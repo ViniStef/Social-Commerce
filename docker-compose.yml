@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_USER=socialcommerce
+      - MYSQL_PASSWORD=12345
+      - MYSQL_DATABASE=db_socialcommerce
+      - MYSQL_ROOT_PASSWORD=12345
+    volumes:
+      - "./conf.d:/etc/mysql/conf.d:ro"
