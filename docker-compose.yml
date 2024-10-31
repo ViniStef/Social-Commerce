@@ -1,14 +1,18 @@
+version: '3.8'
+
 services:
-  mysql:
-    image: mysql
-    ports:
-      - "3307:3306"
-    expose:
-      - "3306"
+  db:
+    image: mysql:latest
+    restart: always
     environment:
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=ThePassword
-      - MYSQL_DATABASE=db_socialcommerce
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root  # Defina uma senha para o usuário root
+      MYSQL_DATABASE: db_social-commerce          # Nome do banco de dados a ser criado
+      MYSQL_USER: admin                  # Nome de um usuário adicional
+      MYSQL_PASSWORD: admin        # Senha do usuário adicional
+    ports:
+      - "3307:3306"                       # Mapeia a porta 3306 do container para a porta 3306 da máquina host
     volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
+      - db_data:/var/lib/mysql            # Persistência dos dados
+
+volumes:
+  db_data:                               # Volume para armazenar dados do MySQL
