@@ -1,8 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +16,12 @@ import java.util.List;
 @Table(name = "tb_seller")
 public class Seller extends User{
 
-    @Column(unique = true, name = "publications")
+    @OneToMany(mappedBy = "sellers")
+    @Column(name = "publications")
     private List<Publication> publications;
 
-    @Column(unique = true, name = "buyers-followers")
+   @ManyToMany(mappedBy = "sellers")
+   @Column(name = "buyers_followed")
     private List<Buyer> buyers;
 
 }

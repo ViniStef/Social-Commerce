@@ -16,6 +16,12 @@ import java.util.List;
 @Table(name = "tb_buyer")
 public class Buyer extends User {
 
-    @OneToMany()
+    @ManyToMany
+    @JoinTable (
+            name = "buyer_seller_relation",
+            joinColumns = @JoinColumn(name = "buyer_id"),
+            inverseJoinColumns = @JoinColumn(name = "seller_id")
+    )
+    @Column(name = "sellers_followers")
     private List<Seller> sellers;
 }

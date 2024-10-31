@@ -1,9 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -18,5 +15,6 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID user_id;
 
+    @Column(name = "user-name")
     private String user_name;
 }

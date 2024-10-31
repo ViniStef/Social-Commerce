@@ -2,13 +2,13 @@ services:
   mysql:
     image: mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     expose:
       - "3306"
     environment:
-      - MYSQL_USER=socialcommerce
-      - MYSQL_PASSWORD=12345
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=ThePassword
       - MYSQL_DATABASE=db_socialcommerce
-      - MYSQL_ROOT_PASSWORD=12345
+      - MYSQL_ROOT_PASSWORD=root
     volumes:
       - "./conf.d:/etc/mysql/conf.d:ro"
