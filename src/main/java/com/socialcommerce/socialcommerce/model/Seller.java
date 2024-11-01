@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(name = "tb_seller")
 public class Seller extends User{
 
-    @OneToMany(mappedBy = "sellers")
+    @OneToMany(mappedBy = "seller")
     @Column(name = "publications")
     private List<Publication> publications;
 
