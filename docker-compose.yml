@@ -1,11 +1,12 @@
-
 services:
-  mysql:
+  db:
     image: mysql
-    ports:
-      - "3307:3306"
+    container_name: social_commerce
     environment:
-      - MYSQL_ROOT_PASSWORD=12345
-      - MYSQL_DATABASE=db_socialcommerce
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - "3306:3306"
     volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
+    - ./conf.d:/etc/mysql/conf.d:ro
+
+
