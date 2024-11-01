@@ -25,7 +25,7 @@ public class Publication {
     private LocalDate publication_date;
 
     @OneToOne
-    @Column(name = "product")
+    @JoinColumn(name = "product")
     private Product product;
 
     @ManyToOne

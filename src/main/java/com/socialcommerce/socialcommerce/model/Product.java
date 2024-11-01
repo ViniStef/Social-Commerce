@@ -32,4 +32,7 @@ public class Product {
     @Column(name = "color")
     private String product_color;
 
+    @OneToOne
+    private Publication publication;
+
 }

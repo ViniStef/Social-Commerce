@@ -4,6 +4,8 @@ import com.socialcommerce.socialcommerce.model.Seller;
 import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class SellerService {
@@ -16,6 +18,10 @@ public class SellerService {
 
     public Seller createSeller(Seller seller) {
         return sellerRepo.save(seller);
+    }
+
+    public List<Seller> getAllSellers() {
+        return sellerRepo.findAll();
     }
 
 }
