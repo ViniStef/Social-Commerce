@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,7 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_buyer")
-public class Buyer extends User {
+public class Buyer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID buyer_id;
+
+    @Column(name = "first_name")
+    private String first_name;
+
+    @Column(name = "last_name")
+    private String last_name;
 
     @ManyToMany
     @JoinTable (

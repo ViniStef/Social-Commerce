@@ -13,6 +13,10 @@ public class SellerController {
 
     private SellerService sellerService;
 
+    public SellerController(SellerService sellerService) {
+        this.sellerService = sellerService;
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createSeller(@RequestBody Seller seller) {
         return ResponseEntity.ok(sellerService.createSeller(seller));
@@ -21,5 +25,6 @@ public class SellerController {
     @GetMapping("/findall")
     public ResponseEntity<?> findAllSellers() {
         return ResponseEntity.ok(sellerService.getAllSellers());
+
     }
 }

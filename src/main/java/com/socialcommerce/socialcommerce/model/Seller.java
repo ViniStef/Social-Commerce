@@ -12,9 +12,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_seller")
-public class Seller extends User{
+public class Seller{
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID seller_id;
+
+    @Column(name = "first_name")
+    private String first_name;
+
+    @Column(name = "last_name")
+    private String last_name;
 
     @OneToMany(mappedBy = "seller")
     @Column(name = "publications")
@@ -24,10 +34,4 @@ public class Seller extends User{
    @Column(name = "buyers_followed")
     private List<Buyer> buyers;
 
-
-    public Seller(UUID user_id, String user_name, List<Publication> publications, List<Buyer> buyers) {
-        super(user_id, user_name);
-        this.publications = publications;
-        this.buyers = buyers;
-    }
 }

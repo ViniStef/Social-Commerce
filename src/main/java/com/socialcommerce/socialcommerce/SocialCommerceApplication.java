@@ -14,22 +14,11 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @SpringBootApplication
-public class SocialCommerceApplication implements CommandLineRunner {
+public class SocialCommerceApplication  {
 
     public static void main(String[] args) {
         SpringApplication.run(SocialCommerceApplication.class, args);
     }
 
 
-    @Autowired
-    ISellerRepo sellerRepo;
-
-    @Override
-    public void run(String... args) throws Exception {
-        sellerRepo.save(new Seller(UUID.randomUUID(), "Marcos", new ArrayList<>(){{
-            add(new Publication());
-        }}, new ArrayList<>(){{
-            add(new Buyer());
-        }} ));
-    }
 }
