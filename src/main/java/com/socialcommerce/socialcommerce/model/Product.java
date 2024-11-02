@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,5 +36,9 @@ public class Product {
 
     @OneToOne
     private Publication publication;
+
+    @ManyToMany(mappedBy = "products")
+    @Column(name = "category")
+    private List<Category> category;
 
 }

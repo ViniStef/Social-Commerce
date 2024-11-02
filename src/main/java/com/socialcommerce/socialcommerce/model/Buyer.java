@@ -27,6 +27,9 @@ public class Buyer {
     @Column(name = "last_name")
     private String last_name;
 
+    @Column(name = "cpf")
+    private Long buyer_cpf;
+
     @ManyToMany
     @JoinTable (
             name = "buyer_seller_relation",
