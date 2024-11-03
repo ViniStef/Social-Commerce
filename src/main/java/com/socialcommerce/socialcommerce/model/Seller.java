@@ -39,8 +39,7 @@ public class Seller{
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "seller", cascade=CascadeType.ALL)
-    @Column(name = "publications")
+    @OneToMany(mappedBy = "seller")
     private List<Publication> publications = new ArrayList<Publication>();
 
    @ManyToMany(mappedBy = "sellers")

@@ -17,21 +17,16 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer category_id;
 
     @Column(name = "category_name")
     private String categoryName;
 
-    @ManyToMany
-    @JoinTable (
-            name = "product_category_relation",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
+    @OneToOne(mappedBy = "category")
+    private Publication publication;
 
-    public Category(String categoryName) {
+   public Category(String categoryName) {
         this.categoryName = categoryName;
     }
 }

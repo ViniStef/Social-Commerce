@@ -8,6 +8,7 @@ import com.socialcommerce.socialcommerce.model.Category;
 import com.socialcommerce.socialcommerce.model.Product;
 import com.socialcommerce.socialcommerce.model.Publication;
 import com.socialcommerce.socialcommerce.model.Seller;
+import com.socialcommerce.socialcommerce.repository.ICategoryRepo;
 import com.socialcommerce.socialcommerce.repository.IPublicationRepo;
 import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import jakarta.persistence.criteria.From;
@@ -24,10 +25,12 @@ public class PublicationService {
 
     private ISellerRepo sellerRepo;
     private IPublicationRepo publicationRepo;
+    private ICategoryRepo categoryRepo;
 
-    public PublicationService(ISellerRepo sellerRepo, IPublicationRepo publicationRepo) {
+    public PublicationService(ISellerRepo sellerRepo, IPublicationRepo publicationRepo, ICategoryRepo categoryRepo) {
         this.sellerRepo = sellerRepo;
         this.publicationRepo = publicationRepo;
+        this.categoryRepo = categoryRepo;
     }
 
     public CreatePublicationDto createANewPost (CreatePublicationDto publicationDto, UUID sellerId) {
@@ -35,13 +38,18 @@ public class PublicationService {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
         Publication newPublication = fromPublicationDtoToPublication(publicationDto);
+
+        Category category = newPublication.getCategory();
+
+        categoryRepo.save(category);
+
         newPublication.setSeller(seller);
+
+        publicationRepo.save(newPublication);
 
         seller.getPublications().add(newPublication);
 
         sellerRepo.save(seller);
-
-        publicationRepo.save(newPublication);
 
         return publicationDto;
     }
@@ -51,17 +59,13 @@ public class PublicationService {
     }
 
     private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
-        Double priceWithDiscount = 0D;
-        if(publicationDto.has_promotion().equals(true)){
-            priceWithDiscount = (publicationDto.price()*publicationDto.discount_percentage());
-        } else {
-            priceWithDiscount = (publicationDto.price());
-        }
+
         return new Publication(LocalDate.now(),
                 fromProductDtoToProduct(publicationDto.product()),
+                fromCategoryDtoToCategory(publicationDto.category()),
                 publicationDto.discount_percentage(),
                 publicationDto.has_promotion(),
-                priceWithDiscount);
+                publicationDto.price());
     }
 
     private Product fromProductDtoToProduct(CreateProductDto productDto) {
@@ -70,11 +74,7 @@ public class PublicationService {
                 productDto.product_description(),
                 productDto.product_image(),
                 productDto.product_brand(),
-                productDto.product_color(),
-                productDto.categories().stream()
-                        .map(this::fromCategoryDtoToCategory)
-                        .collect(Collectors.toList())
-
+                productDto.product_color()
         );
     }
 

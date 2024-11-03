@@ -7,4 +7,6 @@ import java.util.UUID;
 
 @Repository
 public interface IBuyerRepo extends JpaRepository<Buyer, UUID> {
+
+    Buyer findByEmail(String email);
 }

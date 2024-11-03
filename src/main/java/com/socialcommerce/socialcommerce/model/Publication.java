@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
+import com.socialcommerce.socialcommerce.dto.CategoryDto;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class Publication {
     private LocalDate publication_date;
 
     @OneToOne
-    @JoinColumn(name = "product")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
@@ -44,12 +45,19 @@ public class Publication {
     @Column(name = "likes")
     private Integer likes;
 
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public Publication(LocalDate publication_date, Product product, Float discount_percentage, Boolean has_promotion, Double price) {
+
+    public Publication(LocalDate publication_date, Product product, Category category, Float discount_percentage, Boolean has_promotion, Double price) {
         this.publication_date = publication_date;
         this.product = product;
+        this.category = category;
         this.discount_percentage = discount_percentage;
         this.has_promotion = has_promotion;
         this.price = price;
     }
+
+
 }

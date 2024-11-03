@@ -34,23 +34,14 @@ public class Product {
     @Column(name = "color")
     private String product_color;
 
-    @OneToOne
+    @OneToOne(mappedBy = "product")
     private Publication publication;
 
-    @ManyToMany(mappedBy = "products",
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    private List<Category> category;
-
-
-    public Product(String product_name, String product_description, String product_image, String product_brand, String product_color, List<Category> category) {
+    public Product(String product_name, String product_description, String product_image, String product_brand, String product_color) {
         this.product_name = product_name;
         this.product_description = product_description;
         this.product_image = product_image;
         this.product_brand = product_brand;
         this.product_color = product_color;
-        this.category = category;
     }
 }

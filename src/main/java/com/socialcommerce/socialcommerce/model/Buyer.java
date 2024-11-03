@@ -46,4 +46,13 @@ public class Buyer {
     )
     @Column(name = "sellers_followers")
     private List<Seller> sellers;
+
+    public Buyer(UUID buyer_id, String first_name, String last_name, String password, Long buyer_cpf, String email) {
+        this.buyer_id = buyer_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.password = password;
+        this.buyer_cpf = buyer_cpf;
+        this.email = email;
+    }
 }

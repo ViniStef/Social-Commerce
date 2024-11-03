@@ -22,4 +22,10 @@ public class ExceptionController {
         ExceptionDto exception = new ExceptionDto(ex.getMessage());
         return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<?> handleAlreadyExistException(AlreadyExistsException ex) {
+        ExceptionDto exception = new ExceptionDto(ex.getMessage());
+        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+    }
 }

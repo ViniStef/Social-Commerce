@@ -6,5 +6,5 @@ import com.socialcommerce.socialcommerce.model.Seller;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record CreatePublicationDto(CreateProductDto product, Integer category_id, Float discount_percentage, Boolean has_promotion, Double price, Integer likes) {
+public record CreatePublicationDto(CreateProductDto product, CategoryDto category, Float discount_percentage, Boolean has_promotion, Double price) {
 }
