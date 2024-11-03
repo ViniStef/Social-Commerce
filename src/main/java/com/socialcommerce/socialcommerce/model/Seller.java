@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,9 +39,9 @@ public class Seller{
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade=CascadeType.ALL)
     @Column(name = "publications")
-    private List<Publication> publications;
+    private List<Publication> publications = new ArrayList<Publication>();
 
    @ManyToMany(mappedBy = "sellers")
    @Column(name = "buyers_followed")

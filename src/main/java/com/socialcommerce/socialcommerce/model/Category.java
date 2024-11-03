@@ -23,13 +23,15 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-
     @ManyToMany
     @JoinTable (
             name = "product_category_relation",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @Column(name = "products")
     private List<Product> products;
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

@@ -1,6 +1,7 @@
 package com.socialcommerce.socialcommerce.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,15 @@ public class Buyer {
     @Column(name = "last_name")
     private String last_name;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "cpf")
     private Long buyer_cpf;
+
+    @Email
+    @Column(name = "email")
+    private String email;
 
     @ManyToMany
     @JoinTable (

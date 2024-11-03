@@ -29,11 +29,8 @@ public class Publication {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "seller_id")
     private Seller seller;
-
-    @Column(name = "category_id")
-    private Integer category_id;
 
     @Column(name = "discount")
     private Float discount_percentage;
@@ -44,6 +41,15 @@ public class Publication {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "likes")
+    private Integer likes;
 
 
+    public Publication(LocalDate publication_date, Product product, Float discount_percentage, Boolean has_promotion, Double price) {
+        this.publication_date = publication_date;
+        this.product = product;
+        this.discount_percentage = discount_percentage;
+        this.has_promotion = has_promotion;
+        this.price = price;
+    }
 }
