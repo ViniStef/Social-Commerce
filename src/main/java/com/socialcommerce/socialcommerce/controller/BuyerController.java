@@ -5,10 +5,7 @@ import com.socialcommerce.socialcommerce.model.Buyer;
 import com.socialcommerce.socialcommerce.service.BuyerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/buyer")
@@ -24,5 +21,12 @@ public class BuyerController {
     public ResponseEntity<?> createABuyer(@RequestBody CreateBuyerDto buyer) {
         buyerService.createBuyer(buyer);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/findbuyer/{email}")
+    public ResponseEntity<Boolean> findABuyerByEmail(@PathVariable String email) {
+        boolean response = buyerService.findByEmail(email);
+
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

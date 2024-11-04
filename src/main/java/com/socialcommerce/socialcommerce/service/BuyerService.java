@@ -35,5 +35,9 @@ public class BuyerService {
     }
 
 
+    public boolean findByEmail(String buyerEmail) {
+        Buyer buyer = buyerRepo.findByEmail(buyerEmail);
 
+        return buyer != null;
+    }
 }
