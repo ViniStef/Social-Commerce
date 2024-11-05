@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,7 @@ public class Buyer {
             inverseJoinColumns = @JoinColumn(name = "seller_id")
     )
     @Column(name = "sellers_followers")
+    @JsonIgnoreProperties("buyers")
     private List<Seller> sellers;
 
     public Buyer(UUID buyer_id, String first_name, String last_name, String password, Long buyer_cpf, String email) {

@@ -1,4 +1,4 @@
-package com.socialcommerce.socialcommerce.service;
+package com.socialcommerce.socialcommerce.service.sellerService;
 
 import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
 import com.socialcommerce.socialcommerce.exception.PasswordNotMatchException;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 
 @Service
-public class SellerService {
+public class SellerService implements ISellerService {
 
     private ISellerRepo sellerRepo;
 
@@ -19,6 +19,7 @@ public class SellerService {
         this.sellerRepo = sellerRepo;
     }
 
+    @Override
     public void createSeller(CreateSellerDto sellerDto) {
         if(sellerDto.password().equals(sellerDto.confirmPassword())){
            Seller seller = new Seller(
@@ -35,11 +36,13 @@ public class SellerService {
         }
     }
 
+    @Override
     public void deleteAll(){
         sellerRepo.deleteAll();
     }
 
 
+    @Override
     public List<Seller> getAllSellers() {
         return sellerRepo.findAll();
     }

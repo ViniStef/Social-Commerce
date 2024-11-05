@@ -14,6 +14,8 @@ import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import jakarta.persistence.criteria.From;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,23 +35,15 @@ public class PublicationService {
         this.categoryRepo = categoryRepo;
     }
 
-    public CreatePublicationDto createANewPost (CreatePublicationDto publicationDto, UUID sellerId) {
+    public CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, UUID sellerId) {
 
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
         Publication newPublication = fromPublicationDtoToPublication(publicationDto);
 
-        Category category = newPublication.getCategory();
-
-        categoryRepo.save(category);
-
         newPublication.setSeller(seller);
 
         publicationRepo.save(newPublication);
-
-        seller.getPublications().add(newPublication);
-
-        sellerRepo.save(seller);
 
         return publicationDto;
     }
@@ -77,6 +71,7 @@ public class PublicationService {
                 productDto.product_color()
         );
     }
+
 
     private Category fromCategoryDtoToCategory(CategoryDto categoryDto) {
         return new Category(categoryDto.category_name());

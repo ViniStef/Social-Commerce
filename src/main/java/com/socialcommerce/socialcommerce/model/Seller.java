@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -39,11 +40,13 @@ public class Seller{
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("seller")
     private List<Publication> publications = new ArrayList<Publication>();
 
    @ManyToMany(mappedBy = "sellers")
    @Column(name = "buyers_followed")
+   @JsonIgnoreProperties("sellers")
     private List<Buyer> buyers;
 
     public Seller(UUID seller_id, String first_name, String last_name, Long cnpj, String password, String email) {

@@ -1,8 +1,7 @@
 package com.socialcommerce.socialcommerce.controller;
 
 import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
-import com.socialcommerce.socialcommerce.model.Seller;
-import com.socialcommerce.socialcommerce.service.SellerService;
+import com.socialcommerce.socialcommerce.service.sellerService.SellerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
