@@ -1,0 +1,138 @@
+@use "../../../styles/main";
+
+.welcome__container {
+  @include main.flexbox($direction: column, $gap: 20px);
+  overflow: hidden;
+
+  .welcome__headline {
+    width: 90%;
+    color: main.$color-light-100;
+    font-size: main.$fs-lg;
+    font-weight: main.$fw-bolder;
+  }
+
+  .welcome__instruction {
+    font-size: main.$fs-sm;
+    color: main.$color-light-200;
+  }
+}
+
+.animate {
+  animation: moveRight .3s ease-in-out forwards;
+}
+
+.registration__form {
+  @include main.flexbox($align: center, $justify: center, $direction: column);
+  width: 100%;
+
+  .registration__roles {
+    @include main.flexbox($direction: column, $justify: start, $gap: 10px);
+    padding-block: 38px;
+    width: 100%;
+    position: relative;
+
+    .invalid__message {
+      position: absolute;
+      font-size: main.$fs-xs;
+      color: main.$color-brand-300;
+      bottom: 18px;
+      left: 5px;
+    }
+  }
+
+  .email__container {
+    @include main.flexbox($align: center, $justify: center);
+    position: relative;
+    width: 100%;
+
+    .email__input {
+      padding: 25px 55px 25px 15px;
+    }
+
+    .email__validate {
+      position: absolute;
+      height: 2.188rem;
+      width: 2.188rem;
+      background-image: url("../../../assets/images/arrow-right-circle.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      border: none;
+      background-color: transparent;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    .invalid__email {
+      border: 1px solid main.$color-brand-200 !important;
+
+      &:focus {
+        outline: 1px solid main.$color-brand-200 !important;
+      }
+    }
+
+    .invalid__message {
+      position: absolute;
+      font-size: main.$fs-xs;
+      color: main.$color-brand-300;
+      bottom: -22px;
+      left: 5px;
+    }
+
+  }
+
+
+  .step__button {
+    @include main.flexbox($align: center, $justify: center, $gap: 10px);
+    border: none;
+    padding: 10px 25px;
+    font-size: main.$fs-xl;
+    line-height: 32px;
+    font-weight: main.$fw-bold;
+    border-radius: 10px;
+    margin: 35px 20px 10px 20px;
+    background-color: transparent;
+    color: main.$color-light-200;
+    text-decoration: underline;
+    cursor: pointer;
+
+    img {
+      border: none;
+    }
+
+    .arrow__next {
+      background-image: url("../../../assets/images/arrow-right.svg");
+      width: 1.875rem;
+      height: 1.875rem;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      margin-left: 5px;
+    }
+  }
+
+
+  .redirect__login {
+    margin-top: 10px;
+    color: main.$color-light-400;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+  }
+
+}
+
+@keyframes moveRight {
+  from {
+    position: relative;
+    left: -100%;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    left: 0;
+    opacity: 1;
+  }
+}

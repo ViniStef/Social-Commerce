@@ -1,0 +1,78 @@
+@use "../../../styles/main";
+
+.registration__form {
+  @include main.flexbox($direction: column, $align: center, $justify: center);
+  width: 100%;
+  animation: moveLeft .3s ease-in-out forwards;
+  overflow: hidden;
+
+  .registration__fields {
+    @include main.flexbox($direction: column, $gap: 20px);
+    width: 100%;
+  }
+
+  .register__button {
+    border: none;
+    padding: 10px 25px;
+    font-size: main.$fs-xl;
+    line-height: 32px;
+    font-weight: main.$fw-bold;
+    border-radius: 10px;
+    margin: 35px 20px 10px 20px;
+    background-color: transparent;
+    color: main.$color-light-200;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .redirect__login {
+    margin-top: 10px;
+    color: main.$color-light-400;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .return__container {
+    position: relative;
+    width: 100%;
+
+    .return__button {
+      @include main.flexbox($align: center, $justify: center, $direction: row-reverse);
+      background-color: transparent;
+      position: absolute;
+      top: 35px;
+      border: none;
+      color: main.$color-gray-100;
+      font-size: main.$fs-md;
+      cursor: pointer;
+
+      .arrow__next {
+        background-image: url("../../../assets/images/arrow-right.svg");
+        width: 22px;
+        height: 22px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: transparent;
+
+        border-radius: 50%;
+        margin-right: 5px;
+        rotate: 180deg;
+      }
+    }
+
+  }
+}
+
+@keyframes moveLeft {
+  from {
+    position: relative;
+    right: -100%;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    right: 0;
+    opacity: 1;
+  }
+}
