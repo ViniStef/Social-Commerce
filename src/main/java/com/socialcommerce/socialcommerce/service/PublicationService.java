@@ -40,6 +40,13 @@ public class PublicationService {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
         Publication newPublication = fromPublicationDtoToPublication(publicationDto);
+        Category existingCategory = categoryRepo.findByCategoryName(newPublication.getCategory().getCategoryName());
+        if (existingCategory == null) {
+            categoryRepo.save(newPublication.getCategory());
+        } else {
+            newPublication.setCategory(existingCategory);
+        }
+
 
         newPublication.setSeller(seller);
 

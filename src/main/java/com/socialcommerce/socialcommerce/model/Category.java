@@ -23,7 +23,7 @@ public class Category {
     private Integer category_id;
 
 
-    @Column(name = "category_name", unique = true, nullable = false)
+    @Column(name = "category_name", nullable = false)
     private String categoryName;
 
     @OneToOne(mappedBy = "category")

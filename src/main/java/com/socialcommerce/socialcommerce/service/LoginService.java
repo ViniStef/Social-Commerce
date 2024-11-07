@@ -36,4 +36,22 @@ public class LoginService {
         }
         return true;
     }
+
+    public Object login(String email, String password) {
+        Seller seller = sellerRepo.findByEmail(email);
+        Buyer buyer = buyerRepo.findByEmail(email);
+        if (seller != null) {
+            if(seller.getPassword().equals(password)) {
+                return seller;
+            }
+            return false;
+        }
+        else if (buyer != null){
+            if( buyer.getPassword().equals(password)) {
+                return buyer;
+            }
+            return false;
+        }
+        return false;
+    }
 }
