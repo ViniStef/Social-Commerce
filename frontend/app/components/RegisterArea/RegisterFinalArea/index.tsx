@@ -1,17 +1,41 @@
 import style from "./style.module.scss";
-import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
-import {Form} from "@remix-run/react";
-import {Dispatch, FormEvent, SetStateAction} from "react";
+import {Form, useSubmit} from "@remix-run/react";
+import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
+import {FormData} from "@remix-run/web-fetch";
+import {CurrentUserContext, InitialRegisterContext} from "~/routes/register";
+import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
 
 interface needsAnimation {
     setNeedsAnimation: Dispatch<SetStateAction<boolean>>;
 }
 
-export const RegisterFinalArea = ( {setNeedsAnimation}: needsAnimation) => {
+export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
+    const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+    const [isRegisterClicked, setIsRegisterClicked] = useState(false);
+    const [isAnyInvalid, setIsAnyInvalid] = useState(false);
+    const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);
+
+    const submit = useSubmit();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    }
+
+        if (!isAnyInvalid) {
+            const formData = new FormData(e.currentTarget);
+            if (initialRegister) {
+                for (const pair of initialRegister.entries()) {
+                    formData.append(pair[0], pair[1]);
+                }
+            }
+
+            console.log(Object.fromEntries(formData));
+
+            setIsRegisterClicked(true);
+            submit(formData, { method: "post" });
+        } else {
+            setIsRegisterClicked(false);
+        }
+    };
 
     const handlePrevAnimation = () => {
         setNeedsAnimation(true);
@@ -21,37 +45,31 @@ export const RegisterFinalArea = ( {setNeedsAnimation}: needsAnimation) => {
     return (
         <Form className={style.registration__form} onSubmit={(e) => handleSubmit(e)} method={"post"}>
             <div className={style.registration__fields}>
-                <div className={style.field__container}>
-                    <label className={style.sr__only} htmlFor={"name"}>Nome</label>
-                    <input autoComplete={"name"} className={`${style.name__input} ${style.standard__input}`} id={"name"} name={"name"} type="text" placeholder={"Seu Nome"}/>
-                </div>
 
-                <div className={style.field__container}>
-                    <label className={style.sr__only} htmlFor={"surname"}>Sobrenome</label>
-                    <input autoComplete={"family-name"} className={`${style.surname__input} ${style.standard__input}`} id={"surname"} name={"surname"} type="text" placeholder={"Seu Sobrenome"}/>
-                </div>
+                <InputField setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Nome"} autocomplete={"name"} className={"name__input"} name={"name"} id={"name"}
+                            placeholder={"Seu nome"}/>
 
-                <div className={style.field__container}>
-                    <label className={style.sr__only} htmlFor={"identifier"}>CPF/CNPJ</label>
-                    <input autoComplete={"cpf"} className={`${style.identifier__input} ${style.standard__input}`} id={"identifier"} name={"identifier"} type={"text"} placeholder={"Seu CPF/CNPJ"}/>
-                </div>
+                <InputField setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Sobrenome"} autocomplete={"family-name"} className={"surname__input"}
+                            name={"surname"} id={"surname"} placeholder={"Seu Sobrenome"}/>
 
-                <div className={style.field__container}>
-                    <label className={style.sr__only} htmlFor={"password"}>Senha</label>
-                    <input autoComplete={"new-password"} className={`${style.password__input} ${style.standard__input}`} id={"password"} name={"password"} type="password" placeholder={"Sua Senha"}/>
-                </div>
+                <InputField setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"CPF/CNPJ"} autocomplete={"cpf"} className={"identifier__input"}
+                            name={"identifier"} id={"identifier"} placeholder={"Seu CPF/CNPJ"}/>
 
-                <div className={style.field__container}>
-                    <label className={style.sr__only} htmlFor={"confirmPassword"}>Confirme a Senha</label>
-                    <input autoComplete={"new-password"} className={`${style.passwordConfirm__input} ${style.standard__input}`} id={"confirmPassword"} name={"confirmPassword"} type="password" placeholder={"Confirme sua Senha"}/>
-                </div>
+                <InputField setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Senha"} autocomplete={"new-password"} className={"password__input"}
+                            name={"password"} id={"password"} placeholder={"Sua Senha"} type={"password"}/>
+
+                <InputField setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Confirme a Senha"} autocomplete={"new-password"}
+                            className={"passwordConfirm__input"} name={"confirmPassword"} id={"confirmPassword"}
+                            placeholder={"Confirme sua Senha"} type={"password"}/>
+
             </div>
 
-            <button className={style.register__button}>Cadastrar</button>
+            <input type="hidden" name={"_action"} value={"register"}/>
+            <button type={"submit"} aria-label={"cadastrar"} className={style.register__button}>Cadastrar</button>
             <a className={style.redirect__login}>Já tenho uma conta</a>
 
             <div className={style.return__container}>
-                <button className={style.return__button} onClick={(e) => handlePrevAnimation()}>Voltar<span
+                <button type={"button"} aria-label={"voltar"} className={style.return__button} onClick={(e) => handlePrevAnimation()}>Voltar<span
                     className={style.arrow__next}></span></button>
             </div>
         </Form>
