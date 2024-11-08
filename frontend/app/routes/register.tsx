@@ -1,15 +1,17 @@
 import RegisterArea from "~/components/RegisterArea";
 import {useActionData} from "react-router";
-import {createContext, Dispatch, SetStateAction, useState} from "react";
+import {createContext, Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
+import {json} from "@remix-run/react";
+
 
 interface User {
-    nome?: String;
-    sobrenome?: String;
-    account?: String;
-    email?: String;
-    CPF?: String;
-    password?: String;
-    confirmPassword?: String;
+    name?: string;
+    surname?: string;
+    account?: string;
+    email?: string;
+    identifier?: string;
+    password?: string;
+    confirmPassword?: string;
 }
 
 interface CurrentUserContextType {
@@ -22,8 +24,23 @@ export const CurrentUserContext = createContext<CurrentUserContextType>({
     setCurrentUser: () => {},
 });
 
+interface InitialRegisterContextType {
+    initialRegister: FormData | null;
+    setInitialRegister: Dispatch<SetStateAction<FormData | null>>;
+}
+
+export const InitialRegisterContext = createContext<InitialRegisterContextType>({
+    initialRegister: null,
+    setInitialRegister: () => {},
+});
+
 export default function RegisterPage() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [initialRegister, setInitialRegister] = useState<FormData | null>(null);
+
+    useEffect(() => {
+        console.log(currentUser);
+    }, [currentUser]);
 
     return (
         <>
@@ -33,7 +50,14 @@ export default function RegisterPage() {
                     setCurrentUser
                 }}
             >
-                <RegisterArea />
+                <InitialRegisterContext.Provider
+                    value={{
+                        initialRegister,
+                        setInitialRegister
+                    }}
+                >
+                    <RegisterArea />
+                </InitialRegisterContext.Provider>
             </CurrentUserContext.Provider>
         </>
 
@@ -41,29 +65,52 @@ export default function RegisterPage() {
 }
 
 
+
+
 export async function action( { request }: {request: Request}) {
     const formData = await request.formData();
 
-    // Convert FormData to an object for easier logging
-    const data = Object.fromEntries(formData);
+    let { _action, ...data } = Object.fromEntries(formData);
 
-    // Log the data to the server console
-    console.log("Form data:", data);
+    let jsonResponse;
 
-    try {
-        const response: Response = await fetch(`http://localhost:8080/buyer/findbuyer/${data.email}`, {
-            method: "GET",
-        })
-        const jsonResponse = await response.json();
+    switch(_action) {
+        case "nextStep":
 
-        console.log(jsonResponse);
+            try {
+                console.log("fez o post msm assim")
+                const response: Response = await fetch(`http://localhost:8080/buyer/findbuyer/${data.email}`, {
+                    method: "GET",
+                })
+                jsonResponse = await response.json();
 
-        return jsonResponse;
+                console.log("resposta json do servidor: ", jsonResponse);
 
-    } catch (error) {
-        console.log("Algo deu errado ao fazer a requisição para o Spring Boot!")
-        return {"message": "Algo deu Errado no servidor", "erro": error};
+                return jsonResponse;
+
+            } catch (error) {
+                console.log("Algo deu errado ao fazer a requisição para o Spring Boot!")
+                return {"message": "Algo deu Errado no servidor", "erro": error};
+            }
+        case "register":
+            console.log("Rodou no caso register!!");
+            try {
+                const response: Response = await fetch(`http://localhost:8080/buyer/findbuyer/${data.email}`, {
+                    method: "GET",
+                })
+                jsonResponse = await response.json();
+
+                console.log("resposta json do servidor: ", jsonResponse);
+
+                return jsonResponse;
+
+            } catch (error) {
+                console.log("Algo deu errado ao fazer a requisição para o Spring Boot!")
+                return {"message": "Algo deu Errado no servidor", "erro": error};
+            }
     }
 
+    console.log("Teste chegou aqui embaixo!");
+    return jsonResponse || new Error("Algo deu errado no servidor!!");
 
 }
