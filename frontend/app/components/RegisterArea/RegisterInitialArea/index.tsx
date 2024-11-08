@@ -2,9 +2,8 @@ import {Form, useSubmit} from "@remix-run/react";
 import style from "./style.module.scss";
 import {useActionData} from "react-router";
 import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
-import {LogoDisplay} from "~/components/LogoDisplay";
 import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
-import {CurrentUserContext} from "~/routes/register";
+import {CurrentUserContext, InitialRegisterContext} from "~/routes/register";
 import {FormData} from "@remix-run/web-fetch";
 
 interface needsAnimation {
@@ -15,6 +14,7 @@ interface needsAnimation {
 export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}: needsAnimation) {
     let data = useActionData();
     const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+    const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);
     const [email, setEmail] = useState("");
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [invalidMessage, setInvalidMessage] = useState("");
@@ -23,11 +23,13 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
     const submit = useSubmit();
 
     useEffect(() => {
+        console.log(data);
         if (data === true) {
             setIsValidEmail(false);
             setInvalidMessage("E-mail já está em uso");
         } else if (data === false) {
             setIsValidEmail(true);
+            setNeedsAnimation(true);
         }
     }, [data]);
 
@@ -37,14 +39,15 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
             if (currentUser.account && currentUser.email) {
                 setIsAccountTypeSelected(true);
                 const formData = new FormData(e.currentTarget);
+                setInitialRegister(formData);
                 submit(formData, {method: "post"});
                 setNeedsAnimation(false);
-
+ Reg
             } else {
                 if (!currentUser.account) {
                     setIsAccountTypeSelected(false);
                 }
-                setNeedsAnimation(false);
+
 
             }
         } else {
@@ -106,6 +109,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                     }
                 </div>
 
+                <input type={"hidden"} name={"_action"} value={"nextStep"} />
                 <button className={style.step__button} onClick={(e) => verifyEmail(email)} type={"submit"}>Próximo Passo<span
                     className={style.arrow__next}></span></button>
                 <a className={style.redirect__login}>Já tenho uma conta</a>
