@@ -8,16 +8,14 @@ import {useState} from "react";
 export default function RegisterArea() {
     const [needsAnimation, setNeedsAnimation] = useState(true);
 
-    console.log(needsAnimation);
+    // console.log(needsAnimation);
 
     return (
         <main className={style.main__page}>
             <div className={style.register__container}>
                 <LogoDisplay/>
                 {
-                    needsAnimation ?
-                        <RegisterInitialArea needsAnimation={needsAnimation} setNeedsAnimation={setNeedsAnimation}/>
-                        : <RegisterFinalArea setNeedsAnimation={setNeedsAnimation}/>
+                     <RegisterFinalArea setNeedsAnimation={setNeedsAnimation}/>
                 }
             </div>
         </main>

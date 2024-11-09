@@ -1,0 +1,54 @@
+@use "../../../../styles/main";
+
+.invalid__input {
+  border: 1px solid main.$color-brand-300;
+}
+
+.field__container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  //background: green;
+
+  .standard__input {
+    padding-right: 40px;
+  }
+
+  .invalid__input {
+    border: 1px solid main.$color-brand-200;
+  }
+
+  .error__container {
+    @include main.flexbox($align: center, $justify: center);
+    position: absolute;
+    //background: teal;
+    width: 40px;
+    top: 0;
+    right: 5px;
+    height: 100%;
+
+
+    .error__icon {
+      position: absolute;
+      right: 0;
+      width: 30px;
+      height: 30px;
+    }
+
+    .error__info {
+      background-color: main.$color-dark-opaque-200;
+      width: 11rem;
+      position: absolute;
+      font-size: main.$fs-xs;
+      color: main.$color-light-400;
+      padding: 10px;
+      right: 35px;
+      border-radius: 10px;
+      text-align: center;
+    }
+  }
+
+}
+
+
+

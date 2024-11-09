@@ -1,6 +1,7 @@
 import style from "./style.module.scss";
-import {Dispatch, JSX, SetStateAction, useContext} from "react";
-import {CurrentUserContext} from "~/routes/register";
+import {Dispatch, JSX, SetStateAction, useContext, useEffect} from "react";
+import {action, CurrentUserContext} from "~/routes/register";
+import {useActionData} from "@remix-run/react";
 
 interface receivedProps {
     account: string;
@@ -9,14 +10,25 @@ interface receivedProps {
 }
 
 export const RoleContainer = ( {account, isAccountTypeSelected, setIsAccountTypeSelected}: receivedProps): JSX.Element => {
+    const data = useActionData<typeof action>();
     const { setCurrentUser } = useContext(CurrentUserContext);
+
+    useEffect(() => {
+
+        if (data) {
+            if ("errors" in data) {
+                const errors = data.errors
+                if (errors.errors.account) {
+                    setIsAccountTypeSelected(false);
+                }
+            }
+        }
+    }, [data]);
 
     const setAccountType = ((accountType: string) => {
         setIsAccountTypeSelected(true);
-        setCurrentUser(prevState => {
-            return {...prevState, account: accountType};
-        })
     })
+
 
     return (
         <div className={isAccountTypeSelected ? style.role__container : `${style.role__container} ${style.container__error}`}>
