@@ -26,7 +26,6 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     const [invalidConfirmPasswordMessage, setInvalidConfirmPasswordMessage] = useState("");
 
     useEffect(() => {
-        console.log("data aq em final: ", data);
         if (data) {
             const expectedFields = new Set(['first_name', 'last_name', 'identifier', 'password', 'confirm_password']);
             if ("errors" in data) {

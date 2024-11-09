@@ -3,9 +3,10 @@ import {ZodError, ZodSchema} from "zod";
 
 type ActionErrors<T> = Partial<Record<keyof T, string>>;
 
-export const validateAction = async <ActionInput>(request: Request, schema:ZodSchema) => {
+export const validateAction =
+    <ActionInput>(body: {[k: string]: FormDataEntryValue }, schema:ZodSchema) => {
 
-    const body = Object.fromEntries(await request.formData());
+    // const body = Object.fromEntries(await request.formData());
 
     try {
         const formData = schema.parse(body) as ActionInput;

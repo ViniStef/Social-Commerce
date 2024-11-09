@@ -28,6 +28,9 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                 if (errors.errors.email) {
                     setIsValidEmail(false);
                     setInvalidMessage(String(errors.errors.email));
+                } else {
+                    setIsValidEmail(true);
+                    setInvalidMessage("");
                 }
             }
         }
@@ -39,26 +42,13 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
             setInvalidMessage("E-mail já está em uso");
         } else if (data === false) {
             setIsValidEmail(true);
-            setNeedsAnimation(true);
+            setNeedsAnimation(false);
         }
 
     }, [data]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         console.log("oi")
-        e.preventDefault();
-        const { account, email } = Object.fromEntries(new FormData(e.currentTarget));
-        console.log(account)
-        console.log(email)
-        if (account && email) {
-            setIsAccountTypeSelected(true);
-            const formData = new FormData(e.currentTarget);
-            setInitialRegister(formData);
-            submit(formData, {method: "post"});
-            setNeedsAnimation(false);
-        } else {
-
-        }
 
     }
 

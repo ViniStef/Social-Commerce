@@ -4,7 +4,7 @@ import {createContext, Dispatch, FormEvent, SetStateAction, useContext, useEffec
 import {json} from "@remix-run/react";
 import {z} from "zod";
 import {validateAction} from "~/utils/utils";
-import type { ActionFunctionArgs} from "@remix-run/node";
+import type {ActionFunctionArgs} from "@remix-run/node";
 
 
 interface User {
@@ -24,7 +24,8 @@ interface CurrentUserContextType {
 
 export const CurrentUserContext = createContext<CurrentUserContextType>({
     currentUser: null,
-    setCurrentUser: () => {},
+    setCurrentUser: () => {
+    },
 });
 
 interface InitialRegisterContextType {
@@ -34,7 +35,8 @@ interface InitialRegisterContextType {
 
 export const InitialRegisterContext = createContext<InitialRegisterContextType>({
     initialRegister: null,
-    setInitialRegister: () => {},
+    setInitialRegister: () => {
+    },
 });
 
 export default function RegisterPage() {
@@ -59,7 +61,7 @@ export default function RegisterPage() {
                         setInitialRegister
                     }}
                 >
-                    <RegisterArea />
+                    <RegisterArea/>
                 </InitialRegisterContext.Provider>
             </CurrentUserContext.Provider>
         </>
@@ -68,13 +70,12 @@ export default function RegisterPage() {
 }
 
 
-
 const initialRegisterSchema = z.object({
     account: z.enum(["buyer", "seller"]),
     email: z.string({
-        required_error: "Email é obrigatório"
-    }).email("Email inválido"),
-    _action: z.enum(["nextStep", "register"])
+        required_error: "O campo email precisa existir"
+    }).email("Email inválido").min(1, {message: "Email é obrigatório"}),
+    _action: z.enum(["next_step", "register"])
 });
 
 type InitialRegister = z.infer<typeof initialRegisterSchema>
@@ -82,58 +83,70 @@ type InitialRegister = z.infer<typeof initialRegisterSchema>
 type FinalRegister = z.infer<typeof finalRegisterSchema>
 
 const finalRegisterSchema = z.object({
-    first_name: z.string({
-        required_error: "Insira um nome"
-    }).min(2, {message: "O nome deve conter no mínimo 2 letras"})
-        .max(20, {message: "O nome deve conter no máximo 20 letras"})
-        .regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ'-]+$/, {
-            message: "O nome não pode ser vazio e deve conter apenas letras, apóstrofos ou hífens",
-        }),
-    last_name: z.string({
-        required_error: "Sobrenome é obrigatório"
-    }).min(2, {message: "O sobrenome deve conter no mínimo 2 letras"})
-        .max(40, {message: "O sobrenome deve conter no máximo 40 letras"})
-        .regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s'-]{2,40}$/, {
-        message: "O sobrenome não pode ser vazio e pode incluir apenas letras, espaços, apóstrofos ou hífens",
-    }),
-    _action: z.enum(["nextStep", "register"]),
-    identifier: z.union([z.string({
-        required_error: "CPF ou CNPJ é obrigatório"
-    }).regex(/^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}-?[0-9]{2}$/, {
-        message: "Formato incorreto de CPF ou CNPJ"
-    }),
-        z.string().regex(/^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2}$/)
-    ]),
-    password: z.string({
-        required_error: "Senha é obrigatória"
-    }).min(6, "A senha deve ter pelo menos 6 caracteres"),
-    confirm_password: z.string({
-        required_error: "Confirme a senha"
-    }).min(6, "A senha deve ter pelo menos 6 caracteres"),
-}).refine((data) => data.password === data.confirm_password, {
-        message: "As senhas devem ser iguais",
-        path: ["confirm_password"],
-    })
+    first_name:
+        z.string({required_error: "O campo nome precisa existir"})
+        .regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ'-]+$/, "O nome deve conter apenas letras, apóstrofos ou hífens")
+        .min(2, "O nome deve conter no mínimo 2 letras")
+        .max(20, "O nome deve conter no máximo 20 letras"),
 
-export async function action ({ request }: ActionFunctionArgs)   {
-    console.log(request.url)
+    last_name:
+        z.string({required_error: "O campo sobrenome deve existir"})
+        .regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s'-]{2,40}$/, "O sobrenome pode incluir apenas letras, espaços, apóstrofos ou hífens")
+        .min(2, "O sobrenome deve conter no mínimo 2 letras")
+        .max(40, "O sobrenome deve conter no máximo 40 letras"),
+
+    _action: z.enum(["nextStep", "register"]),
+
+    identifier:
+        z.union(
+        [
+            z.string({required_error: "O campo CPF ou CNPJ deve existir"})
+                .regex(/^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}-?[0-9]{2}$/,
+                    "Formato inválido." +
+                    " O CPF deve ser 000.000.000-00 ou 00000000000." +
+                    " O CNPJ deve ser 00.000.000/0000-00 ou 00000000000000."),
+            z.string()
+                .regex(/^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2}$/)
+        ]
+    ),
+
+    password:
+        z.string({required_error: "O campo senha deve existir"})
+        .min(6, "A senha deve ter pelo menos 6 caracteres")
+        .max(40, "A senha pode ter no máximo 40 caracteres"),
+
+    confirm_password:
+        z.string({required_error: "O campo confirmar senha deve existir"})
+        .min(1, "Este campo não pode estar vazio"),
+
+}).refine((data) => data.password === data.confirm_password, {
+    message: "As senhas devem ser iguais",
+    path: ["password", "confirm_password"],
+})
+
+export async function action({request}: ActionFunctionArgs) {
+    const body = Object.fromEntries(await request.formData());
     let jsonResponse;
 
+    console.log("body test: ", body);
+
+    const {_action, ...data} = body;
+
     let useSchema;
-    if (request.url.endsWith("next_step")) {
+    if (_action === "next_step") {
         useSchema = initialRegisterSchema;
-    } else if (request.url.endsWith("register")) {
+    } else if (_action === "register") {
         useSchema = finalRegisterSchema;
     } else {
         useSchema = finalRegisterSchema;
     }
 
-    const { formData, errors } = await validateAction<InitialRegister | FinalRegister>(request, useSchema);
+    const {formData, errors} = validateAction<InitialRegister | FinalRegister>(body, useSchema);
 
 
-    switch (formData._action) {
+    switch (_action) {
         case "next_step":
-            const { account, email } = formData as InitialRegister;
+            const {account, email} = formData as InitialRegister;
             if (errors) {
                 // console.log({errors});
                 return json({errors: {errors}});
@@ -156,7 +169,7 @@ export async function action ({ request }: ActionFunctionArgs)   {
             }
 
         case "register":
-            const { first_name, last_name } = formData as FinalRegister;
+            const {first_name, last_name} = formData as FinalRegister;
             if (errors) {
                 console.log({errors});
                 return json({errors: {errors}});
