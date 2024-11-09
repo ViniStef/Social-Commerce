@@ -1,5 +1,7 @@
 package com.socialcommerce.socialcommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +37,7 @@ public class Product {
     private String product_color;
 
     @OneToOne(mappedBy = "product")
+    @JsonIgnoreProperties("product")
     private Publication publication;
 
     public Product(String product_name, String product_description, String product_image, String product_brand, String product_color) {

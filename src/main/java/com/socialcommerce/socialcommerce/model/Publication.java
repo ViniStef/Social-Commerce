@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.socialcommerce.socialcommerce.dto.CategoryDto;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
@@ -25,12 +26,14 @@ public class Publication {
     @Column(name = "date")
     private LocalDate publication_date;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
+    @JsonIgnoreProperties("publication")
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
+    @JsonIgnoreProperties("publications")
     private Seller seller;
 
     @Column(name = "discount")
@@ -45,8 +48,9 @@ public class Publication {
     @Column(name = "likes")
     private Integer likes;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties("publication")
     private Category category;
 
 
