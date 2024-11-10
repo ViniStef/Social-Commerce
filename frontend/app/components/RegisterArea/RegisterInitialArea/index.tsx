@@ -22,6 +22,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
     const submit = useSubmit();
 
     useEffect(() => {
+        console.log("data aq test", data);
         if (data) {
             if ("errors" in data) {
                 const errors = data.errors
@@ -32,15 +33,18 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                     setIsValidEmail(true);
                     setInvalidMessage("");
                 }
+            } else if ("message" in data) {
+                if (data.message == "Algo deu errado no servidor") {
+                    setInvalidMessage("Problema no servidor, por favor tente novamente")
+                } else {
+                    setInvalidMessage("Este email já está em uso");
+                }
+                setIsValidEmail(false);
+                setNeedsAnimation(true);
             }
         }
+        if (data === false) {
 
-        console.log(data);
-        if (data === true) {
-
-            setIsValidEmail(false);
-            setInvalidMessage("E-mail já está em uso");
-        } else if (data === false) {
             setIsValidEmail(true);
             setNeedsAnimation(false);
         }
@@ -48,8 +52,15 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
     }, [data]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        console.log("oi")
+        e.preventDefault();
 
+        const formData = new FormData(e.currentTarget);
+        console.log(Object.fromEntries(formData));
+
+        setInitialRegister(e.currentTarget);
+        console.log(formData);
+
+        submit(formData, {"method": "post"})
     }
 
     // const verifyEmail = (email: string) => {

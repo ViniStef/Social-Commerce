@@ -4,7 +4,8 @@ import {createContext, Dispatch, FormEvent, SetStateAction, useContext, useEffec
 import {json} from "@remix-run/react";
 import {z} from "zod";
 import {validateAction} from "~/utils/utils";
-import type {ActionFunctionArgs} from "@remix-run/node";
+import {ActionFunctionArgs, redirect} from "@remix-run/node";
+import axios from "axios";
 
 
 interface User {
@@ -29,23 +30,27 @@ export const CurrentUserContext = createContext<CurrentUserContextType>({
 });
 
 interface InitialRegisterContextType {
-    initialRegister: FormData | null;
-    setInitialRegister: Dispatch<SetStateAction<FormData | null>>;
+    initialRegister: HTMLFormElement | undefined;
+    setInitialRegister: Dispatch<SetStateAction<HTMLFormElement | undefined>>;
 }
 
 export const InitialRegisterContext = createContext<InitialRegisterContextType>({
-    initialRegister: null,
+    initialRegister: undefined,
     setInitialRegister: () => {
     },
 });
 
 export default function RegisterPage() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [initialRegister, setInitialRegister] = useState<FormData | null>(null);
+    const [initialRegister, setInitialRegister] = useState<HTMLFormElement | undefined>(undefined);
 
     useEffect(() => {
         console.log(currentUser);
     }, [currentUser]);
+
+    useEffect(() => {
+        console.log("2 aq: ", initialRegister);
+    }, [initialRegister]);
 
     return (
         <>
@@ -95,7 +100,7 @@ const finalRegisterSchema = z.object({
         .min(2, "O sobrenome deve conter no mínimo 2 letras")
         .max(40, "O sobrenome deve conter no máximo 40 letras"),
 
-    _action: z.enum(["nextStep", "register"]),
+    _action: z.enum(["next_step", "register"]),
 
     identifier:
         z.union(
@@ -118,6 +123,9 @@ const finalRegisterSchema = z.object({
     confirm_password:
         z.string({required_error: "O campo confirmar senha deve existir"})
         .min(1, "Este campo não pode estar vazio"),
+
+    email: z.string().optional(),
+    account: z.string().optional(),
 
 }).refine((data) => data.password === data.confirm_password, {
     message: "As senhas devem ser iguais",
@@ -144,9 +152,10 @@ export async function action({request}: ActionFunctionArgs) {
     const {formData, errors} = validateAction<InitialRegister | FinalRegister>(body, useSchema);
 
 
+
     switch (_action) {
-        case "next_step":
-            const {account, email} = formData as InitialRegister;
+        case "next_step": {
+            const {account, email, _action } = formData as InitialRegister;
             if (errors) {
                 // console.log({errors});
                 return json({errors: {errors}});
@@ -154,33 +163,14 @@ export async function action({request}: ActionFunctionArgs) {
             }
             try {
                 // console.log("fez o post msm assim")
-                const response: Response = await fetch(`http://localhost:8080/buyer/findbuyer/${email}`, {
+                const response: Response = await fetch("http://localhost:8080/register?" +
+                    new URLSearchParams({
+                        type: account,
+                        email: email
+                    }), {
                     method: "GET",
                 })
                 jsonResponse = await response.json();
-
-                // console.log("resposta json do servidor: ", jsonResponse);
-
-                return jsonResponse;
-
-            } catch (error) {
-                console.log("Algo deu errado ao fazer a requisição para o Spring Boot!")
-                return {"message": "Algo deu Errado no servidor", "erro": error};
-            }
-
-        case "register":
-            const {first_name, last_name} = formData as FinalRegister;
-            if (errors) {
-                console.log({errors});
-                return json({errors: {errors}});
-                // return json({errors}, {status: 400});
-            }
-            try {
-                console.log("fez o post msm assim")
-                // const response: Response = await fetch(`http://localhost:8080/buyer/findbuyer/${email}`, {
-                //     method: "GET",
-                // })
-                // jsonResponse = await response.json();
 
                 console.log("resposta json do servidor: ", jsonResponse);
 
@@ -188,8 +178,56 @@ export async function action({request}: ActionFunctionArgs) {
 
             } catch (error) {
                 console.log("Algo deu errado ao fazer a requisição para o Spring Boot!")
-                return {"message": "Algo deu Errado no servidor", "erro": error};
+                return {"message": "Algo deu errado no servidor", "erro": error};
             }
+        }
+        case "register": {
+            const { first_name, last_name, identifier, password, confirm_password, email, account } = formData as FinalRegister;
+
+            if (errors) {
+                return json({errors: {errors}});
+            }
+
+            if (account === "seller") {
+                await axios.get("http://localhost:8080/seller/create", {
+                    method: "POST",
+                    data: {
+                        first_name: first_name,
+                        last_name: last_name,
+                        cnpj: identifier,
+                        password: password,
+                        confirm_password: confirm_password,
+                        email: email,
+                    }
+                }).then(response => {
+                    return response.data.json();
+                }).catch(error => {
+                    return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
+                })
+            } else if (account === "buyer") {
+                console.log("teste");
+                 const response = await axios.post("http://localhost:8080/buyer/create", {
+                    first_name: first_name,
+                    last_name: last_name,
+                    cpf: parseInt(identifier),
+                    password: password,
+                    confirm_password: confirm_password,
+                    email: email,
+                }).then(response => {
+                    console.log("teste de resposta: ", response, " status: ", response.status);
+                    if (response.status === 201) {
+                        redirect("/login");
+                    }
+                    return response.status;
+                }).catch(error => {
+                    return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
+                })
+                console.log(response);
+            } else {
+                return null;
+            }
+        }
+
     }
 
     return new Error("Algo deu errado no servidor!!");

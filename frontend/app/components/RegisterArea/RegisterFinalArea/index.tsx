@@ -92,25 +92,32 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     }, [data]);
 
     useEffect(() => {
-        if (confirmPassword) {
-            setIsConfirmPasswordValid(password === confirmPassword);
-        }
-        console.log("password2: ", password);
-        console.log("confirmPassword2: ", confirmPassword);
-        console.log("true false: ", confirmPassword === password);
-        console.log("isConfirmPasswordValid: ", isConfirmPasswordValid);
-
-    }, [password, confirmPassword]);
+        console.log(initialRegister);
+    }, [initialRegister]);
 
     const submit = useSubmit();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        console.log(Object.fromEntries(formData));
+
+
+        const initialRegisterData = new FormData(initialRegister);
+        console.log(Object.fromEntries(initialRegisterData));
         if (initialRegister) {
-            for (const pair of initialRegister.entries()) {
-                formData.append(pair[0], pair[1]);
+            const initialRegisterObject = Object.fromEntries(initialRegisterData);
+            const keys = Object.keys(initialRegisterObject);
+            console.log("Chaves:", keys);
+            // console.log();
+            for (const pair of Object.entries(initialRegisterObject)) {
+                console.log(pair);
+                if (!(pair[0] == "_action")) {
+                    formData.append(pair[0], pair[1]);
+                }
             }
+        }
+        if (initialRegister) {
         }
 
         console.log(Object.fromEntries(formData));
