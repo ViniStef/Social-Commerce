@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/socialcommerce")
+@RequestMapping("/seller")
 public class SellerController {
 
     private SellerService sellerService;

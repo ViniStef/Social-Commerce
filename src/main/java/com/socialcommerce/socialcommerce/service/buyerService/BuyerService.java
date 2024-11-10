@@ -26,7 +26,7 @@ public class BuyerService implements IBuyerService {
 
     @Override
     public void createBuyer(CreateBuyerDto buyerDto) {
-        if (buyerDto.password().equals(buyerDto.confirmPassword())) {
+        if (buyerDto.password().equals(buyerDto.confirm_password())) {
             Buyer buyer = new Buyer(
                     UUID.randomUUID(),
                     buyerDto.first_name(),

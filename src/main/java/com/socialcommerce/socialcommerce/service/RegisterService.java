@@ -8,32 +8,31 @@ import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginService {
-
+public class RegisterService {
     private IBuyerRepo buyerRepo;
-
     private ISellerRepo sellerRepo;
 
-    public LoginService(IBuyerRepo buyerRepo, ISellerRepo sellerRepo) {
+    public RegisterService(IBuyerRepo buyerRepo, ISellerRepo sellerRepo) {
         this.buyerRepo = buyerRepo;
         this.sellerRepo = sellerRepo;
     }
 
-    public Object login(String email, String password) {
-        Seller seller = sellerRepo.findByEmail(email);
-        Buyer buyer = buyerRepo.findByEmail(email);
-        if (seller != null) {
-            if(seller.getPassword().equals(password)) {
-                return seller;
+    public Boolean isEmailUsed(String type, String email) {
+        if (type.equals("seller")) {
+            Seller byEmail = sellerRepo.findByEmail(email);
+            if (byEmail != null) {
+                throw new AlreadyExistsException("This email already exists");
+            }
+            return false;
+
+        } else if (type.equals("buyer")) {
+            Buyer byEmail = buyerRepo.findByEmail(email);
+            if (byEmail != null) {
+                throw new AlreadyExistsException("This email already exists");
             }
             return false;
         }
-        else if (buyer != null){
-            if( buyer.getPassword().equals(password)) {
-                return buyer;
-            }
-            return false;
-        }
-        return false;
+        return true;
     }
+
 }

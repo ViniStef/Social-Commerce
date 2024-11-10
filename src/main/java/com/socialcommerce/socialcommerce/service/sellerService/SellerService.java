@@ -21,7 +21,7 @@ public class SellerService implements ISellerService {
 
     @Override
     public void createSeller(CreateSellerDto sellerDto) {
-        if(sellerDto.password().equals(sellerDto.confirmPassword())){
+        if(sellerDto.password().equals(sellerDto.confirm_password())){
            Seller seller = new Seller(
                     UUID.randomUUID(),
                     sellerDto.first_name(),
