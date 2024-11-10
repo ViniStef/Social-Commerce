@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.controller;
 
+import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
 import com.socialcommerce.socialcommerce.dto.CreateBuyerDto;
 import com.socialcommerce.socialcommerce.service.buyerService.BuyerService;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,16 @@ public class BuyerController {
     public ResponseEntity<?> followASeller(@PathVariable UUID buyerId, @PathVariable UUID sellerId) {
         buyerService.followerASeller(sellerId, buyerId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<BuyerProfileDto> buyerProfile (@PathVariable UUID id){
+        return ResponseEntity.ok(buyerService.buyerProfile(id));
+    }
+
+    @PostMapping("/publication/{sellerId}/like/{publicationId}")
+    public ResponseEntity<?> likeAPublication(@PathVariable UUID sellerId, @PathVariable Long publicationId){
+        buyerService.likeAPublication(sellerId, publicationId);
+        return ResponseEntity.status(200).build();
     }
 }

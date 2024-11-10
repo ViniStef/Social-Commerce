@@ -2,11 +2,14 @@ package com.socialcommerce.socialcommerce.controller;
 
 
 import com.socialcommerce.socialcommerce.dto.CreatePublicationDto;
-import com.socialcommerce.socialcommerce.service.PublicationService;
+import com.socialcommerce.socialcommerce.dto.ShowProductDto;
+import com.socialcommerce.socialcommerce.dto.ShowPublicationDto;
+import com.socialcommerce.socialcommerce.service.publicationService.PublicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,5 +30,10 @@ public class PublicationController {
     @GetMapping
     public ResponseEntity<?> getAllPublications() {
         return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
+    }
+
+    @GetMapping("/order/")
+    public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type){
+        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(type));
     }
 }

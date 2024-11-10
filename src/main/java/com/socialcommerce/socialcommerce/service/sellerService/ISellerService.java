@@ -1,13 +1,17 @@
 package com.socialcommerce.socialcommerce.service.sellerService;
 
 import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
+import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
+import com.socialcommerce.socialcommerce.dto.SellerProfileDto;
 import com.socialcommerce.socialcommerce.model.Seller;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ISellerService {
 
     void createSeller(CreateSellerDto seller);
     void deleteAll();
     List<Seller> getAllSellers();
+    SellerProfileDto sellerProfile(UUID sellerId);
 }
