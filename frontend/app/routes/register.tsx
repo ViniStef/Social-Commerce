@@ -44,14 +44,6 @@ export default function RegisterPage() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [initialRegister, setInitialRegister] = useState<HTMLFormElement | undefined>(undefined);
 
-    useEffect(() => {
-        console.log(currentUser);
-    }, [currentUser]);
-
-    useEffect(() => {
-        console.log("2 aq: ", initialRegister);
-    }, [initialRegister]);
-
     return (
         <>
             <CurrentUserContext.Provider
@@ -84,8 +76,6 @@ const initialRegisterSchema = z.object({
 });
 
 type InitialRegister = z.infer<typeof initialRegisterSchema>
-
-type FinalRegister = z.infer<typeof finalRegisterSchema>
 
 const finalRegisterSchema = z.object({
     first_name:
@@ -131,6 +121,8 @@ const finalRegisterSchema = z.object({
     message: "As senhas devem ser iguais",
     path: ["password", "confirm_password"],
 })
+
+type FinalRegister = z.infer<typeof finalRegisterSchema>
 
 export async function action({request}: ActionFunctionArgs) {
     const body = Object.fromEntries(await request.formData());
@@ -189,8 +181,7 @@ export async function action({request}: ActionFunctionArgs) {
             }
 
             if (account === "seller") {
-                await axios.get("http://localhost:8080/seller/create", {
-                    method: "POST",
+                await axios.post("http://localhost:8080/seller/create", {
                     data: {
                         first_name: first_name,
                         last_name: last_name,

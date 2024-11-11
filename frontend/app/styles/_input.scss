@@ -25,3 +25,28 @@ input {
 
   }
 }
+
+input:hover {
+}
+
+// "Fix" for the autocomplete style changes!
+input:-webkit-autofill,
+input:-webkit-autofill:focus, {
+  transition-delay: 3600s;
+
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+  font-size: typography.$fs-sm;
+  border: 1px solid colors.$color-light-100;
+}
+
+input {
+  &:-webkit-autofill::first-line,
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    font-size: typography.$fs-md;
+  }
+}

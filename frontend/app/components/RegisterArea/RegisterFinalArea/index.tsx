@@ -135,7 +135,7 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         <Form className={style.registration__form} onSubmit={(e) => handleSubmit(e)} method={"post"}>
             <div className={style.registration__fields}>
 
-                <InputField invalidMessage={invalidFirstNameMessage} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Nome"} autocomplete={"name"} className={"name__input"} name={"first_name"} id={"first_name"}
+                <InputField invalidMessage={invalidFirstNameMessage} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Nome"} autocomplete={"given-name"} className={"name__input"} name={"first_name"} id={"first_name"}
                             placeholder={"Seu nome"}/>
 
                 <InputField invalidMessage={invalidLastNameMessage} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Sobrenome"} autocomplete={"family-name"} className={"surname__input"}

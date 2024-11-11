@@ -63,27 +63,6 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
         submit(formData, {"method": "post"})
     }
 
-    // const verifyEmail = (email: string) => {
-    //     if (email.match(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-    //         setIsValidEmail(true);
-    //         setCurrentUser(prevState => {
-    //             return {...prevState, email: email};
-    //         })
-    //     } else {
-    //         if (email.length < 1) {
-    //             setInvalidMessage("Insira um e-mail");
-    //         } else {
-    //             setInvalidMessage("E-mail inválido, tente novamente");
-    //         }
-    //
-    //         setIsValidEmail(false);
-    //         setCurrentUser(prevState => {
-    //             return {...prevState, email: ""};
-    //         })
-    //     }
-    // }
-
-
     return (
         <>
             <div className={needsAnimation ? `${style.welcome__container} ${style.animate}` : style.welcome__container}>
@@ -103,10 +82,10 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                     }
                 </div>
                 <div className={style.email__container}>
-                    <label htmlFor={"email__input"} className={style.sr__only}>E-mail</label>
-                    <input name={"email"} onChange={(e) => setEmail(e.target.value)}
+                    <label htmlFor={"email__input"} className={style.sr__only}>Email</label>
+                    <input autoComplete={"email"} name={"email"} onChange={(e) => setEmail(e.target.value)}
                            className={isValidEmail ? `${style.email__input} ${style.standard__input}` : `${style.email__input} ${style.standard__input} ${style.invalid__email}`}
-                           id={"email__input"} placeholder={"Insira seu e-mail"} type="text"/>
+                           id={"email__input"} placeholder={"Insira seu email"} type="text"/>
                     <button type={"submit"} className={style.email__validate}></button>
                     {
                         isValidEmail ? true : <p className={style.invalid__message}>{invalidMessage}</p>

@@ -14,8 +14,8 @@ export default function RegisterArea() {
             <div className={style.register__container}>
                 <LogoDisplay/>
                 {
-                    // needsAnimation ? <RegisterInitialArea  needsAnimation={needsAnimation}
-                    //    setNeedsAnimation={setNeedsAnimation}/> :
+                    needsAnimation ? <RegisterInitialArea  needsAnimation={needsAnimation}
+                       setNeedsAnimation={setNeedsAnimation}/> :
                      <RegisterFinalArea setNeedsAnimation={setNeedsAnimation}/>
                 }
             </div>

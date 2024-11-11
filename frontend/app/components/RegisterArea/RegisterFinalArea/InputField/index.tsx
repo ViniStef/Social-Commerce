@@ -4,8 +4,8 @@ import {CurrentUserContext} from "~/routes/register";
 import exclamation from "../../../../assets/images/exclamation-circle.svg";
 
 interface InputProps {
-    setIsAnyInvalid: Dispatch<SetStateAction<boolean>>;
-    isRegisterClicked: boolean;
+    setIsAnyInvalid?: Dispatch<SetStateAction<boolean>>;
+    isRegisterClicked?: boolean;
     labelText: string;
     autocomplete?: string;
     className: string;
@@ -18,16 +18,17 @@ interface InputProps {
     isConfirmPasswordValid?: boolean;
     setConfirmPassword?: Dispatch<SetStateAction<string>>;
     invalidMessage?: string;
+    isAnyLoginFieldInvalid?: boolean;
 }
 
-export const InputField = ({ setIsAnyInvalid, isRegisterClicked, labelText, autocomplete="", className, name, type="text", id, placeholder, setPassword, password="",isConfirmPasswordValid=false,setConfirmPassword, invalidMessage=""}: InputProps) => {
+export const InputField = ({ setIsAnyInvalid, isRegisterClicked, labelText, autocomplete="", className, name, type="text", id, placeholder, setPassword, password="",isConfirmPasswordValid=false,setConfirmPassword, invalidMessage="", isAnyLoginFieldInvalid}: InputProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     return (
         <div className={style.field__container}>
             <label className={style.sr__only} htmlFor={id}>{labelText}</label>
-            <input ref={inputRef} autoComplete={autocomplete} className={invalidMessage ? `${style[className]} ${style.standard__input} ${style.invalid__input}`  :`${style[className]} ${style.standard__input}`} id={id}
+            <input ref={inputRef} autoComplete={autocomplete} className={invalidMessage || isAnyLoginFieldInvalid ? `${style[className]} ${style.standard__input} ${style.invalid__input}`  :`${style[className]} ${style.standard__input}`} id={id}
                    name={name} type={type} placeholder={placeholder}/>
 
             {invalidMessage ?
