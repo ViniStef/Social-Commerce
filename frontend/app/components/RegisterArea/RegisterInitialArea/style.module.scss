@@ -95,6 +95,10 @@
     text-decoration: underline;
     cursor: pointer;
 
+    &:hover {
+      color: main.$color-light-400;
+    }
+
     img {
       border: none;
     }
@@ -120,6 +124,10 @@
     cursor: pointer;
     text-align: center;
     text-decoration: none;
+
+    &:hover {
+      color: main.$color-gray-200;
+    }
   }
 
 }

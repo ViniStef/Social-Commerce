@@ -23,6 +23,10 @@
     color: main.$color-light-200;
     text-decoration: underline;
     cursor: pointer;
+
+    &:hover {
+      color: main.$color-light-400;
+    }
   }
 
   .redirect__login {
@@ -31,6 +35,10 @@
     cursor: pointer;
     text-align: center;
     text-decoration: none;
+
+    &:hover {
+      color: main.$color-gray-200;
+    }
   }
 
   .return__container {
