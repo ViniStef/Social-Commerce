@@ -7,6 +7,10 @@ import com.socialcommerce.socialcommerce.repository.IBuyerRepo;
 import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
@@ -22,15 +26,19 @@ public class LoginService {
     public Object login(String email, String password) {
         Seller seller = sellerRepo.findByEmail(email);
         Buyer buyer = buyerRepo.findByEmail(email);
+        Map<String, String> loginObject = new HashMap<>();
         if (seller != null) {
             if(seller.getPassword().equals(password)) {
-                return seller;
+                loginObject.put("accountType", "seller");
+                loginObject.put("userId", seller.getSeller_id().toString());
+                return loginObject;
             }
             return false;
         }
         else if (buyer != null){
             if( buyer.getPassword().equals(password)) {
-                return buyer;
+                loginObject.put("accountType", "buyer");
+                loginObject.put("userId", buyer.getBuyer_id().toString());
             }
             return false;
         }
