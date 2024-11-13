@@ -6,6 +6,10 @@ import {json} from "@remix-run/react";
 import axios from "axios";
 import {authCookie} from "~/auth";
 
+export const meta = () => {
+    return [{ title: "Entrar - Social Commerce"}]
+}
+
 export default function LoginPage() {
     return (
         <LoginArea />
@@ -33,6 +37,11 @@ export async function action({request}: ActionFunctionArgs) {
     const { _action } = body;
 
     if (_action == "login") {
+        // console.log(json({"message": "Usuário não encontrado"}));
+        if (errors) {
+            return json({errors: {errors}});
+        }
+
         const { email, password } = formData as Login;
         if (errors) {
             return json({errors: {errors}});
@@ -47,11 +56,11 @@ export async function action({request}: ActionFunctionArgs) {
             if (response.status === 404) {
                 return json({"message": "Usuário não encontrado"});
             }
-            const userId = response.data.id;
-            const userAccountType = response.data.account;
+
+            const userId = response.data.userId;
+            const userAccountType = response.data.accountType;
             const cookieData = { userId, userAccountType };
             return redirect("/feed", {
-
                 headers: {
                     "Set-Cookie": await authCookie.serialize(cookieData),
                 }
@@ -61,6 +70,7 @@ export async function action({request}: ActionFunctionArgs) {
             return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
         })
 
+        return json({"message": "Erro desconhecido"});
     }
 }
 
