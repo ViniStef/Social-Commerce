@@ -8,6 +8,8 @@ $color-accent-100: rgb(131, 227, 240);
 
 $color-brand-gradient: #{linear-gradient(133.43deg, $color-accent-100 4.41%, $color-brand-100 121.99%)};
 
+$color-dark-opaque-400:  rgba(0, 0, 0, 0.76);
+$color-dark-opaque-300:  rgba(0, 0, 0, 0.53);
 $color-dark-opaque-200:  rgba(0, 0, 0, 0.32);
 $color-dark-opaque-100: rgba(0, 0, 0, 0.16);
 $color-dark-400: rgba(60,60,60);
@@ -22,4 +24,5 @@ $color-gray-300: rgba(103,103,103);
 $color-light-400: rgba(176,176,176);
 $color-light-300: rgba(187, 187, 187);
 $color-light-200: rgba(220,220,220);
+$color-light-150: rgba(230, 230, 230);
 $color-light-100: rgba(239,239,239);

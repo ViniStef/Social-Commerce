@@ -27,6 +27,7 @@ input {
 }
 
 input:hover {
+  background-color: colors.$color-dark-300;
 }
 
 // "Fix" for the autocomplete style changes!

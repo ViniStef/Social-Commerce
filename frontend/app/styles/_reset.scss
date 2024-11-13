@@ -8,6 +8,10 @@
   font: inherit; /* Get rid of all font sizes and heights */
 }
 
+ol, li {
+  list-style: none;
+}
+
 html {
   color-scheme: dark light; /* Default dark */
   hanging-punctuation: first last; /* Not supported in Chrome */
