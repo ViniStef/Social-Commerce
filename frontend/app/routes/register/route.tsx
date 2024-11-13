@@ -49,20 +49,33 @@ function decideSchema(action: FormDataEntryValue): ZodSchema {
 export async function action({request}: ActionFunctionArgs) {
     const body = Object.fromEntries(await request.formData());
     const { _action } = body;
-    const {formData, errors} = validateAction<InitialRegister | FinalRegister>(body, decideSchema(_action));
-    const { account } = formData;
-
-    if (errors) {
-        return json({errors: {errors}}, 400);
-    }
+    // const { account } = formData;
+    // if (errors) {
+    //
+    //     return json({errors: {errors}}, 400);
+    // }
 
     switch (_action) {
         case "next_step": {
-            return await emailAvailability(formData as InitialRegister);
+            const {formData, errors} = validateAction<InitialRegister>(body, decideSchema(_action));
+            if (errors) {
+
+                return json({errors: {errors}}, 400);
+            }
+            const data = await emailAvailability(formData as InitialRegister);
+            return {success: true, data};
         }
         case "register": {
-            return await registerUser(account, formData as FinalRegister);
+            const {formData, errors} = validateAction<FinalRegister>(body, decideSchema(_action));
+            if (errors) {
+                return json({errors: {errors}}, 400);
+            }
+            const { account } = formData;
+            const data = await registerUser(account, formData as FinalRegister);
+            return {success: true, data, account};
         }
+        default:
+            return {error: "Ação inválida"}
     }
 
     return new Error("Algo deu errado no servidor!!");

@@ -6,8 +6,6 @@ type ActionErrors<T> = Partial<Record<keyof T, string>>;
 export const validateAction =
     <ActionInput>(body: {[k: string]: FormDataEntryValue }, schema:ZodSchema) => {
 
-    // const body = Object.fromEntries(await request.formData());
-
     try {
         const formData = schema.parse(body) as ActionInput;
         return {formData, errors: null};

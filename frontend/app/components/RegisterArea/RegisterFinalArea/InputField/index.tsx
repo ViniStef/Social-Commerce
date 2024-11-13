@@ -1,6 +1,6 @@
 import style from "./style.module.scss";
 import {Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from "react";
-import {CurrentUserContext} from "~/routes/register";
+
 import exclamation from "../../../../assets/images/exclamation-circle.svg";
 
 interface InputProps {

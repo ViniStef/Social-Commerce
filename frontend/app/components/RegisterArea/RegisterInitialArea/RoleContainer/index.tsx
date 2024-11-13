@@ -1,6 +1,6 @@
 import style from "./style.module.scss";
 import {Dispatch, JSX, SetStateAction, useContext, useEffect} from "react";
-import {action, CurrentUserContext} from "~/routes/register";
+import {action} from "~/routes/register/route";
 import {useActionData} from "@remix-run/react";
 
 interface receivedProps {
@@ -11,7 +11,6 @@ interface receivedProps {
 
 export const RoleContainer = ( {account, isAccountTypeSelected, setIsAccountTypeSelected}: receivedProps): JSX.Element => {
     const data = useActionData<typeof action>();
-    const { setCurrentUser } = useContext(CurrentUserContext);
 
     useEffect(() => {
 

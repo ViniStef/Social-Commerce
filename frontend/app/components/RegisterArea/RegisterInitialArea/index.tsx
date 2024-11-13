@@ -2,7 +2,7 @@ import {Form, useActionData, useSubmit} from "@remix-run/react";
 import style from "./style.module.scss";
 import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
 import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
-import {action, CurrentUserContext, InitialRegisterContext} from "~/routes/register";
+import {action, InitialRegisterContext} from "~/routes/register/route";
 import {FormData} from "@remix-run/web-fetch";
 
 interface needsAnimation {
@@ -12,7 +12,6 @@ interface needsAnimation {
 
 export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}: needsAnimation) {
     const data = useActionData<typeof action>();
-    const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
     const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);
     const [email, setEmail] = useState("");
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -43,11 +42,12 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                 setNeedsAnimation(true);
             }
         }
-        if (data === false) {
 
-            setIsValidEmail(true);
-            setNeedsAnimation(false);
-        }
+        // if (data === false) {
+        //
+        //     setIsValidEmail(true);
+        //     setNeedsAnimation(false);
+        // }
 
     }, [data]);
 

@@ -3,7 +3,7 @@ import {LogoDisplay} from "~/components/LogoDisplay";
 import {Form, useActionData} from "@remix-run/react";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
 import {useEffect, useState} from "react";
-import {action} from "~/routes/register";
+import {action} from "~/routes/login";
 
 export const LoginArea = () => {
     const [isAnyLoginFieldInvalid, setIsAnyLoginFieldInvalid] = useState<boolean>(false);

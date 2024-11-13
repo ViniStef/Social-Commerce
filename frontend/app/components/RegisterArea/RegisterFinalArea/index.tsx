@@ -2,16 +2,21 @@ import style from "./style.module.scss";
 import {Form, useActionData, useSubmit} from "@remix-run/react";
 import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
 import {FormData} from "@remix-run/web-fetch";
-import {action, CurrentUserContext, InitialRegisterContext} from "~/routes/register";
+import {action, InitialRegisterContext} from "~/routes/register/route";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
+import {TypedResponse} from "@remix-run/node";
 
 interface needsAnimation {
     setNeedsAnimation: Dispatch<SetStateAction<boolean>>;
 }
 
+type DataResponses<T extends string | number | symbol = string> = {
+    response: Promise<boolean | TypedResponse<any>>;
+    errors: { errors: Record<T, string> };
+};
+
 export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
-    const data = useActionData<typeof action>();
-    const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+    const data = useActionData<DataResponses>();
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
     const [isAnyInvalid, setIsAnyInvalid] = useState(false);
     const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);

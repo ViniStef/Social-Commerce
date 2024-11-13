@@ -1,9 +1,9 @@
 import {FinalRegister} from "~/routes/register/schemas/finalRegisterSchema";
 import axios from "axios";
-import {redirect} from "@remix-run/node";
+import {redirect, TypedResponse} from "@remix-run/node";
 import {json} from "@remix-run/react";
 
-export async function registerBuyer(formData: FinalRegister) {
+export async function registerBuyer(formData: FinalRegister): Promise<number | TypedResponse> {
     const { first_name, last_name, identifier, password, confirm_password, email } = formData;
     await axios.post("http://localhost:8080/buyer/create", {
         first_name: first_name,
@@ -21,4 +21,5 @@ export async function registerBuyer(formData: FinalRegister) {
         return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
     })
 
+    return json({"message": "Erro interno no servidor", "status": 500});
 }
