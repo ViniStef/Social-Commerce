@@ -10,6 +10,11 @@ import styles from "~/styles/main.scss?url";
 
 
 export const links: LinksFunction = () => [
+  {
+    rel: "icon",
+    href: "social-commerce-logo.svg",
+    type: "image/svg+xml",
+  },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
