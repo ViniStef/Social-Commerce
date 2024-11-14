@@ -34,6 +34,6 @@ public class PublicationController {
 
     @GetMapping("/{buyerId}/order")
     public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type, @PathVariable Long buyerId) {
-        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(type, buyerId));
+        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(buyerId, type));
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -74,27 +75,25 @@ public class PublicationService implements IPublicationService{
     @Override
     public List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type) {
 
-        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not found"));
+        List<ShowPublicationDto> allPublicationByBuyer = getAllPublicationByBuyer(buyerId);
 
-        List<Seller> sellers = buyer.getSellers();
+        if (type.equalsIgnoreCase("mostRecently")) {
 
+            return allPublicationByBuyer.stream()
+                    .sorted((p1, p2) -> p2.publicationDate().compareTo(p1.publicationDate()))
+                    .collect(Collectors.toList());
 
+        } else if (type.equalsIgnoreCase("oldest")) {
 
-        if(type.equalsIgnoreCase("mostRecently")){
+            return allPublicationByBuyer.stream()
+                    .sorted(Comparator.comparing(ShowPublicationDto::publicationDate))
+                    .collect(Collectors.toList());
 
-            List<Publication> allByLocalDateOrderAsc = publicationRepo.getAllByLocalDateOrderAsc();
-
-            return fromPublicationToShowPublication(allByLocalDateOrderAsc);
-        }
-        else if (type.equalsIgnoreCase("oldest")){
-            List<Publication> allByLocalDateOrderDesc = publicationRepo.getAllByLocalDateOrderDesc();
-
-             return fromPublicationToShowPublication(allByLocalDateOrderDesc);
-        }
-        else {
+        } else {
             throw new NotFoundException("Publications not found");
         }
     }
+
 
     private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
 
