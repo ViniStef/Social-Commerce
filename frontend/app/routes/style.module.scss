@@ -1,9 +1,48 @@
-@use "../../styles/main";
+@use "../styles/main";
+
+
 
 .page__container {
   @include main.flexbox($justify: center, $gap: 20px);
   width: 100%;
-  margin-top: 10px;
+  padding-top: 15px;
+  background-color: main.$color-dark-opaque-400;
+}
+
+.lateral__bar {
+  position: sticky;
+  top: 15px;
+  max-width: 120px;
+  width: 100%;
+  background-color: main.$color-dark-100-opaque-300;
+  border-radius: 10px;
+  height: fit-content;
+
+  .bar__list {
+    @include main.flexbox($direction: column, $align: center, $gap: 40px);
+    margin-block: 30px;
+
+    .bar__item {
+      @include main.flexbox($direction: column, $justify: center, $align: center, $gap: 5px);
+      padding-inline: 10px;
+      text-align: center;
+
+      .bar__action {
+        background-color: transparent;
+        border: none;
+
+        .bar__image {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      .bar__text {
+        color: main.$color-light-200;
+      }
+
+    }
+  }
 }
 
 .feed__container {
@@ -15,6 +54,7 @@
     @include main.flexbox($direction: column, $align: center, $justify: center);
     position: relative;
     background-color: main.$color-dark-100;
+    border-radius: 10px;
 
 
     .feed__content {
@@ -72,7 +112,7 @@
           position: absolute;
           height: 2rem;
           width: 2rem;
-          background-image: url("../../assets/images/arrow-right-circle.svg");
+          background-image: url("../assets/images/arrow-right-circle.svg");
           background-repeat: no-repeat;
           background-size: contain;
           border: none;
@@ -105,7 +145,9 @@
   .category__section {
     //background-color: main.$color-dark-200;
     background-color: main.$color-dark-100-opaque-300;
+    //background-color: main.$color-light-100;
     margin-top: 10px;
+    border-radius: 10px;
 
     .category__title {
       font-size: main.$fs-xl;
@@ -116,7 +158,7 @@
 
 
     .category__list {
-      @include main.flexbox($align:center, $gap: 10px);
+      @include main.flexbox($align: flex-start, $gap: 10px);
       padding-block: 5px 10px;
       position: relative;
       overflow: hidden;
@@ -125,7 +167,7 @@
         position: absolute;
         height: 2rem;
         width: 2rem;
-        background-image: url("../../assets/images/arrow-right-circle.svg");
+        background-image: url("../assets/images/arrow-right-circle.svg");
         background-repeat: no-repeat;
         background-size: contain;
         border: none;
@@ -138,17 +180,50 @@
         min-width: 5rem;
         height: fit-content;
 
-        .category__image {
-          width: 3rem;
-          height: 3rem;
-          padding: 2px;
-          background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-200 100%);
+        .category__img_container {
           border-radius: 50%;
+          width: fit-content;
+          background-color: rgba(20,20,20, .9);
+
+          .category__button {
+            border: none;
+            background-color: transparent;
+            padding: 8px;
+            border-radius: 10px;
+            //box-shadow: 0 0 10px 5px rgba(255, 85, 85, .2);
+            border-radius: 50%;
+            background-color: rgba(30,30,30,.76);
+
+            .category__image {
+              width: 3rem;
+              height: 3rem;
+              padding: 5px;
+
+              border-radius: 10px;
+            }
+          }
+
+          .category__blue {
+            //box-shadow: 0 0 10px 5px rgba(131, 227, 240, .2);
+            background-color: rgba(131, 227, 240,.3);
+
+          }
+
+          .category__green {
+            box-shadow: 0 0 10px 5px rgba(88, 255, 85, .2);
+          }
+
+          .category__yellow {
+            box-shadow: 0 0 10px 5px rgba(255, 193, 85, .2);
+          }
         }
+
+
 
         .category__name {
           font-size: main.$fs-xs;
           font-weight: main.$fw-medium;
+          text-align: center;
         }
 
       }
@@ -165,6 +240,8 @@
     color: main.$color-light-100;
     font-size: main.$fs-md;
     background-color: main.$color-dark-200;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 
 
     font-weight: main.$fw-bold;
@@ -192,14 +269,15 @@
 
   .post__container {
     background-color: main.$color-light-100;
-    padding-block: 5px;
+    padding-top: 5px;
     position: relative;
 
     .post__field {
       position: relative;
-      border: 2px solid main.$color-dark-400;
-      border-left: none;
-      border-right: none;
+      border: 2px solid main.$color-gray-300;
+      border-inline: none;
+      border-bottom: none;
+
 
       .field__brand {
         @include main.flexbox($align: center, $justify: center, $gap: 15px);
@@ -216,9 +294,11 @@
         .brand__name {
           font-size: main.$fs-lg;
           color: main.$color-dark-100;
+          font-weight: main.$fw-boldest;
         }
       }
     }
+
 
     .post__details {
       position: absolute;
@@ -229,35 +309,47 @@
 
       .post__date {
         position: relative;
+        color: main.$color-dark-100;
       }
 
       .post__extra {
-
       }
     }
 
+    .separation__onpost {
+      height: .1rem;
+      margin-block: 10px;
+      width: 80%;
+      background: main.$color-gray-400;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
     .post__description {
-      padding-inline: 10px;
-      padding-block: 5px 15px;
+      padding-inline: 20px;
+      padding-block: 5px 20px;
 
       .description__text {
-        color: main.$color-light-150;
+        line-height: 1.5;
+        color: main.$color-gray-400;
       }
     }
 
     .post__product {
       @include main.flexbox($align: center, $justify: center);
-      width: 95%;
+      width: fit-content;
       margin: auto;
       padding-block: 10px;
       position: relative;
-      
+
       .product__image {
         max-width: 450px;
         max-height: 450px;
         height: 100%;
         width: 100%;
-        border-radius: 10px;
+        border-radius: 20px;
+        border: 1px solid main.$color-light-400;
+
       }
       
       .product__discount {
@@ -265,7 +357,7 @@
         background: main.$color-brand-200;
         margin-top: 10px;
         padding: 8px;
-        border-radius: 0 8px 0 10px;
+        border-radius: 0 20px 0 20px;
         color: main.$color-light-150;
         font-weight: main.$fw-bolder;
 
@@ -277,7 +369,7 @@
     .post__reactions {
       @include main.flexbox($align: center, $justify: center);
       padding-block: .5rem;
-      border-top: 2px solid main.$color-dark-400;
+      border-top: 2px solid main.$color-gray-400;
 
 
       .reaction__container {
@@ -298,11 +390,9 @@
     @include main.flexbox($align: center, $justify: center);
     height: 3rem;
     width: 100%;
+    max-width: 750px;
     background-color: main.$color-dark-100;
     bottom: 0;
-    border-top: 2px solid main.$color-gray-200;
-    max-width: 740px;
-
 
     .feature__list {
       @include main.flexbox($align: center, $justify: space-evenly);
@@ -364,25 +454,45 @@
 
 .user__container {
   width: 360px;
-  background-color: main.$color-dark-200;
+  position: sticky;
+  top: 15px;
+  height: fit-content;
+  //background-color: main.$color-dark-200;
+
+  .user__info:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: main.$color-brand-gradient;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    height: 45%;
+    box-shadow: inset 0 5px 20px 5px main.$color-dark-opaque-200;
+
+    //box-shadow: inset 0 5px 30px 2px main.$color-dark-400;
+  }
 
   .user__info {
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
     width: 100%;
-    @include main.flexbox($direction: column, $align: center, $justify: center, $gap: 20px);
+    @include main.flexbox($direction: column, $align: center, $justify: center, $gap: 3px);
     background: linear-gradient(180deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-200 100%);
 
     .user__image {
-      margin-top: 20px;
+      margin-top: 40px;
       width: 75px;
       height: 75px;
       padding: 5px;
       background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-400 100%);
       border-radius: 50%;
-    }
-
-    .separation__div {
-      margin-block: 1px;
-      align-self: start;
+      z-index: 10;
     }
 
     .user__name {
@@ -390,24 +500,90 @@
       font-weight: main.$fw-bold;
       color: main.$color-light-100;
     }
+
+    .separation__follows {
+      align-self: start;
+    }
   }
 
   .user__follows {
 
-    .follow__headline {
-      font-size: main.$fs-xl;
-      font-weight: main.$fw-bold;
-      color: main.$color-light-100;
-      padding: 5px 10px;
+    .follows__headline {
+      background-color: main.$color-dark-200;
+      padding-bottom: 15px;
+
+      .follow__headline {
+        font-size: main.$fs-xl;
+        font-weight: main.$fw-bold;
+        color: main.$color-light-100;
+        padding: 5px 10px;
+      }
+
     }
 
     .follows__list {
+      @include main.flexbox($direction: column, $gap: 5px);
+      background-color: main.$color-dark-100-opaque-300;
+      min-height: 530px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding-top: 5px;
 
       .follows__item {
+        @include main.flexbox($align: center,$justify: space-between);
+        background-color: rgba(13,13,13, .6);
+        position: relative;
+        margin-inline: 5px;
 
-        .follows__image {
-          width: 65px;
-          height: 65px;
+        .follows__user {
+          @include main.flexbox($align: center, $gap: 5px);
+
+          .user__details {
+            @include main.flexbox($direction: column, $justify: space-between, $gap: 5px);
+            height: 100%;
+
+            .user__followers {
+              font-size: main.$fs-xs;
+              color: main.$color-light-300;
+            }
+          }
+
+          .follows__image {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            border-radius: 50%;
+          }
+
+          .follows__name {
+            color: main.$color-light-200;
+            font-size: main.$fs-lg;
+            font-weight: main.$fw-medium;
+            //font-style: italic;
+          }
+
+        }
+
+        .unfollow__button {
+          border: none;
+          background-color: rgba(229, 82, 82, .3);
+          margin-right: 5px;
+          padding: 8px;
+          border-radius: 50%;
+
+          .unfollow__image {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+        }
+
+        .follows__split {
+          position: absolute;
+          height: 5px;
+          width: 100%;
+          bottom: 0;
+          border-radius: 20px;
+
         }
 
       }

@@ -1,4 +1,4 @@
-import style from "~/styles/feed.module.scss";
+import style from "./style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import menu from "~/assets/images/list.svg";
 import pedro from "~/assets/images/pedro.webp";
@@ -11,10 +11,75 @@ import search from "~/assets/images/search.svg";
 import house from "~/assets/images/house.svg";
 import bookmarks from "~/assets/images/bookmarks.svg";
 import follows from "~/assets/images/follows.svg";
+import woman1 from "~/assets/people/woman1.jfif";
+import woman2 from "~/assets/people/woman2.jfif";
+import man1 from "~/assets/people/man1.jfif";
+import man2 from "~/assets/people/man2.jfif";
+import unfollow from "~/assets/images/person-x-fill.svg";
+import netshoes from "~/assets/images/netshoes-logo.png";
+import smartphone from "~/assets/icons/phone.svg";
+import piggy from "~/assets/icons/piggy-bank.svg";
+import tree from "~/assets/icons/tree.svg"
+import tv from "~/assets/icons/tv.svg";
+import laptop from "~/assets/icons/laptop.svg";
+import lamp from "~/assets/icons/lamp.svg";
+import joystick from "~/assets/icons/joystick.svg";
+import hearts from "~/assets/icons/hearts.svg";
+import wishes from "~/assets/icons/bag-fill.svg";
+import bookmarksFill from "~/assets/icons/bookmarks-fill.svg";
+import houseFill from "~/assets/icons/house-fill.svg";
+import {Form} from "@remix-run/react";
+import {ActionFunction, ActionFunctionArgs} from "@remix-run/node";
 
 export default function FeedPage() {
     return (
         <div className={style.page__container}>
+            <section className={style.lateral__bar}>
+                <ul className={style.bar__list}>
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={search} alt="Buscar"/>
+                        </button>
+
+                        <p className={style.bar__text}>Buscar</p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={houseFill} alt="Início"/>
+                        </button>
+
+                        <p className={style.bar__text}>Início</p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={hearts} alt="Likes"/>
+                        </button>
+
+                        <p className={style.bar__text}>Meus Likes</p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={wishes} alt="Desejos"/>
+                        </button>
+
+                        <p className={style.bar__text}>Lista de Desejos</p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={bookmarksFill} alt="Salvos"/>
+                        </button>
+
+                        <p className={style.bar__text}>
+                            Itens Salvos
+                        </p>
+                    </li>
+
+                </ul>
+            </section>
             <main className={style.feed__container}>
                 <nav className={style.navbar__feed}>
                     <div className={style.feed__content}>
@@ -24,15 +89,16 @@ export default function FeedPage() {
                         </div>
 
                         <div className={style.content__search}>
-                            <div className={style.search__field}>
+                            <Form className={style.search__field}>
+                                <input type="hidden" name={"_action"} value={"search"}/>
                                 <label className={style.sr__only} htmlFor="search">O que você está buscando?</label>
                                 <input className={`${style.standard__input} ${style.field__input}`} name={"search"}
                                        id={"search"} placeholder={"O que você está buscando?"}/>
                                 <button aria-label={"buscar"} className={style.field__submit}></button>
-                            </div>
+                            </Form>
 
                             <menu className={style.search__menu}>
-                                <button className={style.menu__button}><img className={style.button__image} src={menu}
+                            <button className={style.menu__button}><img className={style.button__image} src={menu}
                                                                             alt="Menu"/></button>
                             </menu>
                         </div>
@@ -44,30 +110,95 @@ export default function FeedPage() {
                     <div className={style.separation__div}></div>
                     <ul className={style.category__list}>
                         <li className={style.item__category}>
-                            <img src={pedro} className={style.category__image} alt="Produto"/>
-                            <p className={style.category__name}>Roupas</p>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={piggy} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Maiores Ofertas</p>
+                        </li>
+                        {/*<li className={style.item__category}>*/}
+                        {/*    <div className={style.category__img_container}>*/}
+                        {/*        <button className={`${style.category__button} ${style.category__green}`}>*/}
+                        {/*            <img className={style.category__image} src={tree} alt="Produto"/>*/}
+                        {/*        </button>*/}
+                        {/*    </div>*/}
+                        {/*    <p className={style.category__name}>Natal</p>*/}
+                        {/*</li>*/}
+                        {/*<li className={style.item__category}>*/}
+                        {/*    <div className={style.category__img_container}>*/}
+                        {/*        <button className={style.category__button}>*/}
+                        {/*            <img className={style.category__image} src={smartphone} alt="Produto"/>*/}
+                        {/*        </button>*/}
+                        {/*    </div>*/}
+                        {/*    <p className={style.category__name}>Smartphones</p>*/}
+                        {/*</li>*/}
+                        {/*<li className={style.item__category}>*/}
+                        {/*    <div className={style.category__img_container}>*/}
+                        {/*        <button className={`${style.category__button} ${style.category__yellow}`}>*/}
+                        {/*            <img className={style.category__image} src={tv} alt="Produto"/>*/}
+                        {/*        </button>*/}
+                        {/*    </div>*/}
+                        {/*    <p className={style.category__name}>Televisores</p>*/}
+                        {/*</li>*/}
+                        {/*<li className={style.item__category}>*/}
+                        {/*    <img src={pedro} className={style.category__image} alt="Produto"/>*/}
+                        {/*    <p className={style.category__name}>Jogos</p>*/}
+                        {/*</li>*/}
+
+                        <li className={style.item__category}>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={tree} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Natal</p>
                         </li>
                         <li className={style.item__category}>
-                            <img src={pedro} className={style.category__image} alt="Produto"/>
-                            <p className={style.category__name}>Smartphone</p>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={tv} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Televisores</p>
                         </li>
                         <li className={style.item__category}>
-                            <img src={pedro} className={style.category__image} alt="Produto"/>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={smartphone} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Smartphones</p>
+                        </li>
+                        <li className={style.item__category}>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={joystick} alt="Produto"/>
+                                </button>
+                            </div>
                             <p className={style.category__name}>Jogos</p>
                         </li>
                         <li className={style.item__category}>
-                            <img src={pedro} className={style.category__image} alt="Produto"/>
-                            <p className={style.category__name}>Cosméticos</p>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={laptop} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Eletrônicos</p>
                         </li>
                         <li className={style.item__category}>
-                            <img src={pedro} className={style.category__image} alt="Produto"/>
-                            <p className={style.category__name}>Natal</p>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img className={style.category__image} src={lamp} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Decorações</p>
                         </li>
+
 
                         <button className={style.carousel__right}></button>
                     </ul>
                 </section>
-
 
                 <section>
                     <div className={style.feed__choices}>
@@ -84,7 +215,7 @@ export default function FeedPage() {
                         <fieldset className={style.post__field}>
                             <legend className={style.field__brand}>
                                 <img className={style.brand__image} src={logo}/>
-                                <span className={style.brand__name}>Social Commerce</span>
+                                <span className={style.brand__name}>Eco-Friendly Water Bottle</span>
                             </legend>
 
 
@@ -95,22 +226,17 @@ export default function FeedPage() {
                                 <img className={style.post__extra} src={details} alt="detalhes"/>
                             </div>
 
-                            <div className={style.separation__div}></div>
+                            <div className={style.separation__onpost}></div>
 
                             <div className={style.post__description}>
-                                <p className={style.description__text}>🌟 Promoção imperdível! 🌟<br/><br/>
-
-                                    Que tal renovar o guarda-roupa com estilo e ainda economizar?
-                                    🤑 Todas as nossas camisetas estão com 10% de desconto! Isso mesmo, é a sua
-                                    chance de garantir aquelas peças incríveis que você já estava de olho. <br/><br/>
-
-                                    Mas corra, porque essa oferta é por tempo limitado!
-                                    Aproveite e vista-se com o melhor da moda! 👕✨ <br/><br/>
-
-                                    👉 Link na bio para conferir nossos modelos!🤔</p>
+                                <p className={style.description__text}>Stay hydrated in style! Our sleek, sustainable
+                                    water bottle is perfect for your active lifestyle. Made from recycled materials, it
+                                    keeps your drinks cold for 24 hours or hot for 12. Join the eco-revolution! 🌿💧
+                                    #EcoLiving #ZeroWaste</p>
                             </div>
 
                             <div className={style.post__product}>
+
                                 <img className={style.product__image} src={product} alt=""/>
                                 <span className={style.product__discount}>-10%</span>
                             </div>
@@ -228,24 +354,104 @@ export default function FeedPage() {
                 <div className={style.user__info}>
                     <img className={style.user__image} src={pedro} alt=""/>
                     <p className={style.user__name}>Pedro Pedrinho</p>
-                    <div className={style.separation__div}></div>
+                    <div className={`${style.separation__follows} ${style.separation__div}`}></div>
                 </div>
 
                 <div className={style.user__follows}>
-                    <h1 className={style.follow__headline}>
-                        Seguindo
-                    </h1>
-                    <div className={style.separation__div}></div>
+                    <div className={style.follows__headline}>
+                        <h1 className={style.follow__headline}>
+                            Seguindo
+                        </h1>
+                        {/*<div className={style.separation__div}></div>*/}
+                    </div>
 
                     <ul className={style.follows__list}>
                         <li className={style.follows__item}>
-                            <img className={style.follows__image} src={logo} alt=""/>
-                            <p></p>
+                            <div className={style.follows__user}>
+                                <img className={style.follows__image} src={woman1} alt=""/>
+                                <div className={style.user__details}>
+                                    <p className={style.follows__name}>Phyllis Meredith</p>
+                                    <p className={style.user__followers}>2639 Seguidores</p>
+                                </div>
+
+                            </div>
+                            <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                            src={unfollow} alt=""/></button>
+                            <div className={style.follows__split}></div>
+
                         </li>
+
+                        <li className={style.follows__item}>
+                            <div className={style.follows__user}>
+                                <img className={style.follows__image} src={man1} alt=""/>
+                                <div className={style.user__details}>
+                                    <p className={style.follows__name}>Kevin Malone</p>
+                                    <p className={style.user__followers}>58 Seguidores</p>
+                                </div>
+                            </div>
+                            <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                            src={unfollow} alt=""/></button>
+                            <div className={style.follows__split}></div>
+                        </li>
+
+                        <li className={style.follows__item}>
+                            <div className={style.follows__user}>
+                                <img className={style.follows__image} src={woman2} alt=""/>
+                                <div className={style.user__details}>
+                                    <p className={style.follows__name}>Pam Angela</p>
+                                    <p className={style.user__followers}>715 Seguidores</p>
+                                </div>
+                            </div>
+                            <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                            src={unfollow} alt=""/></button>
+                            <div className={style.follows__split}></div>
+
+                        </li>
+
+                        <li className={style.follows__item}>
+                            <div className={style.follows__user}>
+                                <img className={style.follows__image} src={man2} alt=""/>
+                                <div className={style.user__details}>
+                                    <p className={style.follows__name}>Jim Halpert</p>
+                                    <p className={style.user__followers}>115 Seguidores</p>
+                                </div>
+                            </div>
+                            <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                            src={unfollow} alt=""/></button>
+                            <div className={style.follows__split}></div>
+
+                        </li>
+                        <li className={style.follows__item}>
+                            <div className={style.follows__user}>
+                                <img className={style.follows__image} src={netshoes} alt=""/>
+                                <div className={style.user__details}>
+                                    <p className={style.follows__name}>Netshoes</p>
+                                    <p className={style.user__followers}>25.495 Seguidores</p>
+                                </div>
+                            </div>
+                            <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                            src={unfollow} alt=""/></button>
+                            <div className={style.follows__split}></div>
+
+                        </li>
+
+
                     </ul>
                 </div>
             </section>
+
         </div>
 
-    )
+    );
+}
+
+export async function action({request}: ActionFunctionArgs) {
+    const body = Object.fromEntries(await request.formData());
+    const { _action, ...data } = body;
+
+    switch (_action) {
+        case "search": {
+
+        }
+    }
 }
