@@ -11,9 +11,8 @@ import java.util.UUID;
 
 public interface IPublicationService {
 
-    CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, UUID sellerId);
+    CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, Long sellerId);
     List<Publication> getAllPublications();
-    List<ShowPublicationDto> getAllPublicationByBuyer(UUID buyerId);
-
-    List<ShowPublicationDto> getAllByLocalDateOrder(String type);
+    List<ShowPublicationDto> getAllPublicationByBuyer(Long buyerId);
+    List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type);
  }

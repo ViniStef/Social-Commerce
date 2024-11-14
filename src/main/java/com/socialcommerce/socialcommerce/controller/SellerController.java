@@ -39,7 +39,7 @@ public class SellerController {
     }
 
     @GetMapping("/profile/{sellerId}")
-    public ResponseEntity<SellerProfileDto> sellerProfile (@PathVariable UUID sellerId){
+    public ResponseEntity<SellerProfileDto> sellerProfile (@PathVariable Long sellerId){
         return ResponseEntity.ok(sellerService.sellerProfile(sellerId));
     }
 

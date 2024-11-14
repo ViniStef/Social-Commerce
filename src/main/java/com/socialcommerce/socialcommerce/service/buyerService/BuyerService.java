@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -34,7 +33,6 @@ public class BuyerService implements IBuyerService {
     public void createBuyer(CreateBuyerDto buyerDto) {
         if (buyerDto.password().equals(buyerDto.confirmPassword())) {
             Buyer buyer = new Buyer(
-                    UUID.randomUUID(),
                     buyerDto.first_name(),
                     buyerDto.last_name(),
                     buyerDto.password(),
@@ -48,7 +46,7 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
-    public void followerASeller(UUID sellerId, UUID buyerId) {
+    public void followerASeller(Long sellerId, Long buyerId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not found"));
         buyer.getSellers().add(seller);
@@ -58,7 +56,7 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
-    public BuyerProfileDto buyerProfile(UUID buyerId) {
+    public BuyerProfileDto buyerProfile(Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
         return new BuyerProfileDto(
                 buyer.getFirst_name(),
@@ -84,7 +82,7 @@ public class BuyerService implements IBuyerService {
 
     @Transactional
     @Override
-    public void likeAPublication(UUID sellerId, Long publicationId) {
+    public void likeAPublication(Long sellerId, Long publicationId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not Found"));
 
         Publication publication = seller.getPublications().stream()
@@ -93,6 +91,16 @@ public class BuyerService implements IBuyerService {
                 .orElseThrow(() -> new NotFoundException("Publication not found"));
 
         publication.setLikes(publication.getLikes() + 1);
+
+    }
+
+    @Override
+    public void deleteFollower(Long sellerId, Long buyerId) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not Found"));
+
+        buyer.getSellers().removeIf(s -> s.getSeller_id().equals(sellerId));
+
+        buyerRepo.save(buyer);
 
     }
 }

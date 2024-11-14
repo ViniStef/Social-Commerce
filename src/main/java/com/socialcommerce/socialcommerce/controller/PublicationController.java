@@ -23,7 +23,7 @@ public class PublicationController {
     }
 
     @PostMapping("/{sellerId}/createPublication")
-    public ResponseEntity<CreatePublicationDto> createPublication(@RequestBody CreatePublicationDto createPublicationDto, @PathVariable UUID sellerId) {
+    public ResponseEntity<CreatePublicationDto> createPublication(@RequestBody CreatePublicationDto createPublicationDto, @PathVariable Long sellerId) {
         return new ResponseEntity<>(publicationService.createANewPost(createPublicationDto, sellerId), HttpStatus.CREATED);
     }
 
@@ -32,8 +32,8 @@ public class PublicationController {
         return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
     }
 
-    @GetMapping("/order/")
-    public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type){
-        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(type));
+    @GetMapping("/{buyerId}/order")
+    public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type, @PathVariable Long buyerId) {
+        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(type, buyerId));
     }
 }

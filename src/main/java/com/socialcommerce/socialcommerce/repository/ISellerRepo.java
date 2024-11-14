@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 @Repository
-public interface ISellerRepo extends JpaRepository<Seller, UUID> {
+public interface ISellerRepo extends JpaRepository<Seller, Long> {
 
     Seller findByEmail(String email);
 }

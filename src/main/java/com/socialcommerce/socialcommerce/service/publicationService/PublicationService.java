@@ -32,7 +32,7 @@ public class PublicationService implements IPublicationService{
     }
 
     @Override
-    public CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, UUID sellerId) {
+    public CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, Long sellerId) {
 
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
@@ -60,7 +60,7 @@ public class PublicationService implements IPublicationService{
 
 
     @Override
-    public List<ShowPublicationDto> getAllPublicationByBuyer (UUID buyerId) {
+    public List<ShowPublicationDto> getAllPublicationByBuyer (Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not found"));
 
         List<Publication> publicationList = buyer.getSellers().stream()
@@ -72,8 +72,16 @@ public class PublicationService implements IPublicationService{
     }
 
     @Override
-    public List<ShowPublicationDto> getAllByLocalDateOrder(String type) {
+    public List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type) {
+
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not found"));
+
+        List<Seller> sellers = buyer.getSellers();
+
+
+
         if(type.equalsIgnoreCase("mostRecently")){
+
             List<Publication> allByLocalDateOrderAsc = publicationRepo.getAllByLocalDateOrderAsc();
 
             return fromPublicationToShowPublication(allByLocalDateOrderAsc);

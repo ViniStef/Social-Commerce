@@ -20,8 +20,8 @@ import java.util.UUID;
 public class Buyer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID buyer_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long buyer_id;
 
     @Column(name = "first_name")
     private String first_name;
@@ -49,8 +49,7 @@ public class Buyer {
     @JsonIgnoreProperties("buyers")
     private List<Seller> sellers;
 
-    public Buyer(UUID buyer_id, String first_name, String last_name, String password, Long buyer_cpf, String email) {
-        this.buyer_id = buyer_id;
+    public Buyer(String first_name, String last_name, String password, Long buyer_cpf, String email) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;

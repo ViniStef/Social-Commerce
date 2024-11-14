@@ -1,12 +1,10 @@
 package com.socialcommerce.socialcommerce.service.sellerService;
 
-import com.socialcommerce.socialcommerce.dto.BuyerForSellerProfileDto;
-import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
-import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
-import com.socialcommerce.socialcommerce.dto.SellerProfileDto;
+import com.socialcommerce.socialcommerce.dto.*;
 import com.socialcommerce.socialcommerce.exception.NotFoundException;
 import com.socialcommerce.socialcommerce.exception.PasswordNotMatchException;
 import com.socialcommerce.socialcommerce.model.Buyer;
+import com.socialcommerce.socialcommerce.model.Publication;
 import com.socialcommerce.socialcommerce.model.Seller;
 import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,6 @@ public class SellerService implements ISellerService {
     public void createSeller(CreateSellerDto sellerDto) {
         if(sellerDto.password().equals(sellerDto.confirmPassword())){
            Seller seller = new Seller(
-                    UUID.randomUUID(),
                     sellerDto.first_name(),
                     sellerDto.last_name(),
                     sellerDto.cnpj(),
@@ -54,7 +51,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public SellerProfileDto sellerProfile(UUID sellerId) {
+    public SellerProfileDto sellerProfile(Long sellerId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
 
         return new SellerProfileDto(
@@ -62,6 +59,7 @@ public class SellerService implements ISellerService {
                 fromBuyerToBuyerForSeller(seller.getBuyers()));
 
     }
+
 
     private List<BuyerForSellerProfileDto> fromBuyerToBuyerForSeller(List<Buyer> sellerList) {
         List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
