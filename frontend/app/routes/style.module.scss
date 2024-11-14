@@ -1,15 +1,13 @@
-@use "main";
+@use "../../styles/main";
 
 .page__container {
   @include main.flexbox($justify: center, $gap: 20px);
   width: 100%;
-  background-color: main.$color-dark-opaque-200;
+  margin-top: 10px;
 }
 
 .feed__container {
   max-width: 750px;
-  border-inline: 2px solid main.$color-gray-200;
-  background-color: main.$color-dark-opaque-400;
   position: relative;
 
 
@@ -17,6 +15,7 @@
     @include main.flexbox($direction: column, $align: center, $justify: center);
     position: relative;
     background-color: main.$color-dark-100;
+
 
     .feed__content {
       @include main.flexbox($direction: column, $align: center, $justify: center);
@@ -73,7 +72,7 @@
           position: absolute;
           height: 2rem;
           width: 2rem;
-          background-image: url("../assets/images/arrow-right-circle.svg");
+          background-image: url("../../assets/images/arrow-right-circle.svg");
           background-repeat: no-repeat;
           background-size: contain;
           border: none;
@@ -104,7 +103,8 @@
   }
 
   .category__section {
-    background-color: main.$color-dark-200;
+    //background-color: main.$color-dark-200;
+    background-color: main.$color-dark-100-opaque-300;
     margin-top: 10px;
 
     .category__title {
@@ -125,7 +125,7 @@
         position: absolute;
         height: 2rem;
         width: 2rem;
-        background-image: url("../assets/images/arrow-right-circle.svg");
+        background-image: url("../../assets/images/arrow-right-circle.svg");
         background-repeat: no-repeat;
         background-size: contain;
         border: none;
@@ -191,7 +191,7 @@
   }
 
   .post__container {
-    background-color: main.$color-dark-300;
+    background-color: main.$color-light-100;
     padding-block: 5px;
     position: relative;
 
@@ -215,6 +215,7 @@
 
         .brand__name {
           font-size: main.$fs-lg;
+          color: main.$color-dark-100;
         }
       }
     }
