@@ -36,4 +36,15 @@ public class PublicationController {
     public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type, @PathVariable Long buyerId) {
         return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(buyerId, type));
     }
+
+    @GetMapping("/promo/{buyerId}")
+    public ResponseEntity<List<ShowPublicationDto>> getAllPromoPublication(@PathVariable Long buyerId) {
+        return ResponseEntity.ok(publicationService.getAllByPromo(buyerId));
+    }
+
+    @PutMapping("/delete/{publicationId}/seller/{sellerId}")
+    public ResponseEntity<?> deleteAPublicationBySeller(@PathVariable Long publicationId, @PathVariable Long sellerId){
+        publicationService.deleteAPublicationBySellerId(sellerId, publicationId);
+        return ResponseEntity.noContent().build();
+    }
 }

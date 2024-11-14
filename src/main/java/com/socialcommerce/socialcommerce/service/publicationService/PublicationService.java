@@ -94,6 +94,29 @@ public class PublicationService implements IPublicationService{
         }
     }
 
+    @Override
+    public List<ShowPublicationDto> getAllByPromo(Long buyerId) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not found"));
+
+        List<Publication> publicationList = buyer.getSellers().stream()
+                .flatMap(seller -> seller.getPublications().stream())
+                .filter(p -> p.getHas_promotion().equals(true))
+                .toList();
+
+        return fromPublicationToShowPublication(publicationList);
+
+    }
+
+    @Override
+    public void deleteAPublicationBySellerId(Long sellerId, Long publicationId) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
+
+        seller.getPublications()
+                .removeIf(p -> p.getPublication_id()
+                .equals(publicationId));
+
+        sellerRepo.save(seller);
+    }
 
     private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
 

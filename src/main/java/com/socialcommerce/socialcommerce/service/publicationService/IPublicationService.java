@@ -15,4 +15,6 @@ public interface IPublicationService {
     List<Publication> getAllPublications();
     List<ShowPublicationDto> getAllPublicationByBuyer(Long buyerId);
     List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type);
+    List<ShowPublicationDto> getAllByPromo(Long buyerId);
+    void deleteAPublicationBySellerId(Long sellerId, Long publicationId);
  }
