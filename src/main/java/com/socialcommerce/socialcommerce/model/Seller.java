@@ -22,6 +22,7 @@ public class Seller{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seller_id")
     private Long seller_id;
 
     @Column(name = "first_name")
@@ -40,7 +41,7 @@ public class Seller{
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("seller")
     private List<Publication> publications = new ArrayList<Publication>();
 

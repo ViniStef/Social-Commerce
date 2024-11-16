@@ -21,6 +21,7 @@ public class Buyer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "buyer_id")
     private Long buyer_id;
 
     @Column(name = "first_name")

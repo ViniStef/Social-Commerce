@@ -111,9 +111,12 @@ public class PublicationService implements IPublicationService{
     public void deleteAPublicationBySellerId(Long sellerId, Long publicationId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
-        seller.getPublications()
-                .removeIf(p -> p.getPublication_id()
-                .equals(publicationId));
+        boolean removed = seller.getPublications()
+                .removeIf(p -> p.getPublication_id().equals(publicationId));
+
+        if (!removed) {
+            throw new NotFoundException("Publication not found for the given seller");
+        }
 
         sellerRepo.save(seller);
     }
