@@ -28,7 +28,9 @@ import hearts from "~/assets/icons/hearts.svg";
 import wishes from "~/assets/icons/bag-fill.svg";
 import bookmarksFill from "~/assets/icons/bookmarks-fill.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
-import eraser from "~/assets/icons/eraser-fill.svg"
+import eraser from "~/assets/icons/eraser-fill.svg";
+import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
+
 import {Form, json, useActionData, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs} from "@remix-run/node";
 import axios from "axios";
@@ -183,7 +185,17 @@ export default function FeedPage() {
                             <p className={style.category__name}>Decorações</p>
                         </li>
 
-                        <button className={style.carousel__right}></button>
+                        <li className={style.item__category}>
+                            <div className={style.category__img_container}>
+                                <button className={`${style.category__button} ${style.category__blue}`}>
+                                    <img style={{
+                                        "padding": "1px"
+                                    }} className={style.category__image} src={shirt} alt="Produto"/>
+                                </button>
+                            </div>
+                            <p className={style.category__name}>Roupas</p>
+                        </li>
+
                     </ul>
                 </section>
 

@@ -2,12 +2,13 @@ import RegisterArea from "~/components/RegisterArea";
 import {createContext, Dispatch, SetStateAction, useState} from "react";
 import {json} from "@remix-run/react";
 import {validateAction} from "~/utils/utils";
-import {ActionFunctionArgs} from "@remix-run/node";
+import {ActionFunctionArgs, redirect} from "@remix-run/node";
 import {InitialRegister, initialRegisterSchema} from "~/routes/register/schemas/initialRegisterSchema";
 import {FinalRegister, finalRegisterSchema} from "~/routes/register/schemas/finalRegisterSchema";
 import {emailAvailability} from "~/routes/register/requests/emailAvailability";
 import {ZodSchema} from "zod";
 import {registerUser} from "~/routes/register/requests/users/registerUser";
+import {isResponse} from "@remix-run/react/dist/data";
 
 interface InitialRegisterContextType {
     initialRegister: HTMLFormElement | undefined;
@@ -25,7 +26,7 @@ export const meta = () => {
 }
 
 export default function RegisterPage() {
-    const [initialRegister, setInitialRegister] = useState<HTMLFormElement | undefined>(undefined);
+    const [initialRegister, setInitialRegister] = useState<HTMLFormElement | undefined>();
 
     return (
         <>
@@ -49,34 +50,33 @@ function decideSchema(action: FormDataEntryValue): ZodSchema {
 export async function action({request}: ActionFunctionArgs) {
     const body = Object.fromEntries(await request.formData());
     const { _action } = body;
-    // const { account } = formData;
-    // if (errors) {
-    //
-    //     return json({errors: {errors}}, 400);
-    // }
 
     switch (_action) {
         case "next_step": {
             const {formData, errors} = validateAction<InitialRegister>(body, decideSchema(_action));
             if (errors) {
-
-                return json({errors: {errors}}, 400);
+                return {ok: false, errors: errors};
             }
             const data = await emailAvailability(formData as InitialRegister);
-            return {success: true, data};
+            if (isResponse(data)) {
+                return {success: false, internalError: "Erro interno do servidor"};
+            }
+            return {success: true, isEmailAvailable: data};
         }
         case "register": {
             const {formData, errors} = validateAction<FinalRegister>(body, decideSchema(_action));
             if (errors) {
-                return json({errors: {errors}}, 400);
+                return {ok: false, errors: errors};
             }
             const { account } = formData;
             const data = await registerUser(account, formData as FinalRegister);
-            return {success: true, data, account};
+            if (data === 201) {
+                return redirect("/login");
+            }
+            return {success: false, data, account};
         }
         default:
-            return {error: "Ação inválida"}
+            return {error: "Ação inválida"};
     }
 
-    return new Error("Algo deu errado no servidor!!");
 }

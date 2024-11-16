@@ -156,22 +156,11 @@
 
 
     .category__list {
-      @include main.flexbox($align: flex-start, $gap: 10px);
+      @include main.flexbox($align: center, $justify: center, $gap: 10px);
       padding-block: 5px 10px;
       position: relative;
       overflow: hidden;
 
-      .carousel__right {
-        position: absolute;
-        height: 2rem;
-        width: 2rem;
-        background-image: url("../assets/images/arrow-right-circle.svg");
-        background-repeat: no-repeat;
-        background-size: contain;
-        border: none;
-        background-color: transparent;
-        right: 1px;
-      }
 
       .item__category {
         @include main.flexbox($direction: column, $justify: space-between, $align:center, $gap: 10px);

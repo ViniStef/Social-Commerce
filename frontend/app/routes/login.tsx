@@ -31,13 +31,10 @@ type Login = z.infer<typeof loginSchema>;
 
 export async function action({request}: ActionFunctionArgs) {
     const body = Object.fromEntries(await request.formData());
-
     const { formData, errors } = validateAction<Login>(body, loginSchema);
-
     const { _action } = body;
 
     if (_action == "login") {
-        // console.log(json({"message": "Usuário não encontrado"}));
         if (errors) {
             return json({errors: {errors}});
         }

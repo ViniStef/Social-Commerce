@@ -6,7 +6,7 @@ if (secret === "default") {
     secret = "default-secret";
 }
 
-export let authCookie = createCookie("auth", {
+export const authCookie = createCookie("auth", {
     httpOnly: true,
     path: "/feed",
     sameSite: "lax",

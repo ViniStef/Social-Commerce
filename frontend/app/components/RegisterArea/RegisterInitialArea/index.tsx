@@ -22,32 +22,37 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
 
     useEffect(() => {
         console.log("data aq test", data);
+
         if (data) {
             if ("errors" in data) {
                 const errors = data.errors
-                if (errors.errors.email) {
+                if (errors?.email) {
                     setIsValidEmail(false);
-                    setInvalidMessage(String(errors.errors.email));
+                    setInvalidMessage(String(errors.email));
                 } else {
                     setIsValidEmail(true);
                     setInvalidMessage("");
                 }
-            } else if ("message" in data) {
-                if (data.message == "Algo deu errado no servidor") {
-                    setInvalidMessage("Problema no servidor, por favor tente novamente")
-                } else {
+            } else if ("isEmailAvailable" in data) {
+                if (data.isEmailAvailable === true) {
+                    console.log("Teste aq em cima: ", data.isEmailAvailable);
                     setInvalidMessage("Este email já está em uso");
+                    setIsValidEmail(false);
+                    setNeedsAnimation(true);
+                } else {
+                    setIsValidEmail(true);
+                    setNeedsAnimation(false);
                 }
-                setIsValidEmail(false);
-                setNeedsAnimation(true);
+                // setIsValidEmail(false);
+                // setNeedsAnimation(true);
+            } else if ("data" in data) {
+                if (!data.data) {
+                    setIsValidEmail(true);
+                    setNeedsAnimation(false);
+                }
             }
         }
 
-        // if (data === false) {
-        //
-        //     setIsValidEmail(true);
-        //     setNeedsAnimation(false);
-        // }
 
     }, [data]);
 
@@ -58,7 +63,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
         console.log(Object.fromEntries(formData));
 
         setInitialRegister(e.currentTarget);
-        console.log(formData);
+        console.log(formData.get("email"));
 
         submit(formData, {"method": "post"})
     }
@@ -76,6 +81,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                                    setIsAccountTypeSelected={setIsAccountTypeSelected}/>
                     <RoleContainer account={"seller"} isAccountTypeSelected={isAccountTypeSelected}
                                    setIsAccountTypeSelected={setIsAccountTypeSelected}/>
+
                     {
                         isAccountTypeSelected ? true :
                             <p className={style.invalid__message}>{"Por favor, escolha uma opção"}</p>
@@ -87,9 +93,16 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                            className={isValidEmail ? `${style.email__input} ${style.standard__input}` : `${style.email__input} ${style.standard__input} ${style.invalid__email}`}
                            id={"email__input"} placeholder={"Insira seu email"} type="text"/>
                     <button type={"submit"} className={style.email__validate}></button>
-                    {
-                        isValidEmail ? true : <p className={style.invalid__message}>{invalidMessage}</p>
-                    }
+
+
+                    {data?.isEmailAvailable === true && <p className={style.invalid__message}>Email já está em uso!</p>}
+
+                    {data?.internalError && <p className={style.invalid__message}>Erro no servidor, tente novamente</p>}
+
+
+                    {/*{*/}
+                    {/*    isValidEmail ? true : */}
+                    {/*}*/}
                 </div>
 
                 <input type={"hidden"} name={"_action"} value={"next_step"} />

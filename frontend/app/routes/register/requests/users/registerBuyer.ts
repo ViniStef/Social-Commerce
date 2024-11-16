@@ -3,9 +3,9 @@ import axios from "axios";
 import {redirect, TypedResponse} from "@remix-run/node";
 import {json} from "@remix-run/react";
 
-export async function registerBuyer(formData: FinalRegister): Promise<number | TypedResponse> {
+export async function registerBuyer(formData: FinalRegister): Promise<number | {"message": string, "status": number}> {
     const { first_name, last_name, identifier, password, confirm_password, email } = formData;
-    await axios.post("http://localhost:8080/buyer/create", {
+    return await axios.post("http://localhost:8080/buyer/create", {
         first_name: first_name,
         last_name: last_name,
         cpf: parseInt(identifier),
@@ -13,13 +13,9 @@ export async function registerBuyer(formData: FinalRegister): Promise<number | T
         confirm_password: confirm_password,
         email: email,
     }).then(response => {
-        if (response.status === 201) {
-            redirect("/login");
-        }
         return response.status;
     }).catch(error => {
-        return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
+        return {"message": `Erro interno no servidor:  ${error}`, "status": 500};
     })
 
-    return json({"message": "Erro interno no servidor", "status": 500});
 }
