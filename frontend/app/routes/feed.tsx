@@ -1,4 +1,4 @@
-import style from "./style.module.scss";
+import style from "../styles/style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import menu from "~/assets/images/list.svg";
 import pedro from "~/assets/images/pedro.webp";
@@ -28,10 +28,20 @@ import hearts from "~/assets/icons/hearts.svg";
 import wishes from "~/assets/icons/bag-fill.svg";
 import bookmarksFill from "~/assets/icons/bookmarks-fill.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
-import {Form} from "@remix-run/react";
+import eraser from "~/assets/icons/eraser-fill.svg"
+import {Form, json, useActionData, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs} from "@remix-run/node";
+import axios from "axios";
+import * as path from "node:path";
+import * as process from "node:process";
+import * as fs from "node:fs";
+
 
 export default function FeedPage() {
+    const submit = useSubmit();
+    const data = useActionData<typeof action>();
+
+
     return (
         <div className={style.page__container}>
             <section className={style.lateral__bar}>
@@ -80,6 +90,7 @@ export default function FeedPage() {
 
                 </ul>
             </section>
+
             <main className={style.feed__container}>
                 <nav className={style.navbar__feed}>
                     <div className={style.feed__content}>
@@ -98,7 +109,7 @@ export default function FeedPage() {
                             </Form>
 
                             <menu className={style.search__menu}>
-                            <button className={style.menu__button}><img className={style.button__image} src={menu}
+                                <button className={style.menu__button}><img className={style.button__image} src={menu}
                                                                             alt="Menu"/></button>
                             </menu>
                         </div>
@@ -117,34 +128,6 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Maiores Ofertas</p>
                         </li>
-                        {/*<li className={style.item__category}>*/}
-                        {/*    <div className={style.category__img_container}>*/}
-                        {/*        <button className={`${style.category__button} ${style.category__green}`}>*/}
-                        {/*            <img className={style.category__image} src={tree} alt="Produto"/>*/}
-                        {/*        </button>*/}
-                        {/*    </div>*/}
-                        {/*    <p className={style.category__name}>Natal</p>*/}
-                        {/*</li>*/}
-                        {/*<li className={style.item__category}>*/}
-                        {/*    <div className={style.category__img_container}>*/}
-                        {/*        <button className={style.category__button}>*/}
-                        {/*            <img className={style.category__image} src={smartphone} alt="Produto"/>*/}
-                        {/*        </button>*/}
-                        {/*    </div>*/}
-                        {/*    <p className={style.category__name}>Smartphones</p>*/}
-                        {/*</li>*/}
-                        {/*<li className={style.item__category}>*/}
-                        {/*    <div className={style.category__img_container}>*/}
-                        {/*        <button className={`${style.category__button} ${style.category__yellow}`}>*/}
-                        {/*            <img className={style.category__image} src={tv} alt="Produto"/>*/}
-                        {/*        </button>*/}
-                        {/*    </div>*/}
-                        {/*    <p className={style.category__name}>Televisores</p>*/}
-                        {/*</li>*/}
-                        {/*<li className={style.item__category}>*/}
-                        {/*    <img src={pedro} className={style.category__image} alt="Produto"/>*/}
-                        {/*    <p className={style.category__name}>Jogos</p>*/}
-                        {/*</li>*/}
 
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
@@ -154,6 +137,7 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Natal</p>
                         </li>
+
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
                                 <button className={`${style.category__button} ${style.category__blue}`}>
@@ -162,6 +146,7 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Televisores</p>
                         </li>
+
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
                                 <button className={`${style.category__button} ${style.category__blue}`}>
@@ -170,6 +155,7 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Smartphones</p>
                         </li>
+
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
                                 <button className={`${style.category__button} ${style.category__blue}`}>
@@ -178,6 +164,7 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Jogos</p>
                         </li>
+
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
                                 <button className={`${style.category__button} ${style.category__blue}`}>
@@ -186,6 +173,7 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Eletrônicos</p>
                         </li>
+
                         <li className={style.item__category}>
                             <div className={style.category__img_container}>
                                 <button className={`${style.category__button} ${style.category__blue}`}>
@@ -194,7 +182,6 @@ export default function FeedPage() {
                             </div>
                             <p className={style.category__name}>Decorações</p>
                         </li>
-
 
                         <button className={style.carousel__right}></button>
                     </ul>
@@ -310,18 +297,19 @@ export default function FeedPage() {
                 </section>
 
                 <section className={style.user__features}>
+
                     <ul className={style.feature__list}>
                         <li className={style.feature__group}>
-                            <li className={style.feature__item}>
-                                <button className={style.feature__action}><img className={style.action__image}
-                                                                               src={search}
-                                                                               alt="buscar"/></button>
-                            </li>
-                            <li className={style.feature__item}>
-                                <button className={style.feature__action}><img className={style.action__image}
-                                                                               src={house}
-                                                                               alt="início"/></button>
-                            </li>
+                            <div className={style.feature__item}>
+                                <button className={style.feature__action}>
+                                     <img className={style.action__image} src={search} alt="buscar"/>
+                                </button>
+                            </div>
+                            <div className={style.feature__item}>
+                                <button className={style.feature__action}>
+                                    <img className={style.action__image} src={house} alt="início"/>
+                                </button>
+                            </div>
                         </li>
 
                         <li className={`${style.feature__item} ${style.profile__item}`}>
@@ -330,30 +318,40 @@ export default function FeedPage() {
                                 <p className={style.action__name}>Meu Perfil</p>
                             </button>
                         </li>
+
                         <li className={style.feature__group}>
-                            <li className={style.feature__item}>
-                                <button className={style.feature__action}><img className={style.action__image}
-                                                                               src={follows}
-                                                                               alt="seguidos"/></button>
-                            </li>
-                            <li className={style.feature__item}>
-                                <button className={style.feature__action}><img className={style.action__image}
-                                                                               src={bookmarks} alt="bookmarks"/>
+                            <div className={style.feature__item}>
+                                <button className={style.feature__action}>
+                                    <img className={style.action__image} src={follows} alt="seguidos"/>
                                 </button>
-                            </li>
+                            </div>
+                            <div className={style.feature__item}>
+                                <button className={style.feature__action}>
+                                    <img className={style.action__image} src={bookmarks} alt="bookmarks"/>
+                                </button>
+                            </div>
                         </li>
 
                     </ul>
 
                 </section>
 
+
+
             </main>
 
 
             <section className={style.user__container}>
                 <div className={style.user__info}>
-                    <img className={style.user__image} src={pedro} alt=""/>
+                    <img className={style.user__image} src={data ? data : logo} alt=""/>
                     <p className={style.user__name}>Pedro Pedrinho</p>
+                    <Form onChange={(event) => {submit(event.currentTarget)}} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
+                        <div className={style.upload__submit}>
+                            <input type={"hidden"} name={"_action"} value={"upload_image"} />
+                            <label className={style.upload__input} aria-label={"Enviar foto de perfil"} htmlFor="upload__input"><img src={eraser} alt={"Enviar imagem"} /></label>
+                            <input name={"image"} id={"upload__input"} type={"file"} accept={"image/png"}/>
+                        </div>
+                    </Form>
                     <div className={`${style.separation__follows} ${style.separation__div}`}></div>
                 </div>
 
@@ -362,7 +360,6 @@ export default function FeedPage() {
                         <h1 className={style.follow__headline}>
                             Seguindo
                         </h1>
-                        {/*<div className={style.separation__div}></div>*/}
                     </div>
 
                     <ul className={style.follows__list}>
@@ -446,12 +443,41 @@ export default function FeedPage() {
 }
 
 export async function action({request}: ActionFunctionArgs) {
-    const body = Object.fromEntries(await request.formData());
-    const { _action, ...data } = body;
+    const formData = await request.formData();
+    const _action = formData.get("_action");
+
+    const baseUrl = "http://localhost:8080/";
 
     switch (_action) {
         case "search": {
+            const response = await axios.get(baseUrl + "feed",
+                { params:
+                        {search: data.search}
+                });
 
         }
+        break;
+        case "upload_image": {
+            const image = formData.get("image") as File;
+
+            if (!image) {
+                return json({error:  "O arquivo não pode ser enviado"}, 400);
+            }
+
+            const uploadDir = path.join(process.cwd(), "public/000001");
+            const filename = `${crypto.randomUUID()}-${Date.now()}-${image.name}`;
+            const filePath = path.join(uploadDir, filename);
+
+            fs.mkdirSync(uploadDir, {recursive: true});
+
+            const arrayBuffer = await image.arrayBuffer();
+            fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
+
+            const imageUrl = `/000001/${filename}`;
+
+            return json(imageUrl);
+        }
     }
+
+    throw new Error("Teste so pra n bugar");
 }

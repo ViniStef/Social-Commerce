@@ -1,6 +1,4 @@
-@use "../styles/main";
-
-
+@use "main";
 
 .page__container {
   @include main.flexbox($justify: center, $gap: 20px);
@@ -491,6 +489,7 @@
       height: 75px;
       padding: 5px;
       background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-400 100%);
+
       border-radius: 50%;
       z-index: 10;
     }
@@ -499,6 +498,36 @@
       font-size: main.$fs-xl;
       font-weight: main.$fw-bold;
       color: main.$color-light-100;
+    }
+
+    .upload__image {
+      position: absolute;
+      z-index: 10;
+
+      .upload__submit {
+        border: none;
+        background-color: transparent;
+        position: relative;
+        top: 15px;
+        left: 30px;
+
+        input[type="file"] {
+          display: none;
+        }
+
+        .upload__input {
+          display: inline-block;
+          padding: 5px;
+          cursor: pointer;
+          //background-image: url("../assets/icons/eraser-fill.svg");
+          background-repeat: no-repeat;
+          background-size: contain;
+          border: none;
+          background-color: main.$color-dark-350;
+          border: 3px solid main.$color-dark-400;
+          border-radius: 50%;
+        }
+      }
     }
 
     .separation__follows {
