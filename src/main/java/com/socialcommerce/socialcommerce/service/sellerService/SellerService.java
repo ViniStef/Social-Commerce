@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -55,17 +56,29 @@ public class SellerService implements ISellerService {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
 
         return new SellerProfileDto(
-                seller.getFirst_name(),
+                seller.getFirstName(),
                 fromBuyerToBuyerForSeller(seller.getBuyers()));
 
     }
 
+    @Override
+    public List<SellerForBuyerProfileDto> getAllByName(String sellerName) {
+        List<Seller> sellersFounded = sellerRepo.findAllByFirstNameContainingIgnoreCase(sellerName);
+
+        if (sellersFounded != null) {
+            return sellersFounded.stream()
+                    .map(seller -> new SellerForBuyerProfileDto(seller.getFirstName()))
+                    .collect(Collectors.toList());
+        } else {
+            throw new NotFoundException("Seller not found");
+        }
+    }
 
     private List<BuyerForSellerProfileDto> fromBuyerToBuyerForSeller(List<Buyer> sellerList) {
         List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
 
         for (Buyer buyer : sellerList) {
-            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getFirst_name());
+            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getFirstName());
             buyerList.add(dto);
         }
 

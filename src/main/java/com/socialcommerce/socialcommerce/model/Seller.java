@@ -23,13 +23,13 @@ public class Seller{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seller_id")
-    private Long seller_id;
+    private Long sellerId;
 
     @Column(name = "first_name")
-    private String first_name;
+    private String firstName;
 
     @Column(name = "last_name")
-    private String last_name;
+    private String lastName;
 
     @Column(name = "cnpj")
     private Long cnpj;
@@ -50,9 +50,9 @@ public class Seller{
    @JsonIgnoreProperties("sellers")
     private List<Buyer> buyers;
 
-    public Seller( String first_name, String last_name, Long cnpj, String password, String email) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Seller( String firstName, String lastName, Long cnpj, String password, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.cnpj = cnpj;
         this.password = password;
         this.email = email;

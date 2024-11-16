@@ -59,7 +59,7 @@ public class BuyerService implements IBuyerService {
     public BuyerProfileDto buyerProfile(Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
         return new BuyerProfileDto(
-                buyer.getFirst_name(),
+                buyer.getFirstName(),
                 fromSellerToSellerForBuyer(buyer.getSellers())
                 );
     }
@@ -73,7 +73,7 @@ public class BuyerService implements IBuyerService {
         List<SellerForBuyerProfileDto> sellerForBuyerList = new ArrayList<>();
 
         for (Seller seller : sellerList) {
-            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getFirst_name());
+            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getFirstName());
             sellerForBuyerList.add(dto);
         }
 
@@ -98,7 +98,7 @@ public class BuyerService implements IBuyerService {
     public void deleteFollower(Long sellerId, Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not Found"));
 
-        buyer.getSellers().removeIf(s -> s.getSeller_id().equals(sellerId));
+        buyer.getSellers().removeIf(s -> s.getSellerId().equals(sellerId));
 
         buyerRepo.save(buyer);
 

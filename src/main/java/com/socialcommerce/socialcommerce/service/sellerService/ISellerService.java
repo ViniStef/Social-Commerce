@@ -15,4 +15,5 @@ public interface ISellerService {
     void deleteAll();
     List<Seller> getAllSellers();
     SellerProfileDto sellerProfile(Long sellerId);
+    List<SellerForBuyerProfileDto> getAllByName(String sellerName);
 }
