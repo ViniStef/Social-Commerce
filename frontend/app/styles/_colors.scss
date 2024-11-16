@@ -1,0 +1,33 @@
+$color-brand-300: rgba(196, 74, 74);
+$color-brand-200: rgba(229, 82, 82);
+$color-brand-100: rgba(255, 85, 85);
+
+$color-accent-300: rgb(115, 185, 194);
+$color-accent-200: rgb(114, 197, 208);
+$color-accent-100: rgb(131, 227, 240);
+
+$color-brand-gradient: #{linear-gradient(133.43deg, $color-accent-100 4.41%, $color-brand-100 121.99%)};
+
+$color-dark-opaque-400:  rgba(0, 0, 0, 0.76);
+$color-dark-opaque-300:  rgba(0, 0, 0, 0.53);
+$color-dark-opaque-200:  rgba(0, 0, 0, 0.32);
+$color-dark-opaque-100: rgba(0, 0, 0, 0.16);
+$color-dark-400: rgba(60,60,60);
+$color-dark-350: rgba(30, 30, 30);
+$color-dark-300: rgba(23,23,23);
+$color-dark-200: rgba(18, 18, 18);
+$color-dark-100: rgba(13, 13, 13);
+$color-dark-100-opaque-300: rgba(13, 13, 13, .3);
+
+$color-gray-100: rgba(150,150,150);
+$color-gray-200: rgba(123,123,123);
+$color-gray-300: rgba(103,103,103);
+$color-gray-350: rgba(93,93,93);
+$color-gray-400: rgba(83,83,83);
+
+$color-light-400: rgba(176,176,176);
+$color-light-300: rgba(187, 187, 187);
+$color-light-200: rgba(220,220,220);
+$color-light-150: rgba(230, 230, 230);
+$color-light-100: rgba(239,239,239);
+$color-light-100-opaque-200: rgba(239,239,239, .5);

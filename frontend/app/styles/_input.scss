@@ -1,0 +1,53 @@
+@use 'colors';
+@use 'typography';
+
+input {
+  border-radius: 10px;
+  border: 1px solid colors.$color-gray-300;
+  background-color: colors.$color-dark-200;
+  color: colors.$color-light-100;
+  font-size: typography.$fs-sm;
+
+  &::placeholder {
+    color: colors.$color-light-400;
+  }
+}
+
+.standard__input {
+  border-radius: 10px;
+  height: 2rem;
+  font-size: typography.$fs-sm;
+  width: 100%;
+  padding-block: 25px;
+  padding-left: 15px;
+
+  &::placeholder {
+
+  }
+}
+
+input:hover {
+  background-color: colors.$color-dark-300;
+}
+
+// "Fix" for the autocomplete style changes!
+input:-webkit-autofill,
+input:-webkit-autofill:focus, {
+  transition-delay: 3600s;
+
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+  font-size: typography.$fs-sm;
+  border: 1px solid colors.$color-light-100;
+}
+
+input {
+  &:-webkit-autofill::first-line,
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    font-size: typography.$fs-md;
+  }
+}

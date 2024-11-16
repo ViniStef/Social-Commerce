@@ -31,7 +31,7 @@ public class BuyerService implements IBuyerService {
 
     @Override
     public void createBuyer(CreateBuyerDto buyerDto) {
-        if (buyerDto.password().equals(buyerDto.confirmPassword())) {
+        if (buyerDto.password().equals(buyerDto.confirm_password())) {
             Buyer buyer = new Buyer(
                     buyerDto.first_name(),
                     buyerDto.last_name(),
