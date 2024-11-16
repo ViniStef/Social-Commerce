@@ -44,31 +44,40 @@ export async function action({request}: ActionFunctionArgs) {
             return json({errors: {errors}});
         }
 
-        await axios.get("http://localhost:8080/login?", {
-            params: {
-                email: email,
-                password: password,
-            }
-        }).then(async response => {
-            if (response.status === 404) {
-                return json({"message": "Usuário não encontrado"});
-            }
+       const data = await loginResponse(formData);
 
-            const userId = response.data.userId;
-            const userAccountType = response.data.accountType;
-            const cookieData = { userId, userAccountType };
+        if(data){
             return redirect("/feed", {
                 headers: {
-                    "Set-Cookie": await authCookie.serialize(cookieData),
+                    "Set-Cookie": await authCookie.serialize(data),
                 }
             })
-
-        }).catch(error => {
-            return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
-        })
+        }
 
         return json({"message": "Erro desconhecido"});
     }
 }
 
-//
+
+async function loginResponse (formData:Login){
+    const { email, password } = formData as Login;
+
+    await axios.post("http://localhost:8080/login", {
+        email: email,
+        password: password,
+    }).then(response => {
+        if (response.status === 404) {
+            return json({"message": "Usuário não encontrado"});
+        }
+
+        const userAccountId = response.data.userId;
+        const userAccountType = response.data.accountType;
+        const cookieData = { userAccountId, userAccountType };
+
+        return cookieData;
+    }).catch(error => {
+        return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
+    })
+
+    return json({"message": "Erro desconhecido"});
+}
