@@ -39,6 +39,7 @@ public class LoginService {
             if( buyer.getPassword().equals(password)) {
                 loginObject.put("accountType", "buyer");
                 loginObject.put("userId", buyer.getBuyerId().toString());
+                return loginObject;
             }
             return false;
         }
