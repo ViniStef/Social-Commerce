@@ -103,4 +103,10 @@ public class BuyerService implements IBuyerService {
         buyerRepo.save(buyer);
 
     }
+
+    @Override
+    public void uploadImage(Long buyerId, String image) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not found"));
+        buyer.setImagePath(image);
+    }
 }
