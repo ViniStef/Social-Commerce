@@ -11,6 +11,6 @@ export const authCookie = createCookie("auth", {
     path: "/feed",
     sameSite: "lax",
     secrets: [secret],
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
     maxAge: 60 * 60 * 24 * 30, // 30 dias
 });

@@ -33,7 +33,7 @@ import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 
 import {Form, json, useActionData, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs} from "@remix-run/node";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
@@ -43,6 +43,7 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
 
+    console.log("data em feed: ", data);
 
     return (
         <div className={style.page__container}>
@@ -102,20 +103,51 @@ export default function FeedPage() {
                         </div>
 
                         <div className={style.content__search}>
-                            <Form className={style.search__field}>
+                            <Form method={"post"} className={style.search__field}>
                                 <input type="hidden" name={"_action"} value={"search"}/>
                                 <label className={style.sr__only} htmlFor="search">O que você está buscando?</label>
                                 <input className={`${style.standard__input} ${style.field__input}`} name={"search"}
                                        id={"search"} placeholder={"O que você está buscando?"}/>
-                                <button aria-label={"buscar"} className={style.field__submit}></button>
+                                <button onClick={(e) => console.log("oi")} type={"submit"} aria-label={"buscar"} className={style.field__submit}></button>
                             </Form>
 
                             <menu className={style.search__menu}>
-                                <button className={style.menu__button}><img className={style.button__image} src={menu}
-                                                                            alt="Menu"/></button>
+                                <img className={style.button__image} src={menu}
+                                                                            alt="Menu"/>
                             </menu>
                         </div>
                     </div>
+
+                    {data?.sellers &&
+                        <div className={style.modal__search}>
+                            <div className={style.search__results}>
+                                <Form method={"post"}>
+                                    <input type="hidden" name={"_action"} value={"close_search"}/>
+                                    <button aria-label={"fechar"} className={style.close__button}>Close</button>
+                                </Form>
+
+                                <ul>
+
+                                    {data.sellers.map((seller: Seller) => {
+                                        return (
+                                            <li key={seller.profileImgUrl}>
+                                                <img src={seller.profileImgUrl} alt=""/>
+                                                <p>{seller.name}</p>
+                                            </li>
+                                        )
+                                    })}
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+                    {data?.errors &&
+                    <p>Erro na busca, tente novamente mais tarde</p>
+                    }
+
+
                 </nav>
 
                 <section className={style.category__section}>
@@ -355,7 +387,7 @@ export default function FeedPage() {
 
             <section className={style.user__container}>
                 <div className={style.user__info}>
-                    <img className={style.user__image} src={data ? data : logo} alt=""/>
+                    <img className={style.user__image} src={data?.imageUrl ? data.imageUrl : logo} alt=""/>
                     <p className={style.user__name}>Pedro Pedrinho</p>
                     <Form onChange={(event) => {submit(event.currentTarget)}} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
                         <div className={style.upload__submit}>
@@ -454,26 +486,49 @@ export default function FeedPage() {
     );
 }
 
+type Seller = {
+    name: string;
+    profileImgUrl: string;
+}
+
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
     const _action = formData.get("_action");
+
+    console.log("jjkl: ", _action);
 
     const baseUrl = "http://localhost:8080/";
 
     switch (_action) {
         case "search": {
-            const response = await axios.get(baseUrl + "feed",
-                { params:
-                        {search: data.search}
-                });
+            console.log("chegou aki?")
+            try {
+                const response = await axios.get(baseUrl + `seller/findASeller/${formData.get("search")}`)
+                const sellerResponse: Seller[] = response.data;
+
+                console.log("Response data: ", response.data);
+
+                return {sellers: sellerResponse};
+            } catch(error) {
+                console.log("Erro akii em: ", error);
+
+                if (error instanceof AxiosError) {
+                    return { errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return { errors: "Erro inesperado no servidor" };
+                }
+            }
 
         }
-        break;
+        case "close_search": {
+            return {close_search: true};
+        }
         case "upload_image": {
             const image = formData.get("image") as File;
 
             if (!image) {
-                return json({error:  "O arquivo não pode ser enviado"}, 400);
+                return {error:  "O arquivo não pode ser enviado"};
             }
 
             const uploadDir = path.join(process.cwd(), "public/000001");
@@ -487,9 +542,11 @@ export async function action({request}: ActionFunctionArgs) {
 
             const imageUrl = `/000001/${filename}`;
 
-            return json(imageUrl);
+            return {imageUrl: imageUrl};
         }
     }
 
-    throw new Error("Teste so pra n bugar");
+    console.log("chegou aki2?")
+
 }
+

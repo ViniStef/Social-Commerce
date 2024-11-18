@@ -116,7 +116,8 @@
           border: none;
           background-color: transparent;
           right: 8px;
-
+          cursor: pointer;
+          z-index: 100;
         }
       }
 
@@ -137,6 +138,22 @@
         }
       }
 
+    }
+
+    .modal__search {
+      @include main.flexbox($justify: center, $align: center);
+      position: relative;
+      width: 100%;
+      z-index: 15;
+
+      .search__results {
+        background-color: main.$color-dark-opaque-400;
+        width: 100%;
+        border-radius: 10px;
+        position: absolute;
+        height: 250px;
+        top: 0;
+      }
     }
   }
 

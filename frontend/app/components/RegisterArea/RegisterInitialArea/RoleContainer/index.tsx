@@ -3,36 +3,19 @@ import {Dispatch, JSX, SetStateAction, useContext, useEffect} from "react";
 import {action} from "~/routes/register/route";
 import {useActionData} from "@remix-run/react";
 
-interface receivedProps {
-    account: string;
-    isAccountTypeSelected: boolean;
-    setIsAccountTypeSelected: Dispatch<SetStateAction<boolean>>
+type RoleContainerProps = {
+    account:string;
 }
 
-export const RoleContainer = ( {account, isAccountTypeSelected, setIsAccountTypeSelected}: receivedProps): JSX.Element => {
+export const RoleContainer = ({account}: RoleContainerProps) => {
     const data = useActionData<typeof action>();
 
-    useEffect(() => {
-
-        if (data) {
-            if ("errors" in data) {
-                const errors = data.errors
-                if (errors.errors.account) {
-                    setIsAccountTypeSelected(false);
-                }
-            }
-        }
-    }, [data]);
-
-    const setAccountType = ((accountType: string) => {
-        setIsAccountTypeSelected(true);
-    })
-
+    console.log("data aki: ", data);
 
     return (
-        <div className={isAccountTypeSelected ? style.role__container : `${style.role__container} ${style.container__error}`}>
+        <div className={data?.formValidationError?.account ? `${style.role__container} ${style.container__error}` : style.role__container}>
             <div className={style.role__choice}>
-                <input onChange={(e) => setAccountType(e.target.value)} className={style.choice__input} value={account} type="radio" id={`choice__${account}`}
+                <input className={style.choice__input} value={account} type="radio" id={`choice__${account}`}
                        name={"account"}/>
                 <div className={style.choice__indication}>
                     <label className={style.indication__label} htmlFor={`choice__${account}`}></label>
