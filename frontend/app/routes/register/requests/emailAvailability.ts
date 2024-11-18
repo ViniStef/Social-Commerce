@@ -1,22 +1,34 @@
 import {InitialRegister} from "~/routes/register/schemas/initialRegisterSchema";
 import {json} from "@remix-run/react";
 import {TypedResponse} from "@remix-run/node";
+import axios, {AxiosError} from "axios";
 
-export async function emailAvailability(formData: InitialRegister): Promise<boolean | TypedResponse>   {
+type EmailAvailabilityResponse = {
+    isEmailUsed?: boolean;
+    errors?: string;
+}
+
+export async function emailAvailability(formData: InitialRegister): Promise<EmailAvailabilityResponse>   {
     const { account, email } = formData as InitialRegister;
 
     try {
-        const response: Response = await fetch("http://localhost:8080/register?" +
-            new URLSearchParams({
+        const response = await axios.get("http://localhost:8080/register?", {
+            params: {
                 type: account,
-                email: email
-            }), {
-            method: "GET",
+                email: email,
+            }
         })
 
-        return await response.json();
-
+        return {isEmailUsed: response.data};
     } catch (error) {
-        return json({message: "Erro interno do servidor"}, 500);
+        if (error instanceof AxiosError) {
+            return { errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+        } else {
+            return { errors: "Erro inesperado no servidor" };
+        }
+
     }
+
+
 }

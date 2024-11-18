@@ -54,29 +54,32 @@ export async function action({request}: ActionFunctionArgs) {
     switch (_action) {
         case "next_step": {
             const {formData, errors} = validateAction<InitialRegister>(body, decideSchema(_action));
+
             if (errors) {
-                return {ok: false, errors: errors};
+                return {ok: false, formValidationError: errors};
             }
-            const data = await emailAvailability(formData as InitialRegister);
-            if (isResponse(data)) {
-                return {success: false, internalError: "Erro interno do servidor"};
-            }
-            return {success: true, isEmailAvailable: data};
+
+            const emailAvailabilityResponse = await emailAvailability(formData as InitialRegister);
+
+            return {emailResponse: emailAvailabilityResponse};
+
         }
         case "register": {
             const {formData, errors} = validateAction<FinalRegister>(body, decideSchema(_action));
             if (errors) {
-                return {ok: false, errors: errors};
+                return {ok: false, "errors": errors};
             }
             const { account } = formData;
             const data = await registerUser(account, formData as FinalRegister);
-            if (data === 201) {
+            if (data.registerStatus === 201) {
                 return redirect("/login");
             }
-            return {success: false, data, account};
+
+            return {ok: false, data, account};
         }
         default:
             return {error: "Ação inválida"};
     }
 
 }
+

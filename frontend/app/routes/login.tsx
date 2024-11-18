@@ -1,6 +1,6 @@
 import {LoginArea} from "~/components/LoginArea";
 import {z} from "zod";
-import {ActionFunctionArgs, redirect} from "@remix-run/node";
+import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
 import {json} from "@remix-run/react";
 import axios from "axios";
@@ -36,48 +36,52 @@ export async function action({request}: ActionFunctionArgs) {
 
     if (_action == "login") {
         if (errors) {
-            return json({errors: {errors}});
+            return {"errors": errors};
         }
-
-        const { email, password } = formData as Login;
-        if (errors) {
-            return json({errors: {errors}});
-        }
-
-       const data = await loginResponse(formData);
-
-        if(data){
+        const response = await tryLoginUser(formData);
+        const data = await response.json();
+        if (data?.userId && data?.userAccountType) {
             return redirect("/feed", {
                 headers: {
                     "Set-Cookie": await authCookie.serialize(data),
                 }
             })
+        } else if (data?.message) {
+            return {"notFound": data.message};
         }
 
-        return json({"message": "Erro desconhecido"});
     }
+
+    return {"error": "Algo inesperado aconteceu"};
 }
 
+type LoginResponse = {
+    userId?: string;
+    userAccountType?: string;
+    message?: string;
+};
 
-async function loginResponse (formData:Login){
-    const { email, password } = formData as Login;
+async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginResponse>> {
+    const { email, password } = formData;
 
-    await axios.post("http://localhost:8080/login", {
-        email: email,
-        password: password,
-    }).then(response => {
+    try {
+        const response = await axios.post("http://localhost:8080/login", {
+            email,
+            password,
+        });
+
         if (response.status === 404) {
-            return json({"message": "Usuário não encontrado"});
+            return json({ message: "Usuário não encontrado" }, { status: 404 });
         }
 
-        const userAccountId = response.data.userId;
-        const userAccountType = response.data.accountType;
-        const cookieData = { userAccountId, userAccountType };
+        const { userId, accountType } = response.data;
 
-        return cookieData;
-    }).catch(error => {
-        return json({"message": `Erro interno no servidor:  ${error}`, "status": 500});
-    })
+        return json({ userId, userAccountType: accountType });
 
-    return json({"message": "Erro desconhecido"});
+    } catch (error) {
+        return json(
+            { message: `Erro interno no servidor: ${error}` },
+            { status: 500 }
+        );
+    }
 }
