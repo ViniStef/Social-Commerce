@@ -30,7 +30,7 @@ public class LoginService {
         if (seller != null) {
             if(seller.getPassword().equals(password)) {
                 loginObject.put("accountType", "seller");
-                loginObject.put("userId", seller.getSeller_id().toString());
+                loginObject.put("userId", seller.getSellerId().toString());
                 return loginObject;
             }
             return false;
@@ -38,7 +38,8 @@ public class LoginService {
         else if (buyer != null){
             if( buyer.getPassword().equals(password)) {
                 loginObject.put("accountType", "buyer");
-                loginObject.put("userId", buyer.getBuyer_id().toString());
+                loginObject.put("userId", buyer.getBuyerId().toString());
+                return loginObject;
             }
             return false;
         }

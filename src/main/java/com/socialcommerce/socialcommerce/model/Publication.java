@@ -48,9 +48,9 @@ public class Publication {
     @Column(name = "likes")
     private Integer likes;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnoreProperties("publication")
+    @JsonIgnoreProperties("publications")
     private Category category;
 
 

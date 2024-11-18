@@ -1,17 +1,22 @@
 package com.socialcommerce.socialcommerce.service.buyerService;
 
 
+import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
 import com.socialcommerce.socialcommerce.dto.CreateBuyerDto;
+import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
 import com.socialcommerce.socialcommerce.exception.NotFoundException;
 import com.socialcommerce.socialcommerce.exception.PasswordNotMatchException;
 import com.socialcommerce.socialcommerce.model.Buyer;
+import com.socialcommerce.socialcommerce.model.Publication;
 import com.socialcommerce.socialcommerce.model.Seller;
 import com.socialcommerce.socialcommerce.repository.IBuyerRepo;
 import com.socialcommerce.socialcommerce.repository.ISellerRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class BuyerService implements IBuyerService {
@@ -28,7 +33,6 @@ public class BuyerService implements IBuyerService {
     public void createBuyer(CreateBuyerDto buyerDto) {
         if (buyerDto.password().equals(buyerDto.confirm_password())) {
             Buyer buyer = new Buyer(
-                    UUID.randomUUID(),
                     buyerDto.first_name(),
                     buyerDto.last_name(),
                     buyerDto.password(),
@@ -42,7 +46,7 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
-    public void followerASeller(UUID sellerId, UUID buyerId) {
+    public void followerASeller(Long sellerId, Long buyerId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not found"));
         buyer.getSellers().add(seller);
@@ -52,7 +56,51 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
+    public BuyerProfileDto buyerProfile(Long buyerId) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
+        return new BuyerProfileDto(
+                buyer.getFirstName(),
+                fromSellerToSellerForBuyer(buyer.getSellers())
+                );
+    }
+
+    @Override
     public List<Buyer> findAllBuyers() {
         return buyerRepo.findAll();
+    }
+
+    private List<SellerForBuyerProfileDto> fromSellerToSellerForBuyer(List<Seller> sellerList) {
+        List<SellerForBuyerProfileDto> sellerForBuyerList = new ArrayList<>();
+
+        for (Seller seller : sellerList) {
+            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getFirstName());
+            sellerForBuyerList.add(dto);
+        }
+
+        return sellerForBuyerList;
+    }
+
+    @Transactional
+    @Override
+    public void likeAPublication(Long sellerId, Long publicationId) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not Found"));
+
+        Publication publication = seller.getPublications().stream()
+                .filter(p -> p.getPublication_id().equals(publicationId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Publication not found"));
+
+        publication.setLikes(publication.getLikes() + 1);
+
+    }
+
+    @Override
+    public void deleteFollower(Long sellerId, Long buyerId) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not Found"));
+
+        buyer.getSellers().removeIf(s -> s.getSellerId().equals(sellerId));
+
+        buyerRepo.save(buyer);
+
     }
 }

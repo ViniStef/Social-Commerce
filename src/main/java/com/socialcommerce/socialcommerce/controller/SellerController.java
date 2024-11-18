@@ -1,11 +1,17 @@
 package com.socialcommerce.socialcommerce.controller;
 
+import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
 import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
+import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
+import com.socialcommerce.socialcommerce.dto.SellerProfileDto;
 import com.socialcommerce.socialcommerce.service.sellerService.SellerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/seller")
@@ -33,4 +39,17 @@ public class SellerController {
         sellerService.deleteAll();
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/profile/{sellerId}")
+    public ResponseEntity<SellerProfileDto> sellerProfile (@PathVariable Long sellerId){
+        return ResponseEntity.ok(sellerService.sellerProfile(sellerId));
+    }
+
+    @GetMapping("/findASeller/{sellerName}")
+    public ResponseEntity<List<SellerForBuyerProfileDto>> findAllSellersByName (@PathVariable String sellerName){
+        return ResponseEntity.ok(sellerService.getAllByName(sellerName));
+    }
+
+
+
 }

@@ -35,7 +35,7 @@ public class PublicationService {
         this.categoryRepo = categoryRepo;
     }
 
-    public CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, UUID sellerId) {
+    public CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, Long sellerId) {
 
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
