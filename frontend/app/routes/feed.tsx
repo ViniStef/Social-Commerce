@@ -41,7 +41,7 @@ import {authCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 
 type BuyerProfileResultType = {
-    first_name: string;
+    name: string;
     sellers: any[];
 }
 
@@ -64,39 +64,41 @@ export async function loader({request}: LoaderFunctionArgs) {
     let { userId, accountType } = await authCookie.parse(cookieString);
 
     if (accountType === "buyer") {
-        let results = {};
         try {
             const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
-            const { first_name, sellers }:BuyerProfileResultType = result.data;
+            const { name, sellers }:BuyerProfileResultType = result.data;
 
-            results = {...results, "first_name": first_name, "sellersFollowed": sellers};
+            return {"first_name": name, "sellersFollowed": sellers};
+
         } catch (error) {
             return {"errors": "Algo deu errado no servidor"}
         }
 
-        try {
-            const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
-            const publicationsList:PublicationsResultType[] = result.data;
-
-            results = {...results, "publicationsList": publicationsList};
-        } catch (error) {
-
-        }
+        // try {
+        //     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
+        //     const publicationsList:PublicationsResultType[] = result.data;
+        //
+        //     results = {...results, "publicationsList": publicationsList};
+        // } catch (error) {
+        //
+        // }
 
     } else {
-
+        return null;
     }
 
-    return { "first_name": "Vinicius", "sellersFollowed": [{"name": "Vinicius", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"},
-            {"name": "Marcos", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"}
-        ] };
+    return null;
+
+    // return { "first_name": "Vinicius", "sellersFollowed": [{"name": "Vinicius", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"},
+    //         {"name": "Marcos", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"}
+    //     ] };
 }
 
 
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
-    const {first_name, sellersFollowed } = useLoaderData<typeof loader>();
+    const loaderData = useLoaderData<typeof loader>();
 
 
     return (
@@ -184,8 +186,8 @@ export default function FeedPage() {
 
                                     {data.sellers.map((seller: Seller) => {
                                         return (
-                                            <li key={seller.profileImgUrl}>
-                                                <img src={seller.profileImgUrl} alt=""/>
+                                            <li key={seller.profileImg}>
+                                                <img src={seller.profileImg} alt=""/>
                                                 <p>{seller.name}</p>
                                             </li>
                                         )
@@ -296,6 +298,8 @@ export default function FeedPage() {
                         </div>
                     </div>
                     <br/>
+
+
                 </section>
 
                 <section className={style.user__features}>
@@ -346,7 +350,7 @@ export default function FeedPage() {
             <section className={style.user__container}>
                 <div className={style.user__info}>
                     <img className={style.user__image} src={data?.imageUrl ? data.imageUrl : logo} alt="Imagem de Perfil"/>
-                    <p className={style.user__name}>{first_name}</p>
+                    <p className={style.user__name}>{loaderData?.first_name}</p>
                     <Form onChange={(event) => {submit(event.currentTarget)}} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
                         <div className={style.upload__submit}>
                             <input type={"hidden"} name={"_action"} value={"upload_image"} />
@@ -366,13 +370,13 @@ export default function FeedPage() {
 
                     <ul className={style.follows__list}>
 
-                        {/*{sellersFollowed ? sellersFollowed.map((seller: Seller) => {*/}
-                        {/*    return (*/}
-                        {/*        <ProfileFollowersDisplay profileImg={seller.profileImg} name={seller.name} />*/}
-                        {/*    )*/}
-                        {/*})*/}
-                        {/*: <p>Você ainda não está seguindo ninguém!</p>*/}
-                        {/*}*/}
+                        {loaderData?.sellersFollowed ? loaderData.sellersFollowed.map((seller: Seller) => {
+                            return (
+                                <ProfileFollowersDisplay profileImg={seller.profileImg} name={seller.name} />
+                            )
+                        })
+                        : <p>Você ainda não está seguindo ninguém!</p>
+                        }
 
                         <li className={style.follows__item}>
                             <div className={style.follows__user}>
@@ -455,7 +459,7 @@ export default function FeedPage() {
 
 type Seller = {
     name: string;
-    profileImgUrl: string;
+    profileImg: string;
 }
 
 export async function action({request}: ActionFunctionArgs) {
