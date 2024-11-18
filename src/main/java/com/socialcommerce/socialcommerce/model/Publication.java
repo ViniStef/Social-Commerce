@@ -49,7 +49,7 @@ public class Publication {
     private Integer likes;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categoryId")
     @JsonIgnoreProperties("publications")
     private Category category;
 

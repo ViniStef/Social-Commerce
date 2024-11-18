@@ -20,7 +20,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer category_id;
+    private Integer categoryId;
 
 
     @Column(name = "category_name", nullable = false)
@@ -31,8 +31,8 @@ public class Category {
     private List<Publication> publications;
 
 
-    public Category(Integer category_id, String categoryName) {
-        this.category_id = category_id;
+    public Category(Integer categoryId, String categoryName) {
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 }

@@ -35,8 +35,8 @@ public class PublicationService implements IPublicationService{
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
         Publication newPublication = fromPublicationDtoToPublication(publicationDto);
-        Category category = categoryRepo.findById(newPublication.getCategory().getCategory_id())
-                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada: ID = " + newPublication.getCategory().getCategory_id()));
+        Category category = categoryRepo.findById(newPublication.getCategory().getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada: ID = " + newPublication.getCategory().getCategoryId()));
 
 
         newPublication.setSeller(seller);
@@ -125,6 +125,18 @@ public class PublicationService implements IPublicationService{
                 publicationDto.price());
     }
 
+    @Override
+    public List<ShowPublicationDto> getAllByCategoryType(Integer categoryId, Long buyerId) {
+        Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
+        List<Publication> publicationList = buyer.getSellers().stream()
+                .flatMap(seller -> seller.getPublications().stream())
+                .filter(p -> p.getCategory().getCategoryId().equals(categoryId))
+                .toList();
+
+        return fromPublicationToShowPublication(publicationList);
+
+    }
+
     private Product fromProductDtoToProduct(CreateProductDto productDto) {
         return new Product(
                 productDto.product_name(),
@@ -138,7 +150,7 @@ public class PublicationService implements IPublicationService{
 
     private Category fromCategoryDtoToCategory(CategoryDto categoryDto) {
             Category category = categoryRepo.findById(categoryDto.categoryID()).orElseThrow(() -> new NotFoundException("Category Not Found"));
-        return new Category(category.getCategory_id(), category.getCategoryName());
+        return new Category(category.getCategoryId(), category.getCategoryName());
     }
 
     private List<ShowPublicationDto> fromPublicationToShowPublication(List<Publication> publication){
