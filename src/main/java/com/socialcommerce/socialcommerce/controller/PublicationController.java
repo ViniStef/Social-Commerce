@@ -47,4 +47,16 @@ public class PublicationController {
         publicationService.deleteAPublicationBySellerId(sellerId, publicationId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/buyer/{buyerId}/category/{categoryId}")
+    public ResponseEntity<List<ShowPublicationDto>> getAllByCategoryType(@PathVariable Long buyerId, @PathVariable Integer categoryId) {
+        return ResponseEntity.ok(publicationService.getAllByCategoryType(categoryId, buyerId));
+    }
+
+    @GetMapping("/buyer/{buyerId}")
+    public ResponseEntity<List<ShowPublicationDto>> getAllByBuyer(@PathVariable Long buyerId) {
+        return ResponseEntity.ok(publicationService.getAllPublicationByBuyer(buyerId));
+    }
+
+
 }
