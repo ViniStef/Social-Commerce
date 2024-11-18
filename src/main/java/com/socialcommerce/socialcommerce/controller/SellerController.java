@@ -50,6 +50,10 @@ public class SellerController {
         return ResponseEntity.ok(sellerService.getAllByName(sellerName));
     }
 
-
+    @PutMapping("{sellerId}/image")
+    public ResponseEntity<?> uploadImage(@PathVariable Long sellerId,@RequestBody String imagePath){
+        sellerService.uploadImage(sellerId, imagePath);
+        return ResponseEntity.status(200).build();
+    }
 
 }

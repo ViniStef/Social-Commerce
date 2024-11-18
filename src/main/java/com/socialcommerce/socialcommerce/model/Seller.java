@@ -25,6 +25,9 @@ public class Seller{
     @Column(name = "seller_id")
     private Long sellerId;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Column(name = "first_name")
     private String firstName;
 

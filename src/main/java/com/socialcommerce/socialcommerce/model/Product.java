@@ -24,11 +24,10 @@ public class Product {
     @Column(name = "product_name")
     private String product_name;
 
+
     @Column(name = "description")
     private String product_description;
 
-    @Column(name = "image")
-    private String product_image;
 
     @Column(name = "brand")
     private String product_brand;
@@ -40,10 +39,9 @@ public class Product {
     @JsonIgnoreProperties("product")
     private Publication publication;
 
-    public Product(String product_name, String product_description, String product_image, String product_brand, String product_color) {
+    public Product(String product_name, String product_description, String product_brand, String product_color) {
         this.product_name = product_name;
         this.product_description = product_description;
-        this.product_image = product_image;
         this.product_brand = product_brand;
         this.product_color = product_color;
     }

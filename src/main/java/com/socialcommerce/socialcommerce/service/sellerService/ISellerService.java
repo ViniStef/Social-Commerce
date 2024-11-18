@@ -16,4 +16,5 @@ public interface ISellerService {
     List<Seller> getAllSellers();
     SellerProfileDto sellerProfile(Long sellerId);
     List<SellerForBuyerProfileDto> getAllByName(String sellerName);
+    void uploadImage(Long sellerId, String image);
 }

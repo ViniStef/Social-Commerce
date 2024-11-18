@@ -119,6 +119,7 @@ public class PublicationService implements IPublicationService{
 
         return new Publication(LocalDate.now(),
                 fromProductDtoToProduct(publicationDto.product()),
+                publicationDto.imagePath(),
                 fromCategoryDtoToCategory(publicationDto.category()),
                 publicationDto.discount_percentage(),
                 publicationDto.has_promotion(),
@@ -141,7 +142,6 @@ public class PublicationService implements IPublicationService{
         return new Product(
                 productDto.product_name(),
                 productDto.product_description(),
-                productDto.product_image(),
                 productDto.product_brand(),
                 productDto.product_color()
         );
@@ -158,7 +158,8 @@ public class PublicationService implements IPublicationService{
 
         for (Publication publi : publication) {
             ShowPublicationDto dto = new ShowPublicationDto(publi.getPublication_date()
-                    , new ShowProductDto(publi.getProduct().getProduct_name(), publi.getProduct().getProduct_image())
+                    , new ShowProductDto(publi.getProduct().getProduct_name())
+                    , publi.getImagePath()
                     , publi.getDiscount_percentage()
                     , publi.getPrice()
                     , publi.getLikes());

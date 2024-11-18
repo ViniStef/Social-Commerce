@@ -24,6 +24,9 @@ public class Buyer {
     @Column(name = "buyer_id")
     private Long buyerId;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Column(name = "first_name")
     private String firstName;
 

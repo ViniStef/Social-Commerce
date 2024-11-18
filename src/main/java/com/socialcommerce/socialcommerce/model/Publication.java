@@ -39,6 +39,9 @@ public class Publication {
     @Column(name = "discount")
     private Float discount_percentage;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Column(name = "promotion")
     private Boolean has_promotion;
 
@@ -54,13 +57,14 @@ public class Publication {
     private Category category;
 
 
-    public Publication(LocalDate publication_date, Product product, Category category, Float discount_percentage, Boolean has_promotion, Double price) {
+    public Publication(LocalDate publication_date, Product product, String imagePath, Category category, Float discount_percentage, Boolean has_promotion, Double price) {
         this.publication_date = publication_date;
         this.product = product;
         this.category = category;
         this.discount_percentage = discount_percentage;
         this.has_promotion = has_promotion;
         this.price = price;
+        this.imagePath = imagePath;
     }
 
 

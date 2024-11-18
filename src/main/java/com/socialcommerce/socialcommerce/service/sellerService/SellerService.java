@@ -84,4 +84,10 @@ public class SellerService implements ISellerService {
 
         return buyerList;
     }
+
+    @Override
+    public void uploadImage(Long sellerId, String image) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
+        seller.setImagePath(image);
+    }
 }

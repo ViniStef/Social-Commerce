@@ -51,4 +51,10 @@ public class BuyerController {
         buyerService.deleteFollower(sellerId, buyerId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("{buyerId}/image")
+    public ResponseEntity<?> uploadImage(@PathVariable Long buyerId,@RequestBody String imagePath){
+        buyerService.uploadImage(buyerId, imagePath);
+        return ResponseEntity.status(200).build();
+    }
 }

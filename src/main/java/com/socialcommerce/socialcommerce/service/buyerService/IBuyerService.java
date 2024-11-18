@@ -13,5 +13,6 @@ public interface IBuyerService {
     BuyerProfileDto buyerProfile (Long buyerId);
     void likeAPublication(Long sellerId, Long publicationId);
     void deleteFollower(Long sellerId, Long buyerId);
+    void uploadImage(Long buyerId, String image);
 
 }
