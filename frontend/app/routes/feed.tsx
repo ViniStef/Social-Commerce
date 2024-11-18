@@ -32,32 +32,58 @@ import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 
 import {Form, json, useActionData, useLoaderData, useSubmit} from "@remix-run/react";
-import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs} from "@remix-run/node";
+import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect} from "@remix-run/node";
 import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
 import {authCookie} from "~/auth";
+import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
+
+type resultType = {
+    first_name: string;
+    sellers: any[];
+}
 
 export async function loader({request}: LoaderFunctionArgs) {
     let cookieString = request.headers.get("Cookie");
-    let { userId, accountType } = await authCookie.parse(cookieString);
 
-    if (accountType === "buyer") {
-
-    } else {
-
+    if (!(cookieString?.includes("auth"))) {
+        return redirect("/login");
     }
 
-    const result = await axios.get()
-
-    return { userId, accountType };
+    // if (!cookieString) {
+    //     return redirect("/login");
+    // }
+    //
+    // let { userId, accountType } = await authCookie.parse(cookieString);
+    //
+    //
+    // if (accountType === "buyer") {
+    //     try {
+    //         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
+    //         const { first_name, sellers }:resultType = result.data;
+    //
+    //         return {"first_name": first_name, "sellersFollowed": sellers};
+    //     } catch (error) {
+    //         return {"errors": "Algo deu errado no servidor"}
+    //     }
+    //
+    // } else {
+    //
+    // }
+    //
+    return { "first_name": "Vinicius", "sellersFollowed": [{"name": "Vinicius", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"},
+            {"name": "Marcos", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"}
+        ] };
 }
 
 
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
+    const {first_name, sellersFollowed } = useLoaderData<typeof loader>();
+
 
     return (
         <div className={style.page__container}>
@@ -401,8 +427,8 @@ export default function FeedPage() {
 
             <section className={style.user__container}>
                 <div className={style.user__info}>
-                    <img className={style.user__image} src={data?.imageUrl ? data.imageUrl : logo} alt=""/>
-                    <p className={style.user__name}>Pedro Pedrinho</p>
+                    <img className={style.user__image} src={data?.imageUrl ? data.imageUrl : logo} alt="Imagem de Perfil"/>
+                    <p className={style.user__name}>{first_name}</p>
                     <Form onChange={(event) => {submit(event.currentTarget)}} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
                         <div className={style.upload__submit}>
                             <input type={"hidden"} name={"_action"} value={"upload_image"} />
@@ -421,6 +447,15 @@ export default function FeedPage() {
                     </div>
 
                     <ul className={style.follows__list}>
+
+                        {/*{sellersFollowed ? sellersFollowed.map((seller: Seller) => {*/}
+                        {/*    return (*/}
+                        {/*        <ProfileFollowersDisplay profileImg={seller.profileImg} name={seller.name} />*/}
+                        {/*    )*/}
+                        {/*})*/}
+                        {/*: <p>Você ainda não está seguindo ninguém!</p>*/}
+                        {/*}*/}
+
                         <li className={style.follows__item}>
                             <div className={style.follows__user}>
                                 <img className={style.follows__image} src={woman1} alt=""/>
@@ -509,7 +544,8 @@ export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
     const _action = formData.get("_action");
 
-    console.log("jjkl: ", _action);
+    let cookieString = request.headers.get("Cookie");
+    let { userId, accountType } = await authCookie.parse(cookieString);
 
     const baseUrl = "http://localhost:8080/";
 
@@ -555,7 +591,36 @@ export async function action({request}: ActionFunctionArgs) {
 
             const imageUrl = `/000001/${filename}`;
 
-            return {imageUrl: imageUrl};
+            if (accountType === "buyer") {
+                try {
+                    const result = await axios.put(`http://localhost:8080/buyer/${userId}/image`, {
+                        profileImg: imageUrl,
+                    })
+
+                    if (result.status === 200) {
+                        return {imageUrl: imageUrl};
+                    }
+
+                    return {status: result.status};
+                } catch (error) {
+                    return {erro: "Erro ao enviar imagem"};
+                }
+            } else {
+                try {
+                    const result = await axios.put(`http://localhost:8080/seller/${userId}/image`, {
+                        profileImg: imageUrl,
+                    })
+
+                    if (result.status === 200) {
+                        return {imageUrl: imageUrl};
+                    }
+
+                    return {status: result.status};
+                } catch (error) {
+                    return {erro: "Erro ao enviar imagem"};
+                }
+            }
+
         }
     }
 
