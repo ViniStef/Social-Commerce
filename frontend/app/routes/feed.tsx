@@ -40,9 +40,18 @@ import * as fs from "node:fs";
 import {authCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 
-type resultType = {
+type BuyerProfileResultType = {
     first_name: string;
     sellers: any[];
+}
+
+type PublicationsResultType = {
+    publicationDate: string;
+    productName: string;
+    imagePath: string;
+    discount: number;
+    price: number;
+    likes: number;
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -52,27 +61,32 @@ export async function loader({request}: LoaderFunctionArgs) {
         return redirect("/login");
     }
 
-    // if (!cookieString) {
-    //     return redirect("/login");
-    // }
-    //
-    // let { userId, accountType } = await authCookie.parse(cookieString);
-    //
-    //
-    // if (accountType === "buyer") {
-    //     try {
-    //         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
-    //         const { first_name, sellers }:resultType = result.data;
-    //
-    //         return {"first_name": first_name, "sellersFollowed": sellers};
-    //     } catch (error) {
-    //         return {"errors": "Algo deu errado no servidor"}
-    //     }
-    //
-    // } else {
-    //
-    // }
-    //
+    let { userId, accountType } = await authCookie.parse(cookieString);
+
+    if (accountType === "buyer") {
+        let results = {};
+        try {
+            const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
+            const { first_name, sellers }:BuyerProfileResultType = result.data;
+
+            results = {...results, "first_name": first_name, "sellersFollowed": sellers};
+        } catch (error) {
+            return {"errors": "Algo deu errado no servidor"}
+        }
+
+        try {
+            const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
+            const publicationsList:PublicationsResultType[] = result.data;
+
+            results = {...results, "publicationsList": publicationsList};
+        } catch (error) {
+
+        }
+
+    } else {
+
+    }
+
     return { "first_name": "Vinicius", "sellersFollowed": [{"name": "Vinicius", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"},
             {"name": "Marcos", "profileImg": "public/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png"}
         ] };
@@ -281,103 +295,7 @@ export default function FeedPage() {
                             <p>Para você</p>
                         </div>
                     </div>
-
-                    <div className={style.post__container}>
-                        <fieldset className={style.post__field}>
-                            <legend className={style.field__brand}>
-                                <img className={style.brand__image} src={logo}/>
-                                <span className={style.brand__name}>Eco-Friendly Water Bottle</span>
-                            </legend>
-
-
-                            <div className={style.post__details}>
-                                <div className={style.post__date}>
-                                    <p className={style.date__text}>54 Min</p>
-                                </div>
-                                <img className={style.post__extra} src={details} alt="detalhes"/>
-                            </div>
-
-                            <div className={style.separation__onpost}></div>
-
-                            <div className={style.post__description}>
-                                <p className={style.description__text}>Stay hydrated in style! Our sleek, sustainable
-                                    water bottle is perfect for your active lifestyle. Made from recycled materials, it
-                                    keeps your drinks cold for 24 hours or hot for 12. Join the eco-revolution! 🌿💧
-                                    #EcoLiving #ZeroWaste</p>
-                            </div>
-
-                            <div className={style.post__product}>
-
-                                <img className={style.product__image} src={product} alt=""/>
-                                <span className={style.product__discount}>-10%</span>
-                            </div>
-
-
-                            <div className={style.post__reactions}>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={like} alt="gostar"/>
-                                </div>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
-                                </div>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={bookmark} alt="salvar"/>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
                     <br/>
-
-                    <div className={style.post__container}>
-                        <fieldset className={style.post__field}>
-                            <legend className={style.field__brand}>
-                                <img className={style.brand__image} src={logo}/>
-                                <span className={style.brand__name}>Social Commerce</span>
-                            </legend>
-
-
-                            <div className={style.post__details}>
-                                <div className={style.post__date}>
-                                    <p className={style.date__text}>54 Min</p>
-                                </div>
-                                <img className={style.post__extra} src={details} alt="detalhes"/>
-                            </div>
-
-                            <div className={style.separation__div}></div>
-
-                            <div className={style.post__description}>
-                                <p className={style.description__text}>🌟 Promoção imperdível! 🌟<br/><br/>
-
-                                    Que tal renovar o guarda-roupa com estilo e ainda economizar?
-                                    🤑 Todas as nossas camisetas estão com 10% de desconto! Isso mesmo, é a sua
-                                    chance de garantir aquelas peças incríveis que você já estava de olho. <br/><br/>
-
-                                    Mas corra, porque essa oferta é por tempo limitado!
-                                    Aproveite e vista-se com o melhor da moda! 👕✨ <br/><br/>
-
-                                    👉 Link na bio para conferir nossos modelos!🤔</p>
-                            </div>
-
-                            <div className={style.post__product}>
-                                <img className={style.product__image} src={product} alt=""/>
-                                <span className={style.product__discount}>-10%</span>
-                            </div>
-
-
-                            <div className={style.post__reactions}>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={like} alt="gostar"/>
-                                </div>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
-                                </div>
-                                <div className={style.reaction__container}>
-                                    <img className={style.reaction__image} src={bookmark} alt="salvar"/>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
                 </section>
 
                 <section className={style.user__features}>
@@ -386,19 +304,19 @@ export default function FeedPage() {
                         <li className={style.feature__group}>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                     <img className={style.action__image} src={search} alt="buscar"/>
+                                     <img className={style.action__image} src={search} alt="Buscar"/>
                                 </button>
                             </div>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={house} alt="início"/>
+                                    <img className={style.action__image} src={house} alt="Início"/>
                                 </button>
                             </div>
                         </li>
 
                         <li className={`${style.feature__item} ${style.profile__item}`}>
                             <button className={style.feature__action}>
-                                <img className={style.action__image} src={pedro} alt="início"/>
+                                <img className={style.action__image} src={pedro} alt="Meu Perfil"/>
                                 <p className={style.action__name}>Meu Perfil</p>
                             </button>
                         </li>
@@ -406,12 +324,12 @@ export default function FeedPage() {
                         <li className={style.feature__group}>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={follows} alt="seguidos"/>
+                                    <img className={style.action__image} src={follows} alt="Seguidos"/>
                                 </button>
                             </div>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={bookmarks} alt="bookmarks"/>
+                                    <img className={style.action__image} src={bookmarks} alt="Bookmarks"/>
                                 </button>
                             </div>
                         </li>
