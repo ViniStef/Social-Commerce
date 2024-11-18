@@ -40,7 +40,9 @@ export async function action({request}: ActionFunctionArgs) {
         }
         const response = await tryLoginUser(formData);
         const data = await response.json();
-        if (data?.userId && data?.userAccountType) {
+        console.log(data)
+        if (data?.userId && data?.accountType) {
+            console.log(data);
             return redirect("/feed", {
                 headers: {
                     "Set-Cookie": await authCookie.serialize(data),
@@ -49,15 +51,13 @@ export async function action({request}: ActionFunctionArgs) {
         } else if (data?.message) {
             return {"notFound": data.message};
         }
-
     }
-
     return {"error": "Algo inesperado aconteceu"};
 }
 
 type LoginResponse = {
     userId?: string;
-    userAccountType?: string;
+    accountType?: string;
     message?: string;
 };
 
@@ -76,7 +76,7 @@ async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginRespons
 
         const { userId, accountType } = response.data;
 
-        return json({ userId, userAccountType: accountType });
+        return json({ userId, accountType });
 
     } catch (error) {
         return json(
