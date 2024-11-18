@@ -31,19 +31,33 @@ import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 
-import {Form, json, useActionData, useSubmit} from "@remix-run/react";
-import {ActionFunction, ActionFunctionArgs} from "@remix-run/node";
+import {Form, json, useActionData, useLoaderData, useSubmit} from "@remix-run/react";
+import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs} from "@remix-run/node";
 import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
+import {authCookie} from "~/auth";
+
+export async function loader({request}: LoaderFunctionArgs) {
+    let cookieString = request.headers.get("Cookie");
+    let { userId, accountType } = await authCookie.parse(cookieString);
+
+    if (accountType === "buyer") {
+
+    } else {
+
+    }
+
+    const result = await axios.get()
+
+    return { userId, accountType };
+}
 
 
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
-
-    console.log("data em feed: ", data);
 
     return (
         <div className={style.page__container}>
@@ -510,7 +524,6 @@ export async function action({request}: ActionFunctionArgs) {
 
                 return {sellers: sellerResponse};
             } catch(error) {
-                console.log("Erro akii em: ", error);
 
                 if (error instanceof AxiosError) {
                     return { errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
