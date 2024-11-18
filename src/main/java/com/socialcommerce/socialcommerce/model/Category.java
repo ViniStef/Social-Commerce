@@ -26,11 +26,13 @@ public class Category {
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @OneToOne(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("category")
-    private Publication publication;
+    private List<Publication> publications;
 
-   public Category(String categoryName) {
+
+    public Category(Integer category_id, String categoryName) {
+        this.category_id = category_id;
         this.categoryName = categoryName;
     }
 }

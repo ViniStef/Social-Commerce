@@ -10,10 +10,7 @@ import com.socialcommerce.socialcommerce.repository.ISellerRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,15 +35,12 @@ public class PublicationService implements IPublicationService{
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("User id not found"));
 
         Publication newPublication = fromPublicationDtoToPublication(publicationDto);
-        Category existingCategory = categoryRepo.findByCategoryName(newPublication.getCategory().getCategoryName());
-        if (existingCategory == null) {
-            categoryRepo.save(newPublication.getCategory());
-        } else {
-            newPublication.setCategory(existingCategory);
-        }
+        Category category = categoryRepo.findById(newPublication.getCategory().getCategory_id())
+                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada: ID = " + newPublication.getCategory().getCategory_id()));
 
 
         newPublication.setSeller(seller);
+        newPublication.setCategory(category);
         newPublication.setLikes(0);
 
         publicationRepo.save(newPublication);
@@ -143,7 +137,8 @@ public class PublicationService implements IPublicationService{
 
 
     private Category fromCategoryDtoToCategory(CategoryDto categoryDto) {
-        return new Category(categoryDto.category_name());
+            Category category = categoryRepo.findById(categoryDto.categoryID()).orElseThrow(() -> new NotFoundException("Category Not Found"));
+        return new Category(category.getCategory_id(), category.getCategoryName());
     }
 
     private List<ShowPublicationDto> fromPublicationToShowPublication(List<Publication> publication){
