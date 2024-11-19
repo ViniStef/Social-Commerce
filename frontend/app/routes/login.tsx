@@ -4,7 +4,7 @@ import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
 import {json} from "@remix-run/react";
 import axios from "axios";
-import { commitSession, getSession} from "~/auth";
+import { setAuthOnResponse} from "~/auth";
 
 export const meta = () => {
     return [{ title: "Entrar - Social Commerce"}]
@@ -34,9 +34,9 @@ export async function action({request}: ActionFunctionArgs) {
     const { formData, errors } = validateAction<Login>(body, loginSchema);
     const { _action } = body;
 
-    const session = await getSession(
-        request.headers.get("Cookie")
-    )
+    // const session = await getSession(
+    //     request.headers.get("Cookie")
+    // )
 
     if (_action == "login") {
         if (errors) {
@@ -44,15 +44,24 @@ export async function action({request}: ActionFunctionArgs) {
         }
         const response = await tryLoginUser(formData);
         const data = await response.json();
-        if (data?.userId && data?.userAccountType) {
-            session.set( "userId", data.userId);
-            session.set( "accountType", data.userAccountType);
+        if (data?.userId) {
+            // session.set( "userId", data.userId);
+            // session.set( "accountType", data.userAccountType);
 
-            return redirect("/feed", {
-                headers: {
-                    "Set-Cookie": await commitSession(session),
-                }
-            })
+            console.log("OII AKI 51")
+
+            return redirect("/feed");
+
+            // console.log("response aq: ", response);
+            // console.log("useriD: ", data.userId);
+            //
+            // return setAuthOnResponse(response, data.userId);
+
+            // return redirect("/feed", {
+            //     headers: {
+            //         "Set-Cookie": await commitSession(session),
+            //     }
+            // })
         } else if (data?.message) {
             return {"notFound": data.message};
         }

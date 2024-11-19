@@ -11,10 +11,12 @@
   position: sticky;
   top: 15px;
   max-width: 120px;
-  width: 100%;
+  width: 10vw;
+  min-width: 80px;
   background-color: main.$color-dark-100-opaque-300;
   border-radius: 10px;
   height: fit-content;
+  margin-left: 5px;
 
   .bar__list {
     @include main.flexbox($direction: column, $align: center, $gap: 40px);
@@ -46,6 +48,8 @@
 .feed__container {
   max-width: 750px;
   position: relative;
+  min-width: 390px;
+  min-height: 100vh;
 
 
   .navbar__feed {
@@ -121,22 +125,6 @@
         }
       }
 
-      .search__menu {
-        @include main.flexbox();
-
-        .menu__button {
-          background-color: main.$color-dark-300;
-          border-radius: 5px;
-          width: fit-content;
-          border: none;
-
-          .button__image {
-            width: 2.3rem;
-            height: 2.3rem;
-
-          }
-        }
-      }
 
     }
 
@@ -235,8 +223,8 @@
 
   }
 
-  .feed__choices {
-    @include main.flexbox($align: center);
+  .feed__starter {
+    @include main.flexbox($align: center, $justify: center);
     width: 100%;
     margin-top: 10px;
     text-align: center;
@@ -244,159 +232,44 @@
     color: main.$color-light-100;
     font-size: main.$fs-md;
     background-color: main.$color-dark-200;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-
-
+    border-radius: 10px;
     font-weight: main.$fw-bold;
+    padding-bottom: 5px;
 
-    .choice__indicator {
-      background: main.$color-brand-gradient;
-      height: .35rem;
-      border-radius: 20px;
-      position: relative;
-      width: 90%;
-
-      top: 6px;
-    }
-
-    .choice__followed {
+    .feed__headline {
       @include main.flexbox($direction: column, $align: center, $justify: center);
       width: 50%;
-    }
 
-    .choice__recommended {
-      width: 50%;
-    }
-
-  }
-
-  .post__container {
-    background-color: main.$color-light-100;
-    padding-top: 5px;
-    position: relative;
-
-    .post__field {
-      position: relative;
-      border: 2px solid main.$color-gray-300;
-      border-inline: none;
-      border-bottom: none;
-
-
-      .field__brand {
-        @include main.flexbox($align: center, $justify: center, $gap: 15px);
-        padding-inline: .5rem 1rem;
-        margin-left: 1rem;
-        //background-color: main.$color-dark-opaque-200;
-        border-radius: 40px;
-
-        .brand__image {
-          width: 4rem;
-          height: 4rem;
-        }
-
-        .brand__name {
-          font-size: main.$fs-lg;
-          color: main.$color-dark-100;
-          font-weight: main.$fw-boldest;
-        }
-      }
-    }
-
-
-    .post__details {
-      position: absolute;
-      @include main.flexbox($align: center, $justify: center, $gap: 5px);
-      right: 0;
-      top: -28px;
-
-
-      .post__date {
-        position: relative;
-        color: main.$color-dark-100;
+      .feed__text {
+        font-size: main.$fs-xl;
       }
 
-      .post__extra {
-      }
-    }
-
-    .separation__onpost {
-      height: .1rem;
-      margin-block: 10px;
-      width: 80%;
-      background: main.$color-gray-400;
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-    }
-
-    .post__description {
-      padding-inline: 20px;
-      padding-block: 5px 20px;
-
-      .description__text {
-        line-height: 1.5;
-        color: main.$color-gray-400;
-      }
-    }
-
-    .post__product {
-      @include main.flexbox($align: center, $justify: center);
-      width: fit-content;
-      margin: auto;
-      padding-block: 10px;
-      position: relative;
-
-      .product__image {
-        max-width: 450px;
-        max-height: 450px;
-        height: 100%;
-        width: 100%;
+      .feed__indicator {
+        background: main.$color-brand-gradient;
+        height: .35rem;
         border-radius: 20px;
-        border: 1px solid main.$color-light-400;
+        position: relative;
+        width: 90%;
 
-      }
-      
-      .product__discount {
-        position: absolute;
-        background: main.$color-brand-200;
-        margin-top: 10px;
-        padding: 8px;
-        border-radius: 0 20px 0 20px;
-        color: main.$color-light-150;
-        font-weight: main.$fw-bolder;
-
-        top: 0;
-        right: 0;
+        top: 6px;
       }
     }
 
-    .post__reactions {
-      @include main.flexbox($align: center, $justify: center);
-      padding-block: .5rem;
-      border-top: 2px solid main.$color-gray-400;
-
-
-      .reaction__container {
-        @include main.flexbox($align: center, $justify: center);
-        width: 100%;
-
-        .reaction__image {
-          width: 25px;
-          height: 25px;
-        }
-      }
-    }
 
   }
+
+
 
   .user__features {
     position: fixed;
-    @include main.flexbox($align: center, $justify: center);
     height: 3rem;
-    width: 100%;
-    max-width: 750px;
-    background-color: main.$color-dark-100;
+    background-color: main.$color-dark-opaque-500;
     bottom: 0;
+    display: none;
+    margin: 0;
+    padding: 0;
+    max-width: 732px;
+    width: 100%;
 
     .feature__list {
       @include main.flexbox($align: center, $justify: space-evenly);
@@ -410,7 +283,7 @@
 
       .feature__item {
         @include main.flexbox($align: center, $justify: center);
-        padding: 5px;
+        //padding: 5px;
         width: 100%;
 
         .feature__action {
@@ -462,6 +335,7 @@
   top: 15px;
   height: fit-content;
   //background-color: main.$color-dark-200;
+  margin-right: 5px;
 
   .user__info:before {
     content: "";
@@ -563,6 +437,7 @@
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
       padding-top: 5px;
+      min-width: 280px;
 
       .follows__item {
         @include main.flexbox($align: center,$justify: space-between);
@@ -635,4 +510,25 @@
   background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-300 100%);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
+}
+
+@media (max-width: 900px) {
+  .user__container {
+    display: none;
+  }
+
+  .lateral__bar {
+    display: none;
+  }
+
+  .feed__container {
+    padding-inline: 5px;
+
+    .user__features {
+      @include main.flexbox($align: center, $justify: center);
+
+    }
+  }
+
+
 }

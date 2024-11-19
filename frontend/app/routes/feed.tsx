@@ -30,6 +30,8 @@ import bookmarksFill from "~/assets/icons/bookmarks-fill.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
+import offers from "~/assets/icons/currency-dollar.svg";
+
 
 import {Form, json, useActionData, useLoaderData, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -37,7 +39,7 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {authCookie, commitSession, getSession} from "~/auth";
+import {requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 
@@ -61,15 +63,18 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export async function loader({request}: LoaderFunctionArgs) {
-     session = await getSession(
-        request.headers.get("Cookie")
-    )
+    let userId = await requireAuthCookie(request);
+
+    //  session = await getSession(
+    //     request.headers.get("Cookie")
+    // )
     // if (!(cookieString?.includes("auth"))) {
     //     return redirect("/login");
     // } else {
-    let userId = session.get("userId");
-    let accountType = session.get("accountType");
+    // let userId = session.get("userId");
+    // let accountType = session.get("accountType");
 
+    let accountType = "buyer";
 
     if (accountType === "buyer") {
         let resultFinal: { userId?: string; accountType?: string;  name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
@@ -84,14 +89,39 @@ export async function loader({request}: LoaderFunctionArgs) {
         }
 
         try {
-            const { data }: { data: PublicationsResultType[] } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
-            resultFinal.publicationsList = data;
+            // const { data }: { data: PublicationsResultType[] } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
+            const teste: PublicationsResultType[] = [{
+                "publicationDate": "24-12",
+                "productName": "Produto muito bom com o nome grande",
+                "sellerImg": "/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png",
+                "sellerName": "Vini",
+                "description": "Produto muito legal gente pode comprar é mt bom mesmo",
+                "imagePath": "",
+                "discount": 40,
+                "price": 500,
+                "likes": 10
+            },
+                {
+                    "publicationDate": "24-12",
+                    "productName": "Produto bom",
+                    "sellerImg": "/000001/e8e80253-1058-4530-9b24-5262945c47c1-1731791730441-Captura de tela 2023-05-22 160427.png",
+                    "sellerName": "Vini",
+                    "description": "Produto muito legal gente pode comprar é mt bom mesmo",
+                    "imagePath": "",
+                    "discount": 40,
+                    "price": 500,
+                    "likes": 10
+                }
+            ]
+            // resultFinal.publicationsList = data;
+            resultFinal.publicationsList = teste;
         } catch (error) {
             console.error("Error fetching buyer publications", error);
             resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
         }
-        resultFinal.userId = userId;
-        resultFinal.accountType = accountType;
+        resultFinal.userId = "teste";
+
+        console.log("teste result final com userId: ", resultFinal.userId);
         return resultFinal;
     }
 
@@ -151,10 +181,10 @@ export default function FeedPage() {
 
                     <li className={style.bar__item}>
                         <button className={style.bar__action}>
-                            <img className={style.bar__image} src={hearts} alt="Likes"/>
+                            <img className={style.bar__image} src={offers} alt="Ofertas"/>
                         </button>
 
-                        <p className={style.bar__text}>Meus Likes</p>
+                        <p className={style.bar__text}>Ofertas</p>
                     </li>
 
                     <li className={style.bar__item}>
@@ -163,16 +193,6 @@ export default function FeedPage() {
                         </button>
 
                         <p className={style.bar__text}>Lista de Desejos</p>
-                    </li>
-
-                    <li className={style.bar__item}>
-                        <button className={style.bar__action}>
-                            <img className={style.bar__image} src={bookmarksFill} alt="Salvos"/>
-                        </button>
-
-                        <p className={style.bar__text}>
-                            Itens Salvos
-                        </p>
                     </li>
 
                 </ul>
@@ -196,10 +216,6 @@ export default function FeedPage() {
                                         className={style.field__submit}></button>
                             </Form>
 
-                            <menu className={style.search__menu}>
-                                <img className={style.button__image} src={menu}
-                                     alt="Menu"/>
-                            </menu>
                         </div>
                     </div>
 
@@ -316,17 +332,13 @@ export default function FeedPage() {
                     </ul>
                 </section>
 
-                <section>
-                    <div className={style.feed__choices}>
-                        <div className={style.choice__followed}>
-                            <p>Seguidos</p>
-                            <div className={style.choice__indicator}></div>
-                        </div>
-                        <div className={style.choice__recommended}>
-                            <p>Para você</p>
+                <section className={style.feed__section}>
+                    <div className={style.feed__starter}>
+                        <div className={style.feed__headline}>
+                            <p className={style.feed__text}>Feed</p>
+                            <div className={style.feed__indicator}></div>
                         </div>
                     </div>
-                    <br/>
 
                     {
                         loaderData?.publicationsList ? (
@@ -355,6 +367,7 @@ export default function FeedPage() {
                                     <img className={style.action__image} src={house} alt="Início"/>
                                 </button>
                             </div>
+
                         </li>
 
                         <li className={`${style.feature__item} ${style.profile__item}`}>
@@ -367,12 +380,12 @@ export default function FeedPage() {
                         <li className={style.feature__group}>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={follows} alt="Seguidos"/>
+                                    <img className={style.action__image} src={wishes} alt="Lista de Desejos"/>
                                 </button>
                             </div>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={bookmarks} alt="Bookmarks"/>
+                                    <img className={style.action__image} src={offers} alt="Ofertas"/>
                                 </button>
                             </div>
                         </li>
@@ -507,6 +520,8 @@ type Seller = {
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
     const _action = formData.get("_action");
+
+    console.log(request);
 
     let userId = session.get("userId");
     let accountType = session.get("accountType");
