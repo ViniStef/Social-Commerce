@@ -1,4 +1,4 @@
 package com.socialcommerce.socialcommerce.dto;
 
-public record SellerForBuyerProfileDto(String name) {
+public record SellerForBuyerProfileDto(Long sellerId, String imagePath, String name) {
 }

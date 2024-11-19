@@ -3,6 +3,7 @@
 .page__container {
   @include main.flexbox($justify: center, $gap: 20px);
   width: 100%;
+  min-height: 100vh;
   padding-top: 15px;
   background-color: main.$color-dark-opaque-400;
 }
@@ -19,12 +20,11 @@
   .bar__list {
     @include main.flexbox($direction: column, $align: center, $gap: 40px);
     margin-block: 30px;
-
     .bar__item {
       @include main.flexbox($direction: column, $justify: center, $align: center, $gap: 5px);
       padding-inline: 10px;
       text-align: center;
-
+      cursor: pointer;
       .bar__action {
         background-color: transparent;
         border: none;
@@ -32,6 +32,7 @@
         .bar__image {
           width: 40px;
           height: 40px;
+          cursor: pointer;
         }
       }
 
@@ -44,6 +45,8 @@
 }
 
 .feed__container {
+  min-width: 390px;
+  width: 100%;
   max-width: 750px;
   position: relative;
 
@@ -236,7 +239,7 @@
   }
 
   .feed__choices {
-    @include main.flexbox($align: center);
+    @include main.flexbox($align: center, $justify: center);
     width: 100%;
     margin-top: 10px;
     text-align: center;
@@ -568,10 +571,12 @@
         @include main.flexbox($align: center,$justify: space-between);
         background-color: rgba(13,13,13, .6);
         position: relative;
-        margin-inline: 5px;
+        margin-inline: 10px;
+        border-radius: 8px;
 
         .follows__user {
           @include main.flexbox($align: center, $gap: 5px);
+          margin-left: 10px;
 
           .user__details {
             @include main.flexbox($direction: column, $justify: space-between, $gap: 5px);
@@ -584,8 +589,8 @@
           }
 
           .follows__image {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             margin: 5px;
             border-radius: 50%;
           }
@@ -605,7 +610,7 @@
           margin-right: 5px;
           padding: 8px;
           border-radius: 50%;
-
+          cursor: pointer;
           .unfollow__image {
             width: 1.5rem;
             height: 1.5rem;

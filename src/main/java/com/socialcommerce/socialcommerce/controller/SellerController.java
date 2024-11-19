@@ -1,9 +1,6 @@
 package com.socialcommerce.socialcommerce.controller;
 
-import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
-import com.socialcommerce.socialcommerce.dto.CreateSellerDto;
-import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
-import com.socialcommerce.socialcommerce.dto.SellerProfileDto;
+import com.socialcommerce.socialcommerce.dto.*;
 import com.socialcommerce.socialcommerce.service.sellerService.SellerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -51,7 +48,7 @@ public class SellerController {
     }
 
     @PutMapping("{sellerId}/image")
-    public ResponseEntity<?> uploadImage(@PathVariable Long sellerId,@RequestBody String imagePath){
+    public ResponseEntity<?> uploadImage(@PathVariable Long sellerId,@RequestBody ImagePathDto imagePath){
         sellerService.uploadImage(sellerId, imagePath);
         return ResponseEntity.status(200).build();
     }

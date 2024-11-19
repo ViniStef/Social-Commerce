@@ -115,6 +115,15 @@ public class PublicationService implements IPublicationService{
         sellerRepo.save(seller);
     }
 
+    @Override
+    public List<ShowPublicationDto> getAllBySeller(Long sellerId) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller id not found"));
+
+        List<Publication> publications = seller.getPublications();
+
+        return fromPublicationToShowPublication(publications);
+    }
+
     private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
 
         return new Publication(LocalDate.now(),
@@ -158,7 +167,9 @@ public class PublicationService implements IPublicationService{
         List<ShowPublicationDto> publicationDtos = new ArrayList<>();
 
         for (Publication publi : publication) {
-            ShowPublicationDto dto = new ShowPublicationDto(publi.getPublication_date()
+            ShowPublicationDto dto = new ShowPublicationDto(
+                    publi.getPublication_id()
+                    , publi.getPublication_date()
                     , new ShowProductDto(publi.getProduct().getProduct_name())
                     , publi.getSeller().getImagePath()
                     , publi.getSeller().getFirstName()

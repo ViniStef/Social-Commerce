@@ -1,4 +1,4 @@
-import {createCookie, createCookieSessionStorage} from "@remix-run/node";
+import {createCookieSessionStorage} from "@remix-run/node";
 
 let secret = process.env.COOKIE_SECRET || "default";
 if (secret === "default") {
@@ -30,7 +30,7 @@ export const {getSession, commitSession, destroySession} = createCookieSessionSt
         cookie: {
             name: "auth",
             httpOnly: true,
-            path: "/feed",
+            path: `/`,
             sameSite: "lax",
             secrets: [secret],
             secure: false,

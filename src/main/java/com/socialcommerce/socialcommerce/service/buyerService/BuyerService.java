@@ -3,6 +3,7 @@ package com.socialcommerce.socialcommerce.service.buyerService;
 
 import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
 import com.socialcommerce.socialcommerce.dto.CreateBuyerDto;
+import com.socialcommerce.socialcommerce.dto.ImagePathDto;
 import com.socialcommerce.socialcommerce.dto.SellerForBuyerProfileDto;
 import com.socialcommerce.socialcommerce.exception.NotFoundException;
 import com.socialcommerce.socialcommerce.exception.PasswordNotMatchException;
@@ -59,6 +60,7 @@ public class BuyerService implements IBuyerService {
     public BuyerProfileDto buyerProfile(Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
         return new BuyerProfileDto(
+                buyer.getImagePath(),
                 buyer.getFirstName(),
                 fromSellerToSellerForBuyer(buyer.getSellers())
                 );
@@ -73,7 +75,7 @@ public class BuyerService implements IBuyerService {
         List<SellerForBuyerProfileDto> sellerForBuyerList = new ArrayList<>();
 
         for (Seller seller : sellerList) {
-            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getFirstName());
+            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getSellerId(),seller.getImagePath(),seller.getFirstName());
             sellerForBuyerList.add(dto);
         }
 
@@ -105,8 +107,9 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
-    public void uploadImage(Long buyerId, String image) {
+    public void uploadImage(Long buyerId, ImagePathDto image) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer not found"));
-        buyer.setImagePath(image);
+        buyer.setImagePath(image.imagePath());
+        buyerRepo.save(buyer);
     }
 }

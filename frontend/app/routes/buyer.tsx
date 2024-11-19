@@ -2,11 +2,6 @@ import style from "../styles/style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import menu from "~/assets/images/list.svg";
 import pedro from "~/assets/images/pedro.webp";
-import details from "~/assets/images/three-dots-vertical.svg";
-import like from "~/assets/images/heart-svgrepo-com.svg";
-import bookmark from "~/assets/images/bookmark.svg";
-import bag from "~/assets/images/bag.svg";
-import product from "~/assets/images/product_shirt.webp";
 import search from "~/assets/images/search.svg";
 import house from "~/assets/images/house.svg";
 import bookmarks from "~/assets/images/bookmarks.svg";
@@ -31,22 +26,30 @@ import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 
-import {Form, json, useActionData, useLoaderData, useSubmit} from "@remix-run/react";
+import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
 import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {authCookie, commitSession, getSession} from "~/auth";
+import {commitSession, getSession} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 
+type Seller = {
+    name: string;
+    imagePath: string;
+    sellerId:number;
+}
+
 type BuyerProfileResultType = {
+    imagePath: string,
     name: string;
     sellers: any[];
 }
 
 export type PublicationsResultType = {
+    publicationId: number;
     publicationDate: string;
     productName: string;
     sellerImg: string;
@@ -61,21 +64,21 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export async function loader({request}: LoaderFunctionArgs) {
-     session = await getSession(
+
+    const sessionLoader = await getSession(
         request.headers.get("Cookie")
     )
-    // if (!(cookieString?.includes("auth"))) {
-    //     return redirect("/login");
-    // } else {
-    let userId = session.get("userId");
-    let accountType = session.get("accountType");
+
+    let userId = sessionLoader.get("userId");
+    let accountType = sessionLoader.get("accountType");
 
 
     if (accountType === "buyer") {
-        let resultFinal: { userId?: string; accountType?: string;  name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
+        let resultFinal: {imagePath?: string; name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
 
         try {
             const { data }: { data: BuyerProfileResultType } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
+            resultFinal.imagePath = data.imagePath;
             resultFinal.name = data.name;
             resultFinal.sellersFollowed = data.sellers;
         } catch (error) {
@@ -90,39 +93,40 @@ export async function loader({request}: LoaderFunctionArgs) {
             console.error("Error fetching buyer publications", error);
             resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
         }
-        resultFinal.userId = userId;
-        resultFinal.accountType = accountType;
+        session = sessionLoader;
         return resultFinal;
     }
 
-        // if (accountType === "buyer") {
-        //     try {
-        //         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
-        //         const {name, sellers}: BuyerProfileResultType = result.data;
-        //         console.log(name);
-        //         console.log(sellers);
-        //         return {name: name, sellersFollowed: sellers};
-        //
-        //     } catch (error) {
-        //         console.log("catch")
-        //         return {"errors": "Algo deu errado no servidor"}
-        //     }
-        // }
+    return null
+
+    }
+
+    // if (accountType === "buyer") {
+    //     try {
+    //         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
+    //         const {name, sellers}: BuyerProfileResultType = result.data;
+    //         console.log(name);
+    //         console.log(sellers);
+    //         return {name: name, sellersFollowed: sellers};
+    //
+    //     } catch (error) {
+    //         console.log("catch")
+    //         return {"errors": "Algo deu errado no servidor"}
+    //     }
+    // }
 
 
-        // try {
-        //     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
-        //     const publicationsList:PublicationsResultType[] = result.data;
-        //
-        //     results = {...results, "publicationsList": publicationsList};
-        //     return results;
-        //
-        // } catch (error) {
-        //     return console.log(error);
-        // }
-    return null;
+    // try {
+    //     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
+    //     const publicationsList:PublicationsResultType[] = result.data;
+    //
+    //     results = {...results, "publicationsList": publicationsList};
+    //     return results;
+    //
+    // } catch (error) {
+    //     return console.log(error);
+    // }
 
-}
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
@@ -215,8 +219,8 @@ export default function FeedPage() {
 
                                     {data.sellers.map((seller: Seller) => {
                                         return (
-                                            <li key={seller.profileImg}>
-                                                <img src={seller.profileImg} alt=""/>
+                                            <li key={seller.imagePath}>
+                                                <img src={seller.imagePath} alt=""/>
                                                 <p>{seller.name}</p>
                                             </li>
                                         )
@@ -328,13 +332,14 @@ export default function FeedPage() {
                     </div>
                     <br/>
 
+
                     {
                         loaderData?.publicationsList ? (
                             loaderData.publicationsList.map((publication: PublicationsResultType) => (
-                                <PublicationDisplay publication={publication} />
+                                <PublicationDisplay publication={publication} type={"buyer"} />
                             ))
                         ) : (
-                            <PublicationDisplay publication={null} notFound={true} />
+                            <PublicationDisplay publication={null} notFound={true} type={"buyer"} />
                         )
                     }
 
@@ -387,7 +392,7 @@ export default function FeedPage() {
 
             <section className={style.user__container}>
                 <div className={style.user__info}>
-                    <img className={style.user__image} src={data?.profileImg ? data.profileImg : logo}
+                    <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                          alt="Imagem de Perfil"/>
                     <p className={style.user__name}>{loaderData?.name}</p>
                     <Form onChange={(event) => {
@@ -414,94 +419,16 @@ export default function FeedPage() {
 
                         {loaderData?.sellersFollowed ? loaderData.sellersFollowed.map((seller: Seller) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={seller.profileImg} name={seller.name}/>
+                                    <ProfileFollowersDisplay profileImg={seller.imagePath} name={seller.name} type={"buyer"} sellerId={seller.sellerId}/>
                                 )
                             })
                             : <p>Você ainda não está seguindo ninguém!</p>
                         }
-
-                        <li className={style.follows__item}>
-                            <div className={style.follows__user}>
-                                <img className={style.follows__image} src={woman1} alt=""/>
-                                <div className={style.user__details}>
-                                    <p className={style.follows__name}>Phyllis Meredith</p>
-                                    <p className={style.user__followers}>2639 Seguidores</p>
-                                </div>
-
-                            </div>
-                            <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                            src={unfollow} alt=""/></button>
-                            <div className={style.follows__split}></div>
-
-                        </li>
-
-                        <li className={style.follows__item}>
-                            <div className={style.follows__user}>
-                                <img className={style.follows__image} src={man1} alt=""/>
-                                <div className={style.user__details}>
-                                    <p className={style.follows__name}>Kevin Malone</p>
-                                    <p className={style.user__followers}>58 Seguidores</p>
-                                </div>
-                            </div>
-                            <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                            src={unfollow} alt=""/></button>
-                            <div className={style.follows__split}></div>
-                        </li>
-
-                        <li className={style.follows__item}>
-                            <div className={style.follows__user}>
-                                <img className={style.follows__image} src={woman2} alt=""/>
-                                <div className={style.user__details}>
-                                    <p className={style.follows__name}>Pam Angela</p>
-                                    <p className={style.user__followers}>715 Seguidores</p>
-                                </div>
-                            </div>
-                            <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                            src={unfollow} alt=""/></button>
-                            <div className={style.follows__split}></div>
-
-                        </li>
-
-                        <li className={style.follows__item}>
-                            <div className={style.follows__user}>
-                                <img className={style.follows__image} src={man2} alt=""/>
-                                <div className={style.user__details}>
-                                    <p className={style.follows__name}>Jim Halpert</p>
-                                    <p className={style.user__followers}>115 Seguidores</p>
-                                </div>
-                            </div>
-                            <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                            src={unfollow} alt=""/></button>
-                            <div className={style.follows__split}></div>
-
-                        </li>
-                        <li className={style.follows__item}>
-                            <div className={style.follows__user}>
-                                <img className={style.follows__image} src={netshoes} alt=""/>
-                                <div className={style.user__details}>
-                                    <p className={style.follows__name}>Netshoes</p>
-                                    <p className={style.user__followers}>25.495 Seguidores</p>
-                                </div>
-                            </div>
-                            <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                            src={unfollow} alt=""/></button>
-                            <div className={style.follows__split}></div>
-
-                        </li>
-
-
                     </ul>
                 </div>
             </section>
-
         </div>
-
     );
-}
-
-type Seller = {
-    name: string;
-    profileImg: string;
 }
 
 export async function action({request}: ActionFunctionArgs) {
@@ -510,8 +437,6 @@ export async function action({request}: ActionFunctionArgs) {
 
     let userId = session.get("userId");
     let accountType = session.get("accountType");
-    console.log(userId);
-    console.log(accountType);
 
     const baseUrl = "http://localhost:8080/";
 
@@ -558,6 +483,7 @@ export async function action({request}: ActionFunctionArgs) {
             const imageUrl = `public/000001/${filename}`;
 
             if (accountType === "buyer") {
+                console.log("user ID aqui")
                 try {
                     const result = await axios.put(`http://localhost:8080/buyer/${userId}/image`, {
                         imagePath: imageUrl,
@@ -571,26 +497,27 @@ export async function action({request}: ActionFunctionArgs) {
                 } catch (error) {
                     return {erro: "Erro ao enviar imagem"};
                 }
-            } else {
-                try {
-                    const result = await axios.put(`http://localhost:8080/seller/${userId}/image`, {
-                        imagePath: imageUrl,
-                    })
+            }
+        }
 
-                    if (result.status === 200) {
-                        return {profileImg: imageUrl};
-                    }
+        case "unfollow": {
+            try {
+                const response = await axios.put(baseUrl + `buyer/unfollow/${formData.get("sellerId")}/by/${userId}`)
+                const status = response.status;
 
-                    return {status: result.status};
-                } catch (error) {
-                    return {erro: "Erro ao enviar imagem"};
+                if(status == 204){
+                    return {status: status};
+                }
+            } catch (error) {
+
+                if (error instanceof AxiosError) {
+                    return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return {errors: "Erro inesperado no servidor"};
                 }
             }
-
         }
     }
-
-    console.log("chegou aki2?")
-
 }
 

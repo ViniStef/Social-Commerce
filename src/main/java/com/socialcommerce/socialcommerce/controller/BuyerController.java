@@ -2,6 +2,7 @@ package com.socialcommerce.socialcommerce.controller;
 
 import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
 import com.socialcommerce.socialcommerce.dto.CreateBuyerDto;
+import com.socialcommerce.socialcommerce.dto.ImagePathDto;
 import com.socialcommerce.socialcommerce.service.buyerService.BuyerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class BuyerController {
     }
 
     @PutMapping("{buyerId}/image")
-    public ResponseEntity<?> uploadImage(@PathVariable Long buyerId,@RequestBody String imagePath){
+    public ResponseEntity<?> uploadImage(@PathVariable Long buyerId,@RequestBody ImagePathDto imagePath){
         buyerService.uploadImage(buyerId, imagePath);
         return ResponseEntity.status(200).build();
     }

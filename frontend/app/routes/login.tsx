@@ -2,7 +2,7 @@ import {LoginArea} from "~/components/LoginArea";
 import {z} from "zod";
 import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
-import {json} from "@remix-run/react";
+import {json, useRevalidator} from "@remix-run/react";
 import axios from "axios";
 import { commitSession, getSession} from "~/auth";
 
@@ -48,11 +48,20 @@ export async function action({request}: ActionFunctionArgs) {
             session.set( "userId", data.userId);
             session.set( "accountType", data.userAccountType);
 
-            return redirect("/feed", {
-                headers: {
-                    "Set-Cookie": await commitSession(session),
-                }
-            })
+            if(data.userAccountType == "buyer"){
+                return redirect("/buyer", {
+                    headers: {
+                        "Set-Cookie": await commitSession(session),
+                    },
+                })
+            } else {
+                return redirect("/seller", {
+                    headers: {
+                        "Set-Cookie": await commitSession(session),
+                    },
+                })
+            }
+
         } else if (data?.message) {
             return {"notFound": data.message};
         }

@@ -5,9 +5,11 @@ import {Form} from "@remix-run/react";
 type ProfileFollowersDisplayProps = {
     profileImg: string;
     name: string;
+    type: string
+    sellerId?: number,
 }
 
-export default function ProfileFollowersDisplay( {profileImg, name}: ProfileFollowersDisplayProps) {
+export default function ProfileFollowersDisplay( {profileImg, name, type, sellerId}: ProfileFollowersDisplayProps) {
     return (
         <li className={style.follows__item}>
             <div className={style.follows__user}>
@@ -17,10 +19,14 @@ export default function ProfileFollowersDisplay( {profileImg, name}: ProfileFoll
                 </div>
 
             </div>
-            <Form method={"post"}>
-                <button className={style.unfollow__button}><img className={style.unfollow__image}
-                                                                src={unfollow} alt=""/></button>
-            </Form>
+            {type == "buyer"&&
+                <Form method={"post"}>
+                    <input type="hidden" name={"_action"} value={"unfollow"}/>
+                    <input type="hidden" name={"sellerId"} value={sellerId}/>
+                    <button className={style.unfollow__button}><img className={style.unfollow__image}
+                                                                    src={unfollow} alt=""/></button>
+                </Form>
+            }
 
             <div className={style.follows__split}></div>
 

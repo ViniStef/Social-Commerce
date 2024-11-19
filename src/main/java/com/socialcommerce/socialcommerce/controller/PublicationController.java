@@ -58,5 +58,10 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getAllPublicationByBuyer(buyerId));
     }
 
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<List<ShowPublicationDto>> getAllBySeller(@PathVariable Long sellerId) {
+        return ResponseEntity.ok(publicationService.getAllBySeller(sellerId));
+    }
+
 
 }

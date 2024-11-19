@@ -5,9 +5,12 @@ import product from "~/assets/images/product_shirt.webp";
 import like from "~/assets/images/heart-svgrepo-com.svg";
 import bag from "~/assets/images/bag.svg";
 import bookmark from "~/assets/images/bookmark.svg";
-import {PublicationsResultType} from "~/routes/feed";
+import trash from "~/assets/icons/trash-fill.svg"
+import {PublicationsResultType} from "~/routes/seller";
+import unfollow from "~/assets/images/person-x-fill.svg";
+import {Form} from "@remix-run/react";
 
-export const PublicationDisplay = ({ publication, notFound = false }: { publication: PublicationsResultType | null; notFound?: boolean }) => {
+export const PublicationDisplay = ({ type, publication, notFound = false }: { publication: PublicationsResultType | null; notFound?: boolean, type: string }) => {
     return (
 
 
@@ -52,18 +55,30 @@ export const PublicationDisplay = ({ publication, notFound = false }: { publicat
                         <p className={style.description__text}>{publication?.price}</p>
                     </div>
 
-
-                    <div className={style.post__reactions}>
-                        <div className={style.reaction__container}>
-                            <img className={style.reaction__image} src={like} alt="gostar"/>
+                    {type == "buyer" ?
+                        <div className={style.post__reactions}>
+                            <div className={style.reaction__container}>
+                                <img className={style.reaction__image} src={like} alt="like"/>
+                            </div>
+                            <div className={style.reaction__container}>
+                                <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
+                            </div>
+                            <div className={style.reaction__container}>
+                                <img className={style.reaction__image} src={bookmark} alt="salvar"/>
+                            </div>
+                        </div> :
+                        <div className={style.post__reactions}>
+                            <div className={style.reaction__container}>
+                                <Form method={"post"}>
+                                    <input type="hidden" name={"_action"} value={"unfollow"}/>
+                                    <input type="hidden" name={"publicationId"} value={publication?.publicationId}/>
+                                    <button className={style.unfollow__button}><img className={style.reaction__image}
+                                                                                    src={trash} alt="deletar"/>
+                                    </button>
+                                </Form>
+                            </div>
                         </div>
-                        <div className={style.reaction__container}>
-                            <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
-                        </div>
-                        <div className={style.reaction__container}>
-                            <img className={style.reaction__image} src={bookmark} alt="salvar"/>
-                        </div>
-                    </div>
+                    }
                 </fieldset>
             }
 

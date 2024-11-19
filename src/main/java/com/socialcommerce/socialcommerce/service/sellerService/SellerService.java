@@ -56,6 +56,7 @@ public class SellerService implements ISellerService {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
 
         return new SellerProfileDto(
+                seller.getImagePath(),
                 seller.getFirstName(),
                 fromBuyerToBuyerForSeller(seller.getBuyers()));
 
@@ -67,7 +68,7 @@ public class SellerService implements ISellerService {
 
         if (sellersFounded != null) {
             return sellersFounded.stream()
-                    .map(seller -> new SellerForBuyerProfileDto(seller.getFirstName()))
+                    .map(seller -> new SellerForBuyerProfileDto(seller.getSellerId(), seller.getImagePath(), seller.getFirstName()))
                     .collect(Collectors.toList());
         } else {
             throw new NotFoundException("Seller not found");
@@ -78,7 +79,7 @@ public class SellerService implements ISellerService {
         List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
 
         for (Buyer buyer : sellerList) {
-            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getFirstName());
+            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getImagePath(),buyer.getFirstName());
             buyerList.add(dto);
         }
 
@@ -86,8 +87,9 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public void uploadImage(Long sellerId, String image) {
+    public void uploadImage(Long sellerId, ImagePathDto image) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
-        seller.setImagePath(image);
+        seller.setImagePath(image.imagePath());
+        sellerRepo.save(seller);
     }
 }
