@@ -4,7 +4,7 @@ import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
 import {json} from "@remix-run/react";
 import axios from "axios";
-import {authCookie} from "~/auth";
+import { commitSession, getSession} from "~/auth";
 
 export const meta = () => {
     return [{ title: "Entrar - Social Commerce"}]
@@ -34,30 +34,37 @@ export async function action({request}: ActionFunctionArgs) {
     const { formData, errors } = validateAction<Login>(body, loginSchema);
     const { _action } = body;
 
+    const session = await getSession(
+        request.headers.get("Cookie")
+    )
+
     if (_action == "login") {
         if (errors) {
             return {"errors": errors};
         }
         const response = await tryLoginUser(formData);
         const data = await response.json();
-        console.log(data)
-        if (data?.userId && data?.accountType) {
-            console.log(data);
+        if (data?.userId && data?.userAccountType) {
+            session.set( "userId", data.userId);
+            session.set( "accountType", data.userAccountType);
+
             return redirect("/feed", {
                 headers: {
-                    "Set-Cookie": await authCookie.serialize(data),
+                    "Set-Cookie": await commitSession(session),
                 }
             })
         } else if (data?.message) {
             return {"notFound": data.message};
         }
+
     }
+
     return {"error": "Algo inesperado aconteceu"};
 }
 
 type LoginResponse = {
     userId?: string;
-    accountType?: string;
+    userAccountType?: string;
     message?: string;
 };
 
@@ -76,7 +83,7 @@ async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginRespons
 
         const { userId, accountType } = response.data;
 
-        return json({ userId, accountType });
+        return json({ userId, userAccountType: accountType });
 
     } catch (error) {
         return json(

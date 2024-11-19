@@ -36,6 +36,9 @@ public class Publication {
     @JsonIgnoreProperties("publications")
     private Seller seller;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "discount")
     private Float discount_percentage;
 
@@ -57,7 +60,7 @@ public class Publication {
     private Category category;
 
 
-    public Publication(LocalDate publication_date, Product product, String imagePath, Category category, Float discount_percentage, Boolean has_promotion, Double price) {
+    public Publication(LocalDate publication_date, Product product, String imagePath, String description, Category category, Float discount_percentage, Boolean has_promotion, Double price) {
         this.publication_date = publication_date;
         this.product = product;
         this.category = category;
@@ -65,6 +68,7 @@ public class Publication {
         this.has_promotion = has_promotion;
         this.price = price;
         this.imagePath = imagePath;
+        this.description = description;
     }
 
 

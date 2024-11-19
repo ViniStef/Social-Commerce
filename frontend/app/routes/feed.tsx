@@ -32,12 +32,12 @@ import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 
 import {Form, json, useActionData, useLoaderData, useSubmit} from "@remix-run/react";
-import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect} from "@remix-run/node";
+import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
 import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {authCookie} from "~/auth";
+import {authCookie, commitSession, getSession} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 
@@ -49,22 +49,30 @@ type BuyerProfileResultType = {
 export type PublicationsResultType = {
     publicationDate: string;
     productName: string;
+    sellerImg: string;
+    sellerName: string;
+    description: string;
     imagePath: string;
     discount: number;
     price: number;
     likes: number;
 }
 
-export async function loader({request}: LoaderFunctionArgs) {
-    let cookieString = request.headers.get("Cookie");
+let session: SessionData;
 
+export async function loader({request}: LoaderFunctionArgs) {
+     session = await getSession(
+        request.headers.get("Cookie")
+    )
     // if (!(cookieString?.includes("auth"))) {
     //     return redirect("/login");
     // } else {
-    let {userId, accountType} = await authCookie.parse(cookieString);
+    let userId = session.get("userId");
+    let accountType = session.get("accountType");
+
 
     if (accountType === "buyer") {
-        let resultFinal: { name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
+        let resultFinal: { userId?: string; accountType?: string;  name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
 
         try {
             const { data }: { data: BuyerProfileResultType } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
@@ -82,7 +90,8 @@ export async function loader({request}: LoaderFunctionArgs) {
             console.error("Error fetching buyer publications", error);
             resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
         }
-
+        resultFinal.userId = userId;
+        resultFinal.accountType = accountType;
         return resultFinal;
     }
 
@@ -111,7 +120,7 @@ export async function loader({request}: LoaderFunctionArgs) {
         // } catch (error) {
         //     return console.log(error);
         // }
-
+    return null;
 
 }
 export default function FeedPage() {
@@ -378,7 +387,7 @@ export default function FeedPage() {
 
             <section className={style.user__container}>
                 <div className={style.user__info}>
-                    <img className={style.user__image} src={data?.imageUrl ? data.imageUrl : logo}
+                    <img className={style.user__image} src={data?.profileImg ? data.profileImg : logo}
                          alt="Imagem de Perfil"/>
                     <p className={style.user__name}>{loaderData?.name}</p>
                     <Form onChange={(event) => {
@@ -499,14 +508,16 @@ export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
     const _action = formData.get("_action");
 
-    let cookieString = request.headers.get("Cookie");
-    let {userId, accountType} = await authCookie.parse(cookieString);
+    let userId = session.get("userId");
+    let accountType = session.get("accountType");
+    console.log(userId);
+    console.log(accountType);
 
     const baseUrl = "http://localhost:8080/";
 
     switch (_action) {
         case "search": {
-            console.log("chegou aki?")
+
             try {
                 const response = await axios.get(baseUrl + `seller/findASeller/${formData.get("search")}`)
                 const sellerResponse: Seller[] = response.data;
@@ -544,7 +555,7 @@ export async function action({request}: ActionFunctionArgs) {
             const arrayBuffer = await image.arrayBuffer();
             fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
 
-            const imageUrl = `/000001/${filename}`;
+            const imageUrl = `public/000001/${filename}`;
 
             if (accountType === "buyer") {
                 try {
@@ -553,7 +564,7 @@ export async function action({request}: ActionFunctionArgs) {
                     })
 
                     if (result.status === 200) {
-                        return {imageUrl: imageUrl};
+                        return {profileImg: imageUrl};
                     }
 
                     return {status: result.status};
@@ -567,7 +578,7 @@ export async function action({request}: ActionFunctionArgs) {
                     })
 
                     if (result.status === 200) {
-                        return {imageUrl: imageUrl};
+                        return {profileImg: imageUrl};
                     }
 
                     return {status: result.status};

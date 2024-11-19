@@ -22,8 +22,8 @@ export const PublicationDisplay = ({ publication, notFound = false }: { publicat
 
                 : <fieldset className={style.post__field}>
                     <legend className={style.field__brand}>
-                        <img className={style.brand__image} src={logo}/>
-                        <span className={style.brand__name}>Eco-Friendly Water Bottle</span>
+                        <img className={style.brand__image} src={publication?.sellerImg}/>
+                        <span className={style.brand__name}>{publication?.productName}</span>
                     </legend>
 
 
@@ -35,18 +35,21 @@ export const PublicationDisplay = ({ publication, notFound = false }: { publicat
                     </div>
 
                     <div className={style.separation__onpost}></div>
-
                     <div className={style.post__description}>
-                        <p className={style.description__text}>Stay hydrated in style! Our sleek, sustainable
-                            water bottle is perfect for your active lifestyle. Made from recycled materials, it
-                            keeps your drinks cold for 24 hours or hot for 12. Join the eco-revolution! 🌿💧
-                            #EcoLiving #ZeroWaste</p>
+                        <p className={style.description__text}>{publication?.sellerName}</p>
+                    </div>
+                    <div className={style.post__description}>
+                        <p className={style.description__text}>{publication?.description}</p>
                     </div>
 
                     <div className={style.post__product}>
 
                         <img className={style.product__image} src={product} alt=""/>
                         <span className={style.product__discount}>{publication?.discount}</span>
+                    </div>
+
+                    <div className={style.post__description}>
+                        <p className={style.description__text}>{publication?.price}</p>
                     </div>
 
 

@@ -120,6 +120,7 @@ public class PublicationService implements IPublicationService{
         return new Publication(LocalDate.now(),
                 fromProductDtoToProduct(publicationDto.product()),
                 publicationDto.imagePath(),
+                publicationDto.description(),
                 fromCategoryDtoToCategory(publicationDto.category()),
                 publicationDto.discount_percentage(),
                 publicationDto.has_promotion(),
@@ -159,7 +160,10 @@ public class PublicationService implements IPublicationService{
         for (Publication publi : publication) {
             ShowPublicationDto dto = new ShowPublicationDto(publi.getPublication_date()
                     , new ShowProductDto(publi.getProduct().getProduct_name())
+                    , publi.getSeller().getImagePath()
+                    , publi.getSeller().getFirstName()
                     , publi.getImagePath()
+                    ,publi.getDescription()
                     , publi.getDiscount_percentage()
                     , publi.getPrice()
                     , publi.getLikes());
