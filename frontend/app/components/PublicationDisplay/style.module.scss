@@ -147,7 +147,6 @@
     @include main.flexbox($align: center, $justify: center);
     padding-block: .5rem;
 
-
     .reaction__container {
       @include main.flexbox($align: center, $justify: center);
       width: 100%;
@@ -155,6 +154,7 @@
       .reaction__image {
         width: 25px;
         height: 25px;
+        cursor: pointer;
       }
 
       .likes__count {

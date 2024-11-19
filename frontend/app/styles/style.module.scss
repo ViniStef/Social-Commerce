@@ -26,12 +26,14 @@
       @include main.flexbox($direction: column, $justify: center, $align: center, $gap: 5px);
       padding-inline: 10px;
       text-align: center;
+      cursor: pointer;
 
       .bar__action {
         background-color: transparent;
         border: none;
 
         .bar__image {
+          cursor: pointer;
           width: 40px;
           height: 40px;
         }
@@ -291,6 +293,7 @@
           background-color: transparent;
 
           .action__image {
+            cursor: pointer;
             width: 30px;
             height: 30px;
           }
