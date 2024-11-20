@@ -42,7 +42,7 @@ import {LogoDisplay} from "~/components/LogoDisplay";
 type Seller = {
     name: string;
     imagePath: string;
-    sellerId:number;
+    sellerId: number;
 }
 
 type BuyerProfileResultType = {
@@ -66,8 +66,11 @@ export type PublicationsResultType = {
 
 let session: SessionData;
 
+let publications: PublicationsResultType[];
+
+
 export const meta = () => {
-    return [{ title: "Comprador - Social Commerce"}]
+    return [{title: "Comprador - Social Commerce"}]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -82,16 +85,25 @@ export async function loader({request}: LoaderFunctionArgs) {
     // let userId = sessionLoader.get("userId");
     // let accountType = sessionLoader.get("accountType");
 
-    const {userId, accountType } = await requireAuthCookie(request);
+    const {userId, accountType} = await requireAuthCookie(request);
 
     if (accountType === "seller") {
         return redirect("/seller");
     }
 
-    let resultFinal: {imagePath?: string; name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
+    let resultFinal: {
+        imagePath?: string;
+        name?: string;
+        sellersFollowed?: any[];
+        publicationsList?: PublicationsResultType[];
+        errors?: string[]
+    } = {errors: []};
+
 
     try {
-        const { data }: { data: BuyerProfileResultType } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
+        const {data}: {
+            data: BuyerProfileResultType
+        } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
         resultFinal.imagePath = data.imagePath;
         resultFinal.name = data.name;
         resultFinal.sellersFollowed = data.sellers;
@@ -103,48 +115,52 @@ export async function loader({request}: LoaderFunctionArgs) {
     }
 
     try {
-        const { data }: { data: PublicationsResultType[] } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
-        resultFinal.publicationsList = data;
+        const {data}: {
+            data: PublicationsResultType[]
+        } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
+        publications = data;
     } catch (error) {
         console.error("Error fetching buyer publications", error);
         resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
     }
     session = sessionLoader;
+    resultFinal.publicationsList = publications;
     return resultFinal;
 
 }
 
-    // if (accountType === "buyer") {
-    //     try {
-    //         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
-    //         const {name, sellers}: BuyerProfileResultType = result.data;
-    //         console.log(name);
-    //         console.log(sellers);
-    //         return {name: name, sellersFollowed: sellers};
-    //
-    //     } catch (error) {
-    //         console.log("catch")
-    //         return {"errors": "Algo deu errado no servidor"}
-    //     }
-    // }
+// if (accountType === "buyer") {
+//     try {
+//         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
+//         const {name, sellers}: BuyerProfileResultType = result.data;
+//         console.log(name);
+//         console.log(sellers);
+//         return {name: name, sellersFollowed: sellers};
+//
+//     } catch (error) {
+//         console.log("catch")
+//         return {"errors": "Algo deu errado no servidor"}
+//     }
+// }
 
 
-    // try {
-    //     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
-    //     const publicationsList:PublicationsResultType[] = result.data;
-    //
-    //     results = {...results, "publicationsList": publicationsList};
-    //     return results;
-    //
-    // } catch (error) {
-    //     return console.log(error);
-    // }
+// try {
+//     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
+//     const publicationsList:PublicationsResultType[] = result.data;
+//
+//     results = {...results, "publicationsList": publicationsList};
+//     return results;
+//
+// } catch (error) {
+//     return console.log(error);
+// }
 
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
 
+    const publicationsFeed =   data?.publicationFiltered || loaderData.publicationsList || publications;
 
     return (
         <div className={style.page__container}>
@@ -166,16 +182,19 @@ export default function FeedPage() {
                         <p className={style.bar__text}>Início</p>
                     </li>
 
-                    <li className={style.bar__item}>
-                        <button className={style.bar__action}>
-                            <img className={style.bar__image} src={offers} alt="Ofertas"/>
-                        </button>
+                    <Form method={"post"}>
+                        <input type="hidden" name={"_action"} value={"promo_posts"}/>
+                        <li className={style.bar__item}>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={offers} alt="Ofertas"/>
+                            </button>
+                            <p className={style.bar__text}>Ofertas</p>
+                        </li>
+                    </Form>
 
-                        <p className={style.bar__text}>Ofertas</p>
-                    </li>
 
                     <li className={style.bar__item}>
-                        <button className={style.bar__action}>
+                    <button className={style.bar__action}>
                             <img className={style.bar__image} src={wishes} alt="Desejos"/>
                         </button>
 
@@ -252,79 +271,108 @@ export default function FeedPage() {
                     <h1 className={style.category__title}>Categorias</h1>
                     <div className={style.separation__div}></div>
                     <ul className={style.category__list}>
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={piggy} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Maiores Ofertas</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"best_promo_posts"}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={piggy} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Maiores Ofertas</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={tree} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Natal</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={1}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={tree} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Natal</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={tv} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Televisores</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={2}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={tv} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Televisores</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={smartphone} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Smartphones</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={3}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={smartphone} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Smartphones</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={joystick} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Jogos</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={4}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={joystick} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Jogos</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={laptop} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Eletrônicos</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={5}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={laptop} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Eletrônicos</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img className={style.category__image} src={lamp} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Decorações</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={6}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={lamp} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Decorações</p>
+                            </li>
+                        </Form>
 
-                        <li className={style.item__category}>
-                            <div className={style.category__img_container}>
-                                <button className={`${style.category__button} ${style.category__blue}`}>
-                                    <img style={{
-                                        "padding": "1px"
-                                    }} className={style.category__image} src={shirt} alt="Produto"/>
-                                </button>
-                            </div>
-                            <p className={style.category__name}>Roupas</p>
-                        </li>
+                        <Form method={"post"}>
+                            <li className={style.item__category}>
+                                <div className={style.category__img_container}>
+                                    <input type="hidden" name={"_action"} value={"post_by_category"}/>
+                                    <input type="hidden" name={"categoryId"} value={7}/>
+                                    <button className={`${style.category__button} ${style.category__blue}`}>
+                                        <img className={style.category__image} src={shirt} alt="Produto"/>
+                                    </button>
+                                </div>
+                                <p className={style.category__name}>Roupas</p>
+                            </li>
+                        </Form>
 
                     </ul>
                 </section>
@@ -339,12 +387,12 @@ export default function FeedPage() {
 
 
                     {
-                        loaderData?.publicationsList && loaderData.publicationsList.length > 0 ? (
-                            loaderData.publicationsList.map((publication: PublicationsResultType) => (
-                                <PublicationDisplay publication={publication} type={"buyer"} />
+                        publicationsFeed && publicationsFeed.length > 0 ? (
+                            publicationsFeed.map((publication: PublicationsResultType) => (
+                                <PublicationDisplay publication={publication} type={"buyer"}/>
                             ))
                         ) : (
-                            <PublicationDisplay publication={null} notFound={true} type={"buyer"} />
+                            <PublicationDisplay publication={null} notFound={true} type={"buyer"}/>
                         )
                     }
 
@@ -354,19 +402,22 @@ export default function FeedPage() {
                 <section className={style.user__features}>
 
                     <ul className={style.feature__list}>
-                        <li className={style.feature__group}>
-                            <div className={style.feature__item}>
-                                <button className={style.feature__action}>
-                                    <img className={style.action__image} src={search} alt="Buscar"/>
-                                </button>
-                            </div>
-                            <div className={style.feature__item}>
-                                <button className={style.feature__action}>
-                                    <img className={style.action__image} src={house} alt="Início"/>
-                                </button>
-                            </div>
+                        <Form method={"post"}>
 
-                        </li>
+                            <li className={style.feature__group}>
+                                <div className={style.feature__item}>
+                                    <input type="hidden" name={"_action"} value={""}/>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={search} alt="Buscar"/>
+                                    </button>
+                                </div>
+                                <div className={style.feature__item}>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={house} alt="Início"/>
+                                    </button>
+                                </div>
+                            </li>
+                        </Form>
 
                         <li className={`${style.feature__item} ${style.profile__item}`}>
                             <button className={style.feature__action}>
@@ -425,14 +476,15 @@ export default function FeedPage() {
 
                         {loaderData?.sellersFollowed && loaderData.sellersFollowed.length > 0 ? loaderData.sellersFollowed.map((seller: Seller) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={seller.imagePath} name={seller.name} type={"buyer"} sellerId={seller.sellerId}/>
+                                    <ProfileFollowersDisplay profileImg={seller.imagePath} name={seller.name} type={"buyer"}
+                                                             sellerId={seller.sellerId}/>
                                 )
                             })
-                            : <li className={style.nofollow__content} >
+                            : <li className={style.nofollow__content}>
                                 <div className={style.nofollow__item}>
-                                <p className={style.nofollow__text}>Você ainda não está seguindo ninguém!</p>
+                                    <p className={style.nofollow__text}>Você ainda não está seguindo ninguém!</p>
                                 </div>
-                                <LogoDisplay />
+                                <LogoDisplay/>
                             </li>
                         }
                     </ul>
@@ -445,6 +497,8 @@ export default function FeedPage() {
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
     const _action = formData.get("_action");
+
+
 
     let userId = session.get("userId");
     let accountType = session.get("accountType");
@@ -472,9 +526,11 @@ export async function action({request}: ActionFunctionArgs) {
             }
 
         }
+
         case "close_search": {
             return {close_search: true};
         }
+
         case "upload_image": {
             const image = formData.get("image") as File;
 
@@ -509,6 +565,7 @@ export async function action({request}: ActionFunctionArgs) {
                     return {erro: "Erro ao enviar imagem"};
                 }
             }
+            break;
         }
 
         case "unfollow": {
@@ -516,7 +573,7 @@ export async function action({request}: ActionFunctionArgs) {
                 const response = await axios.put(baseUrl + `buyer/unfollow/${formData.get("sellerId")}/by/${userId}`)
                 const status = response.status;
 
-                if(status == 204){
+                if (status == 204) {
                     return {status: status};
                 }
             } catch (error) {
@@ -528,7 +585,82 @@ export async function action({request}: ActionFunctionArgs) {
                     return {errors: "Erro inesperado no servidor"};
                 }
             }
+            break;
+        }
+
+
+        case "post_by_category": {
+            try {
+                const response = await axios.get(baseUrl + `publications/buyer/${userId}/category/${formData.get("categoryId")}`)
+
+                const publicationsCategory: PublicationsResultType[] = response.data
+
+                if (publicationsCategory) {
+                     publications = publicationsCategory;
+                }
+
+                return {publicationFiltered: publications};
+
+            } catch (error) {
+
+                if (error instanceof AxiosError) {
+                    return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return {errors: "Erro inesperado no servidor"};
+                }
+            }
+        }
+
+        case "promo_posts": {
+            try {
+                const response = await axios.get(baseUrl + `publications/promo/${userId}`)
+                console.log("promo1: " + response)
+
+                const publicationsPromo: PublicationsResultType[] = response.data
+
+                console.log("promo2: " + publicationsPromo)
+
+                if (publicationsPromo) {
+                    publications = publicationsPromo;
+                }
+
+                return {publicationFiltered: publicationsPromo};
+
+            } catch (error) {
+                console.log("dentro do error: " + error)
+                if (error instanceof AxiosError) {
+                    return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return {errors: "Erro inesperado no servidor"};
+                }
+            }
+        }
+        case "best_promo_posts": {
+                try {
+                    const response = await axios.get(baseUrl + `publications/mostPromo/${userId}`)
+
+                    const publicationsPromo: PublicationsResultType[] = response.data
+
+
+                    if (publicationsPromo) {
+                        publications = publicationsPromo;
+                    }
+
+                    return {publicationFiltered: publicationsPromo};
+
+                } catch (error) {
+                    console.log("dentro do error: "+error)
+                    if (error instanceof AxiosError) {
+                        return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                    } else {
+                        return {errors: "Erro inesperado no servidor"};
+                    }
+                }
         }
     }
 }
+
 

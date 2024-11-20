@@ -63,5 +63,10 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.getAllBySeller(sellerId));
     }
 
+    @GetMapping("/mostPromo/{sellerId}")
+    public ResponseEntity<List<ShowPublicationDto>> getAllBestPromoPosts(@PathVariable Long sellerId) {
+        return ResponseEntity.ok(publicationService.getAllPostsWithMorePromotion(sellerId));
+    }
+
 
 }
