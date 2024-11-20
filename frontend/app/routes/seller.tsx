@@ -20,13 +20,15 @@ import {PublicationDisplay} from "~/components/PublicationDisplay";
 import ignore from "ignore";
 
 type Buyer = {
-    name: string;
+    firstName: string;
+    lastName: string;
     imagePath: string;
 }
 
 type SellerProfileResultType = {
     imagePath: string,
-    name: string;
+    firstName: string;
+    lastName: string;
     buyers: Buyer[];
 }
 
@@ -65,12 +67,13 @@ export async function loader({request}: LoaderFunctionArgs) {
     }
 
     if (accountType === "seller") {
-        let resultFinal: {imagePath?: string; name?: string; buyers?: Buyer[]; errors?: string[] } = { errors: [] };
+        let resultFinal: {imagePath?: string; firstName?: string; lastName?: string; buyers?: Buyer[]; errors?: string[] } = { errors: [] };
 
         try {
             const { data }: { data: SellerProfileResultType } = await axios.get(`http://localhost:8080/seller/profile/${userId}`);
             resultFinal.imagePath = data.imagePath;
-            resultFinal.name = data.name;
+            resultFinal.firstName = data.firstName;
+            resultFinal.lastName = data.lastName;
             resultFinal.buyers = data.buyers;
         } catch (error) {
             console.error("Error fetching seller profile", error);
@@ -115,7 +118,6 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
-    console.log(loaderData);
 
     return (
         <div className={style.page__container}>
@@ -162,7 +164,7 @@ export default function FeedPage() {
                 <section>
                     <div className={style.feed__starter}>
                         <div className={style.feed__headline}>
-                            <p className={style.feed__text}>{loaderData?.name} Workbench</p>
+                            <p className={style.feed__text}>{loaderData?.firstName} Workbench</p>
                             <div className={style.feed__indicator}></div>
                         </div>
                     </div>
@@ -186,7 +188,7 @@ export default function FeedPage() {
                 <div className={style.user__info}>
                     <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                          alt="Imagem de Perfil"/>
-                    <p className={style.user__name}>{loaderData?.name}</p>
+                    <p className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
                     <Form onChange={(event) => {
                         submit(event.currentTarget)
                     }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
@@ -211,7 +213,7 @@ export default function FeedPage() {
 
                         {loaderData?.buyers ? loaderData.buyers.map((buyer: Buyer) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} name={buyer.name} type={"seller"}/>
+                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} firstName={buyer.firstName} lastName={buyer.lastName} type={"seller"}/>
                                 )
                             })
                             : <p>Você ainda não está seguindo ninguém!</p>

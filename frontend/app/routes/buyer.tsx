@@ -26,6 +26,8 @@ import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
 import offers from "~/assets/icons/currency-dollar.svg";
+import follow from "~/assets/icons/person-plus.svg";
+
 
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
@@ -40,14 +42,16 @@ import {PublicationDisplay} from "~/components/PublicationDisplay";
 import {LogoDisplay} from "~/components/LogoDisplay";
 
 type Seller = {
-    name: string;
+    firstName: string;
+    lastName: string;
     imagePath: string;
     sellerId: number;
 }
 
 type BuyerProfileResultType = {
     imagePath: string,
-    name: string;
+    firstName: string;
+    lastName: string;
     sellers: any[];
 }
 
@@ -93,7 +97,8 @@ export async function loader({request}: LoaderFunctionArgs) {
 
     let resultFinal: {
         imagePath?: string;
-        name?: string;
+        firstName?: string;
+        lastName?: string;
         sellersFollowed?: any[];
         publicationsList?: PublicationsResultType[];
         errors?: string[]
@@ -105,7 +110,8 @@ export async function loader({request}: LoaderFunctionArgs) {
             data: BuyerProfileResultType
         } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
         resultFinal.imagePath = data.imagePath;
-        resultFinal.name = data.name;
+        resultFinal.firstName = data.firstName;
+        resultFinal.lastName = data.lastName;
         resultFinal.sellersFollowed = data.sellers;
         console.log("sellers followed aki: ", data.sellers);
 
@@ -243,14 +249,26 @@ export default function FeedPage() {
 
                                     {data.sellers.length > 0 ? data.sellers.map((seller: Seller) => {
                                             return (
-                                                <li key={seller.imagePath}>
-                                                    <img src={seller.imagePath} alt=""/>
-                                                    <p>{seller.name}</p>
-                                                </li>
+                                                <form method={"post"}>
+                                                    <li className={style.seller_result} key={seller.imagePath}>
+                                                        <div className={style.result_person}>
+                                                            <img src={seller.imagePath} alt=""/>
+                                                            <p>{seller.firstName} {seller.lastName} </p>
+                                                        </div>
+                                                        <input type="hidden" name={"_action"} value={"follow"}/>
+                                                        <input type="hidden" name={"sellerId"} value={seller.sellerId}/>
+                                                        <button
+                                                            className={style.button_modal}>
+                                                            <img className={style.button_img} src={follow}
+                                                                 alt="follow"/>
+                                                        </button>
+                                                    </li>
+                                                </form>
+
                                             )
                                         }) :
                                         <li className={style.result__item}>
-                                            <p className={style.noseller__text}>Não encontramos nenhum vendedor</p>
+                                        <p className={style.noseller__text}>Não encontramos nenhum vendedor</p>
                                         </li>
                                     }
 
@@ -440,7 +458,6 @@ export default function FeedPage() {
                         </li>
 
                     </ul>
-
                 </section>
 
 
@@ -451,7 +468,7 @@ export default function FeedPage() {
                 <div className={style.user__info}>
                     <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                          alt="Imagem de Perfil"/>
-                    <p className={style.user__name} style={{textTransform: "capitalize"}}>{loaderData?.name}</p>
+                    <p className={style.user__name} style={{textTransform: "capitalize"}}>{loaderData?.firstName} {loaderData?.lastName}</p>
                     <Form onChange={(event) => {
                         submit(event.currentTarget)
                     }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
@@ -476,7 +493,7 @@ export default function FeedPage() {
 
                         {loaderData?.sellersFollowed && loaderData.sellersFollowed.length > 0 ? loaderData.sellersFollowed.map((seller: Seller) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={seller.imagePath} name={seller.name} type={"buyer"}
+                                    <ProfileFollowersDisplay profileImg={seller.imagePath} firstName={seller.firstName} lastName={seller.lastName} type={"buyer"}
                                                              sellerId={seller.sellerId}/>
                                 )
                             })
@@ -511,8 +528,6 @@ export async function action({request}: ActionFunctionArgs) {
             try {
                 const response = await axios.get(baseUrl + `seller/findASeller/${formData.get("search")}`)
                 const sellerResponse: Seller[] = response.data;
-
-                console.log("Response data: ", response.data);
 
                 return {sellers: sellerResponse};
             } catch (error) {
@@ -550,7 +565,6 @@ export async function action({request}: ActionFunctionArgs) {
             const imageUrl = `public/000001/${filename}`;
 
             if (accountType === "buyer") {
-                console.log("user ID aqui")
                 try {
                     const result = await axios.put(`http://localhost:8080/buyer/${userId}/image`, {
                         imagePath: imageUrl,
@@ -574,6 +588,29 @@ export async function action({request}: ActionFunctionArgs) {
                 const status = response.status;
 
                 if (status == 204) {
+                    return {status: status};
+                }
+            } catch (error) {
+
+                if (error instanceof AxiosError) {
+                    return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return {errors: "Erro inesperado no servidor"};
+                }
+            }
+            break;
+        }
+
+        case "follow": {
+            try {
+                const response = await axios.post(baseUrl + `buyer/follower/${userId}/followed/${formData.get("sellerId")}`)
+                const status = response.status;
+
+                console.log("status:" + status)
+                console.log("id: "+ formData.get("sellerId"))
+
+                if (status == 200) {
                     return {status: status};
                 }
             } catch (error) {

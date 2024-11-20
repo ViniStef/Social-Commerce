@@ -58,6 +58,7 @@ public class SellerService implements ISellerService {
         return new SellerProfileDto(
                 seller.getImagePath(),
                 seller.getFirstName(),
+                seller.getLastName(),
                 fromBuyerToBuyerForSeller(seller.getBuyers()));
 
     }
@@ -68,7 +69,7 @@ public class SellerService implements ISellerService {
 
         if (sellersFounded != null) {
             return sellersFounded.stream()
-                    .map(seller -> new SellerForBuyerProfileDto(seller.getSellerId(), seller.getImagePath(), seller.getFirstName()))
+                    .map(seller -> new SellerForBuyerProfileDto(seller.getSellerId(), seller.getImagePath(), seller.getFirstName(), seller.getLastName()))
                     .collect(Collectors.toList());
         } else {
             throw new NotFoundException("Seller not found");
@@ -79,7 +80,7 @@ public class SellerService implements ISellerService {
         List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
 
         for (Buyer buyer : sellerList) {
-            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getImagePath(),buyer.getFirstName());
+            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getImagePath(),buyer.getFirstName(), buyer.getLastName());
             buyerList.add(dto);
         }
 
