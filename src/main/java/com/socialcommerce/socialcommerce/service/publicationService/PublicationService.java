@@ -170,7 +170,7 @@ public class PublicationService implements IPublicationService{
             ShowPublicationDto dto = new ShowPublicationDto(
                     publi.getPublication_id()
                     , publi.getPublication_date()
-                    , new ShowProductDto(publi.getProduct().getProduct_name())
+                    , publi.getProduct().getProduct_name()
                     , publi.getSeller().getImagePath()
                     , publi.getSeller().getFirstName()
                     , publi.getImagePath()
