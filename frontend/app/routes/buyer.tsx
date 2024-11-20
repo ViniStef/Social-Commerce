@@ -34,7 +34,7 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {commitSession, getSession} from "~/auth";
+import {commitSession, getSession, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 
@@ -65,15 +65,27 @@ export type PublicationsResultType = {
 
 let session: SessionData;
 
+export const meta = () => {
+    return [{ title: "Vendedor - Social Commerce"}]
+}
+
 export async function loader({request}: LoaderFunctionArgs) {
+
+    // O código antigo assim q dei o merge é esse das linhas 73 até o 78
+    // Testando os da linha 80 até 84
 
     const sessionLoader = await getSession(
         request.headers.get("Cookie")
     )
 
-    let userId = sessionLoader.get("userId");
-    let accountType = sessionLoader.get("accountType");
+    // let userId = sessionLoader.get("userId");
+    // let accountType = sessionLoader.get("accountType");
 
+    const {userId, accountType } = await requireAuthCookie(request);
+
+    if (accountType === "seller") {
+        return redirect("/seller");
+    }
 
     if (accountType === "buyer") {
         let resultFinal: {imagePath?: string; name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
