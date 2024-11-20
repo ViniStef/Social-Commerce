@@ -15,7 +15,7 @@ export default function ProfileFollowersDisplay( {profileImg, name, type, seller
             <div className={style.follows__user}>
                 <img className={style.follows__image} src={profileImg} alt=""/>
                 <div className={style.user__details}>
-                    <p className={style.follows__name}>{name}</p>
+                    <p className={style.follows__name} style={{textTransform: "capitalize"}}>{name}</p>
                 </div>
 
             </div>

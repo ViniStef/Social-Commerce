@@ -14,7 +14,7 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {commitSession, getSession} from "~/auth";
+import {commitSession, getSession, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import ignore from "ignore";
@@ -45,15 +45,24 @@ export type PublicationsResultType = {
 
 let session: SessionData;
 
+export const meta = () => {
+    return [{ title: "Comprador - Social Commerce"}]
+}
+
 export async function loader({request}: LoaderFunctionArgs) {
 
     const sessionLoader = await getSession(
         request.headers.get("Cookie")
     )
 
-    let userId = sessionLoader.get("userId");
-    let accountType = sessionLoader.get("accountType");
+    // let userId = sessionLoader.get("userId");
+    // let accountType = sessionLoader.get("accountType");
 
+    const {userId, accountType } = await requireAuthCookie(request);
+
+    if (accountType === "buyer") {
+        return redirect("/buyer");
+    }
 
     if (accountType === "seller") {
         let resultFinal: {imagePath?: string; name?: string; buyers?: Buyer[]; errors?: string[] } = { errors: [] };
