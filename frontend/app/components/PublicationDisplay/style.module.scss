@@ -7,6 +7,34 @@
   margin-bottom: 20px;
   border-radius: 10px;
 
+  .noposts__container {
+    position: absolute;
+    width: 100%;
+    height: 450px;
+    background-color: main.$color-dark-opaque-300;
+    @include main.flexbox($direction: column, $align: center, $justify: center);
+    border-radius: 10px;
+
+    .noposts__headline {
+      position: absolute;
+      font-size: main.$fs-xl;
+      max-width: 80%;
+      text-align: center;
+      font-weight: main.$fw-bolder;
+      background-color: main.$color-dark-100;
+      padding: 10px;
+      border-radius: 10px;
+      color: main.$color-light-200;
+    }
+
+    .noposts__image {
+      width: 350px;
+      height: 350px;
+      opacity: .1;
+      filter: blur(10px);
+    }
+  }
+
   .post__field {
     position: relative;
     border: 2px solid main.$color-gray-300;
@@ -82,6 +110,7 @@
       color: main.$color-dark-400;
       font-size: main.$fs-lg;
       font-weight: main.$fw-bolder;
+      text-transform: capitalize;
     }
 
   }

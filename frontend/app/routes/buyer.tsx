@@ -37,6 +37,7 @@ import * as fs from "node:fs";
 import {commitSession, getSession, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
+import {LogoDisplay} from "~/components/LogoDisplay";
 
 type Seller = {
     name: string;
@@ -66,7 +67,7 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export const meta = () => {
-    return [{ title: "Vendedor - Social Commerce"}]
+    return [{ title: "Comprador - Social Commerce"}]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -87,33 +88,31 @@ export async function loader({request}: LoaderFunctionArgs) {
         return redirect("/seller");
     }
 
-    if (accountType === "buyer") {
-        let resultFinal: {imagePath?: string; name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
+    let resultFinal: {imagePath?: string; name?: string; sellersFollowed?: any[]; publicationsList?: PublicationsResultType[]; errors?: string[] } = { errors: [] };
 
-        try {
-            const { data }: { data: BuyerProfileResultType } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
-            resultFinal.imagePath = data.imagePath;
-            resultFinal.name = data.name;
-            resultFinal.sellersFollowed = data.sellers;
-        } catch (error) {
-            console.error("Error fetching buyer profile", error);
-            resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
-        }
+    try {
+        const { data }: { data: BuyerProfileResultType } = await axios.get(`http://localhost:8080/buyer/profile/${userId}`);
+        resultFinal.imagePath = data.imagePath;
+        resultFinal.name = data.name;
+        resultFinal.sellersFollowed = data.sellers;
+        console.log("sellers followed aki: ", data.sellers);
 
-        try {
-            const { data }: { data: PublicationsResultType[] } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
-            resultFinal.publicationsList = data;
-        } catch (error) {
-            console.error("Error fetching buyer publications", error);
-            resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
-        }
-        session = sessionLoader;
-        return resultFinal;
+    } catch (error) {
+        console.error("Error fetching buyer profile", error);
+        resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
     }
 
-    return null
-
+    try {
+        const { data }: { data: PublicationsResultType[] } = await axios.get(`http://localhost:8080/publications/buyer/${userId}`);
+        resultFinal.publicationsList = data;
+    } catch (error) {
+        console.error("Error fetching buyer publications", error);
+        resultFinal.errors!.push("Erro ao buscar publicações do comprador.");
     }
+    session = sessionLoader;
+    return resultFinal;
+
+}
 
     // if (accountType === "buyer") {
     //     try {
@@ -197,38 +196,44 @@ export default function FeedPage() {
                         <div className={style.content__search}>
                             <Form method={"post"} className={style.search__field}>
                                 <input type="hidden" name={"_action"} value={"search"}/>
-                                <label className={style.sr__only} htmlFor="search">O que você está buscando?</label>
+                                <label className={style.sr__only} htmlFor="search">Busque por um vendedor</label>
                                 <input className={`${style.standard__input} ${style.field__input}`} name={"search"}
-                                       id={"search"} placeholder={"O que você está buscando?"}/>
+                                       id={"search"} placeholder={"Busque por um vendedor"}/>
                                 <button onClick={(e) => console.log("oi")} type={"submit"} aria-label={"buscar"}
                                         className={style.field__submit}></button>
                             </Form>
 
-                            <menu className={style.search__menu}>
-                                <img className={style.button__image} src={menu}
-                                     alt="Menu"/>
-                            </menu>
                         </div>
                     </div>
 
                     {data?.sellers &&
                         <div className={style.modal__search}>
                             <div className={style.search__results}>
-                                <Form method={"post"}>
+                                <Form className={style.close__form} method={"post"}>
                                     <input type="hidden" name={"_action"} value={"close_search"}/>
-                                    <button aria-label={"fechar"} className={style.close__button}>Close</button>
+                                    <button aria-label={"fechar"} className={style.close__button}>Fechar</button>
                                 </Form>
 
-                                <ul>
+                                <div className={style.background__style}>
+                                    <span className={style.line__background}></span>
+                                    <span className={style.line__background}></span>
+                                    <span className={style.line__background}></span>
+                                </div>
 
-                                    {data.sellers.map((seller: Seller) => {
-                                        return (
-                                            <li key={seller.imagePath}>
-                                                <img src={seller.imagePath} alt=""/>
-                                                <p>{seller.name}</p>
-                                            </li>
-                                        )
-                                    })}
+                                <ul className={style.results__list}>
+
+                                    {data.sellers.length > 0 ? data.sellers.map((seller: Seller) => {
+                                            return (
+                                                <li key={seller.imagePath}>
+                                                    <img src={seller.imagePath} alt=""/>
+                                                    <p>{seller.name}</p>
+                                                </li>
+                                            )
+                                        }) :
+                                        <li className={style.result__item}>
+                                            <p className={style.noseller__text}>Não encontramos nenhum vendedor</p>
+                                        </li>
+                                    }
 
 
                                 </ul>
@@ -334,7 +339,7 @@ export default function FeedPage() {
 
 
                     {
-                        loaderData?.publicationsList ? (
+                        loaderData?.publicationsList && loaderData.publicationsList.length > 0 ? (
                             loaderData.publicationsList.map((publication: PublicationsResultType) => (
                                 <PublicationDisplay publication={publication} type={"buyer"} />
                             ))
@@ -395,7 +400,7 @@ export default function FeedPage() {
                 <div className={style.user__info}>
                     <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                          alt="Imagem de Perfil"/>
-                    <p className={style.user__name}>{loaderData?.name}</p>
+                    <p className={style.user__name} style={{textTransform: "capitalize"}}>{loaderData?.name}</p>
                     <Form onChange={(event) => {
                         submit(event.currentTarget)
                     }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
@@ -418,12 +423,17 @@ export default function FeedPage() {
 
                     <ul className={style.follows__list}>
 
-                        {loaderData?.sellersFollowed ? loaderData.sellersFollowed.map((seller: Seller) => {
+                        {loaderData?.sellersFollowed && loaderData.sellersFollowed.length > 0 ? loaderData.sellersFollowed.map((seller: Seller) => {
                                 return (
                                     <ProfileFollowersDisplay profileImg={seller.imagePath} name={seller.name} type={"buyer"} sellerId={seller.sellerId}/>
                                 )
                             })
-                            : <p>Você ainda não está seguindo ninguém!</p>
+                            : <li className={style.nofollow__content} >
+                                <div className={style.nofollow__item}>
+                                <p className={style.nofollow__text}>Você ainda não está seguindo ninguém!</p>
+                                </div>
+                                <LogoDisplay />
+                            </li>
                         }
                     </ul>
                 </div>

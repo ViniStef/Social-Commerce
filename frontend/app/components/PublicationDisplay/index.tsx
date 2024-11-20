@@ -14,7 +14,6 @@ export const PublicationDisplay = ({ type, publication, notFound = false }: { pu
     const dateConversion: {[key: string]: string} = {"1": "Janeiro", "2": "Fevereiro", "3": "Março", "4": "Abril", "5": "Maio", "6": "Junho",
             "7": "Julho", "8": "Agosto", "9": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro"};
 
-
     let convertedDate;
     if (publication?.publicationDate) {
         const [day, month] = publication.publicationDate.split("-");
@@ -24,17 +23,18 @@ export const PublicationDisplay = ({ type, publication, notFound = false }: { pu
         console.log("Data inválida ou ausente");
     }
 
-
     return (
 
 
         <div className={style.post__container}>
             {notFound ?
 
-                <div>
-                    <p>
-                        Não encontramos nenhuma publicação!
+                <div className={style.noposts__container}>
+                    <p className={style.noposts__headline}>
+                        Comece a seguir um vendedor para ver suas
+                        publicações!
                     </p>
+                    <img className={style.noposts__image} src={logo} alt="Logo"/>
                 </div>
 
                 : <fieldset className={style.post__field}>
@@ -52,7 +52,7 @@ export const PublicationDisplay = ({ type, publication, notFound = false }: { pu
 
 
                     <div className={style.username__headline}>
-                        <h1 className={style.headline__text}>{publication?.sellerName}</h1>
+                        <h1 className={style.headline__text} style={{textTransform: "capitalize"}}>{publication?.sellerName}</h1>
                     </div>
 
                     <div className={style.separation__onpost}></div>
