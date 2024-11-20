@@ -151,10 +151,10 @@ export default function FeedPage() {
                 </nav>
 
                 <section>
-                    <div className={style.feed__choices}>
-                        <div className={style.choice__followed}>
-                            <p>{loaderData?.name} Workbench</p>
-                            <div className={style.choice__indicator}></div>
+                    <div className={style.feed__starter}>
+                        <div className={style.feed__headline}>
+                            <p className={style.feed__text}>{loaderData?.name} Workbench</p>
+                            <div className={style.feed__indicator}></div>
                         </div>
                     </div>
                     <br/>

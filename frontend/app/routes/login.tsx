@@ -2,7 +2,7 @@ import {LoginArea} from "~/components/LoginArea";
 import {z} from "zod";
 import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
-import {json, useRevalidator} from "@remix-run/react";
+import {json} from "@remix-run/react";
 import axios from "axios";
 import { commitSession, getSession} from "~/auth";
 

@@ -25,6 +25,8 @@ import bookmarksFill from "~/assets/icons/bookmarks-fill.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import shirt from "~/assets/icons/shirt-svgrepo-com.svg";
+import offers from "~/assets/icons/currency-dollar.svg";
+
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -155,10 +157,10 @@ export default function FeedPage() {
 
                     <li className={style.bar__item}>
                         <button className={style.bar__action}>
-                            <img className={style.bar__image} src={hearts} alt="Likes"/>
+                            <img className={style.bar__image} src={offers} alt="Ofertas"/>
                         </button>
 
-                        <p className={style.bar__text}>Meus Likes</p>
+                        <p className={style.bar__text}>Ofertas</p>
                     </li>
 
                     <li className={style.bar__item}>
@@ -167,16 +169,6 @@ export default function FeedPage() {
                         </button>
 
                         <p className={style.bar__text}>Lista de Desejos</p>
-                    </li>
-
-                    <li className={style.bar__item}>
-                        <button className={style.bar__action}>
-                            <img className={style.bar__image} src={bookmarksFill} alt="Salvos"/>
-                        </button>
-
-                        <p className={style.bar__text}>
-                            Itens Salvos
-                        </p>
                     </li>
 
                 </ul>
@@ -320,17 +312,13 @@ export default function FeedPage() {
                     </ul>
                 </section>
 
-                <section>
-                    <div className={style.feed__choices}>
-                        <div className={style.choice__followed}>
-                            <p>Seguidos</p>
-                            <div className={style.choice__indicator}></div>
-                        </div>
-                        <div className={style.choice__recommended}>
-                            <p>Para você</p>
+                <section className={style.feed__section}>
+                    <div className={style.feed__starter}>
+                        <div className={style.feed__headline}>
+                            <p className={style.feed__text}>Feed</p>
+                            <div className={style.feed__indicator}></div>
                         </div>
                     </div>
-                    <br/>
 
 
                     {
@@ -360,6 +348,7 @@ export default function FeedPage() {
                                     <img className={style.action__image} src={house} alt="Início"/>
                                 </button>
                             </div>
+
                         </li>
 
                         <li className={`${style.feature__item} ${style.profile__item}`}>
@@ -372,12 +361,12 @@ export default function FeedPage() {
                         <li className={style.feature__group}>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={follows} alt="Seguidos"/>
+                                    <img className={style.action__image} src={wishes} alt="Lista de Desejos"/>
                                 </button>
                             </div>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
-                                    <img className={style.action__image} src={bookmarks} alt="Bookmarks"/>
+                                    <img className={style.action__image} src={offers} alt="Ofertas"/>
                                 </button>
                             </div>
                         </li>
