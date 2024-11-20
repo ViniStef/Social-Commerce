@@ -92,4 +92,22 @@ public class SellerService implements ISellerService {
         seller.setImagePath(image.imagePath());
         sellerRepo.save(seller);
     }
+
+    @Override
+    public SellerMetrics getSellerMetrics(Long sellerId) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
+        long publications = seller.getPublications().stream().count();
+        int totalLikes = seller.getPublications()
+                .stream()
+                .mapToInt(Publication::getLikes)
+                .sum();
+        long followes = seller.getPublications().stream().count();
+
+        return new SellerMetrics(
+                Integer.parseInt(String.valueOf(publications)),
+                Integer.parseInt(String.valueOf(followes)),
+                Integer.parseInt(String.valueOf(totalLikes))
+        );
+
+    }
 }

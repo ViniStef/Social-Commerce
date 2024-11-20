@@ -53,4 +53,9 @@ public class SellerController {
         return ResponseEntity.status(200).build();
     }
 
+    @GetMapping("/metrics/{sellerId}")
+    public ResponseEntity<SellerMetrics> getAllSellerMetrics (@PathVariable Long sellerId){
+        return ResponseEntity.ok(sellerService.getSellerMetrics(sellerId));
+    }
+
 }
