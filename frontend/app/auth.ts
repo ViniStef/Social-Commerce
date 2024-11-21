@@ -64,3 +64,15 @@ export async function requireAuthCookie(request: Request) {
     return { userId, accountType };
 }
 
+export async function redirectAndClearCookie(request: Request) {
+    const session = await getSession(
+        request.headers.get("Cookie")
+    )
+    throw redirect("/login", {
+        headers: {
+            "Set-Cookie": await destroySession(session),
+        },
+    });
+
+}
+

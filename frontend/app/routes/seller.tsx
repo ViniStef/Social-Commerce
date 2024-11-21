@@ -7,6 +7,7 @@ import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import publication from "~/assets/icons/file-image.svg";
 import metrics from "~/assets/icons/metrics.svg";
+import logout from "~/assets/icons/logout.svg";
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -14,7 +15,7 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {commitSession, getSession, requireAuthCookie} from "~/auth";
+import {commitSession, getSession, redirectAndClearCookie, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import ignore from "ignore";
@@ -134,10 +135,7 @@ export default function FeedPage() {
                                 <p className={style.bar__text}>Minhas Publicações</p>
                             </button>
                         </Form>
-
-
                     </li>
-
 
                     <li className={style.bar__item}>
                         <Form className={style.nocontent__create} method={"post"}>
@@ -147,7 +145,6 @@ export default function FeedPage() {
                                 <p className={style.bar__text}>Criar Publicações</p>
                             </button>
                         </Form>
-
                     </li>
 
                     <li className={style.bar__item}>
@@ -158,7 +155,16 @@ export default function FeedPage() {
                                 <p className={style.bar__text}>Minhas Métricas</p>
                             </button>
                         </Form>
+                    </li>
 
+                    <li className={style.bar__item}>
+                        <Form method={"post"}>
+                            <input type="hidden" name={"_action"} value={"log_out"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={logout} alt="Métricas"/>
+                                <p className={style.bar__text}>Sair da Sessão</p>
+                            </button>
+                        </Form>
                     </li>
 
                 </ul>
@@ -326,9 +332,12 @@ export async function action({request}: ActionFunctionArgs) {
         case "create_publication": {
             console.log("form data aq em create publi: ", formData);
         }
-        break
+        break;
         case "view_metrics": {
             return {viewMetrics: true}
+        }
+        case "log_out": {
+            return redirectAndClearCookie(request);
         }
     }
     return {error: "Internal Server Error"}
