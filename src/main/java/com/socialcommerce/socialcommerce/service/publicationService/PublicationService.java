@@ -163,10 +163,7 @@ public class PublicationService implements IPublicationService{
 
     private Product fromProductDtoToProduct(CreateProductDto productDto) {
         return new Product(
-                productDto.product_name(),
-                productDto.product_description(),
-                productDto.product_brand(),
-                productDto.product_color()
+                productDto.product_name()
         );
     }
 
