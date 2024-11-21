@@ -28,13 +28,13 @@ export default function CreatePublicationDisplay() {
                         <label className={style.base__headline} htmlFor="categories__option">Categoria do
                             Produto</label>
                         <select className={style.category__select} name="category" id="categories__option">
-                            <option value="1">Temporada</option>
-                            <option value="2">Televisores</option>
-                            <option value="3">Smartphones</option>
-                            <option value="4">Jogos</option>
-                            <option value="5">Eletrônicos</option>
-                            <option value="6">Decorações</option>
-                            <option value="7">Roupas</option>
+                            <option value={1}>Temporada</option>
+                            <option value={2}>Televisores</option>
+                            <option value={3}>Smartphones</option>
+                            <option value={4}>Jogos</option>
+                            <option value={5}>Eletrônicos</option>
+                            <option value={6}>Decorações</option>
+                            <option value={7}>Roupas</option>
                         </select>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ export default function CreatePublicationDisplay() {
                             <h1 className={style.base__headline}>Preço do Produto sem Desconto</h1>
                             <div className={style.product__price}>
                                 <label className={style.sr__only} htmlFor="price_input">Preço do Produto sem Desconto</label>
-                                <input id={"price_input"} type="text" placeholder={"R$ 0,00"} className={style.price__input}/>
+                                <input name={"price_without_discount"} id={"price_input"} type="text" placeholder={"R$ 0,00"} className={style.price__input}/>
                             </div>
                         </div>
                     </div>
@@ -71,16 +71,26 @@ export default function CreatePublicationDisplay() {
                         <div>
                             <h1 className={style.base__headline}>O produto tem desconto?</h1>
                             <div className={style.hasdiscount__container}>
-                                <button className={`${style.choice__yes} ${style.choice__button}`}>Sim</button>
-                                <button className={`${style.choice__no} ${style.choice__button}`}>Não</button>
+                                <div className={style.hasdiscount__wrap}>
+                                    <label className={`${style.label__choice} ${style.choice__yes}`} htmlFor="discount_true">Sim</label>
+                                    <input id={"discount_true"} name={"discount_choice"} type={"radio"} value={"true"}
+                                           className={style.choice__input}/>
+                                </div>
+
+                                <div className={style.hasdiscount__wrap}>
+                                    <label className={`${style.label__choice} ${style.choice__no}`} htmlFor="discount_false">Não</label>
+                                    <input id={"discount_false"} name={"discount_choice"} type={"radio"} value={"false"}
+                                           className={style.choice__input}/>
+                                </div>
+
                             </div>
                         </div>
 
                         <div>
                             <h1 className={style.base__headline}>Quantidade de Desconto</h1>
                             <div className={style.discount__container}>
-                                <label htmlFor="discount_amount" className={style.sr__only}>Quantidade de Desconto</label>
-                                <input id={"discount_amount"} min={0} max={100} type="number" placeholder={"0%"} className={style.discount__input}/>
+                                <label htmlFor="discount_percentage" className={style.sr__only}>Quantidade de Desconto</label>
+                                <input name={"discount_percentage"} id={"discount_percentage"} min={0} max={100} type="number" placeholder={"0%"} className={style.discount__input}/>
                             </div>
                         </div>
                     </div>

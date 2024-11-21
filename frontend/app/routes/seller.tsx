@@ -330,12 +330,37 @@ export async function action({request}: ActionFunctionArgs) {
             return {ok: true};
         }
         case "create_publication": {
-            console.log("form data aq em create publi: ", formData);
+            const formObjects = Object.fromEntries(formData);
+            console.log(formData);
+            const { product_name, category, product_description, product_image, price_without_discount, discount_choice, discount_percentage} = formObjects;
+            const result = await axios.post(baseUrl + `publications/${userId}/createPublication`, {
+                body:
+                    {
+                        "product": {
+                            "product_name": product_name,
+                        },
+                        "category": {
+                            "categoryID": category,
+                        },
+                        "imagePath": product_image,
+                        "description": product_description,
+                        "discount_percentage": discount_percentage,
+                        "has_promotion": discount_choice,
+                        "price": price_without_discount,
+                    }
+            })
+
+            if (result.status === 204) {
+                return {created: true};
+            }
+
+            return {created: false};
         }
-        break;
+
         case "view_metrics": {
             return {viewMetrics: true}
         }
+
         case "log_out": {
             return redirectAndClearCookie(request);
         }
