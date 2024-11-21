@@ -1,0 +1,332 @@
+@use "../../styles/main";
+
+@keyframes showBottom {
+  from {
+    position: relative;
+    bottom: -200px;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    bottom: 0;
+    opacity: 1;
+  }
+}
+
+.create__publication {
+  background-color: main.$color-light-100;
+  border-radius: 10px;
+  animation: showBottom .3s linear forwards;
+
+  .publication__headline {
+    width: fit-content;
+    align-self: center;
+    font-size: main.$fs-xl;
+    font-weight: main.$fw-bolder;
+    letter-spacing: unset;
+    text-align: center;
+    background-image: main.$color-brand-gradient;
+    background-blend-mode: normal;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: pre-line;
+    border: none;
+    text-decoration: underline;
+    position: relative;
+    padding: 10px;
+    z-index: 10;
+    margin: auto;
+  }
+
+  .publication__form {
+    @include main.flexbox($direction: column, $gap: 30px);
+
+    .create__submit {
+      @include main.flexbox($justify: center);
+      background-color: main.$color-dark-opaque-500;
+      width: fit-content;
+      height: 100%;
+      left: 0;
+      z-index: 1;
+      margin-inline: auto;
+      margin-bottom: 10px;
+      border-radius: 10px;
+
+    }
+
+    .button__create {
+      cursor: pointer;
+      width: fit-content;
+      align-self: center;
+      font-size: main.$fs-xl;
+      font-weight: main.$fw-bolder;
+      letter-spacing: unset;
+      text-align: center;
+      background-image: main.$color-brand-gradient;
+      background-blend-mode: normal;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: pre-line;
+      border: none;
+      text-decoration: underline;
+      position: relative;
+      padding: 10px;
+      z-index: 10;
+    }
+
+  }
+
+  .base__headline {
+    text-align: center;
+    color: main.$color-dark-200;
+    font-weight: main.$fw-medium;
+    font-size: main.$fs-md;
+    margin-bottom: 15px;
+  }
+
+  .initial__settings {
+    @include main.flexbox($align: center, $justify: space-around, $gap: 2rem);
+
+    .product__name {
+      @include main.flexbox($direction: column, $align: center, $justify: center);
+
+      .name__input {
+        text-align: center;
+        border: none;
+        width: 250px;
+        height: 50px;
+        background-color: transparent;
+        box-shadow: 0 0 10px 10px main.$color-light-200;
+        color: main.$color-gray-400;
+      }
+    }
+
+    .category__choices {
+      @include main.flexbox($direction: column, $justify: center, $align: center);
+
+      .category__select {
+        text-align: center;
+        border: none;
+        width: 150px;
+        height: 50px;
+        background-color: transparent;
+        box-shadow: 0 0 10px 10px main.$color-light-200;
+        color: main.$color-gray-400;
+        border-radius: 10px;
+      }
+    }
+  }
+
+
+
+  .description__content {
+    @include main.flexbox($direction: column, $align: center, $justify: center);
+
+    .product__input {
+      min-width: 580px;
+      max-width: 580px;
+      color: main.$color-dark-300;
+      padding: 10px;
+      border-radius: 10px;
+      max-height: 130px;
+      min-height: 130px;
+      border: none;
+      box-shadow: 0 0 10px 10px main.$color-light-200;
+
+    }
+  }
+
+  .product__info {
+    margin-inline: 10px;
+    @include main.flexbox($justify: space-around);
+
+    .info__left {
+      @include main.flexbox($direction: column, $gap: 15px, $align: center, $justify: center);
+
+
+      .product__price {
+        @include main.flexbox($direction: column, $justify: center, $align: center);
+
+        .price__input {
+          border: none;
+          width: 150px;
+          height: 50px;
+          color: main.$color-light-100;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .price__details {
+    @include main.flexbox($direction: column, $gap: 30px);
+
+    .hasdiscount__container {
+      @include main.flexbox();
+      box-shadow: 0 0 10px 10px main.$color-light-200;
+      border-radius: 10px;
+
+      .choice__button {
+        height: 3rem;
+        border: none;
+        background-color: transparent;
+        width: 100%;
+        font-weight: main.$fw-bold;
+        font-size: main.$fs-md;
+      }
+
+      .choice__yes {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        color: main.$color-dark-300;
+      }
+
+      .choice__no {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        background-color: main.$color-dark-300;
+        color: main.$color-light-200;
+      }
+    }
+
+    .discount__container {
+      @include main.flexbox($align: center, $justify: center);
+
+      .discount__input {
+        text-align: center;
+        border: none;
+        width: 150px;
+        height: 50px;
+        background-color: transparent;
+        box-shadow: 0 0 10px 10px main.$color-light-200;
+        color: main.$color-gray-400;
+      }
+    }
+  }
+
+
+
+  .image__content {
+    margin-inline: auto;
+    width:350px;
+    height: 210px;
+    position: relative;
+    @include main.flexbox($align: center, $justify: center);
+    //border: 2px solid main.$color-gray-200;
+    box-shadow: 0 0 10px 10px main.$color-light-200;
+    border-radius: 10px;
+
+    .placeholder__image {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      margin: auto;
+      opacity: .5;
+    }
+
+    .upload__submit {
+      border: none;
+      background-color: transparent;
+      position: relative;
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .upload__input {
+        width: 70px;
+        height: 70px;
+        display: inline-block;
+        padding: 5px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: main.$color-dark-400;
+        border: 3px solid main.$color-gray-400;
+        border-radius: 50%;
+
+        .eraser__img {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+
+    .image__text {
+      position: absolute;
+      width: 85%;
+      color: main.$color-gray-400;
+      text-align: center;
+      bottom: .5rem;
+      font-weight: main.$fw-bold;
+      font-size: main.$fs-md;
+    }
+  }
+
+  .product__input {
+    height: 3rem;
+    background-color: main.$color-light-100;
+    border: 2px solid main.$color-gray-200;
+  }
+}
+
+.nocontent__container {
+  position: absolute;
+  width: 100%;
+  height: 450px;
+  background-color: main.$color-dark-opaque-300;
+  @include main.flexbox($direction: column, $align: center, $justify: center);
+  border-radius: 10px;
+
+  .nocontent__text {
+    background-color: main.$color-dark-100;
+    width: fit-content;
+    border-radius: 10px;
+    filter: brightness(120%);
+  }
+
+  .nocontent__headline {
+
+    cursor: pointer;
+    width: fit-content;
+    align-self: center;
+    font-size: main.$fs-xl;
+    font-weight: main.$fw-bolder;
+    letter-spacing: unset;
+    text-align: center;
+    background-image: main.$color-brand-gradient;
+    background-blend-mode: normal;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: pre-line;
+    border: none;
+    text-decoration: underline;
+    position: relative;
+    padding: 30px;
+    z-index: 10;
+  }
+
+  .nocontent__image {
+    width: 350px;
+    height: 350px;
+    opacity: .1;
+    filter: blur(20px);
+    position: absolute;
+  }
+
+  .nocontent__create {
+
+    .create__btn {
+      position: relative;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      top: 2rem;
+
+      .create__img {
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+  }
+}

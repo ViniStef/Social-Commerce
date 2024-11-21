@@ -1,0 +1,134 @@
+@use "../../styles/main";
+
+@keyframes showBottom {
+  from {
+    position: relative;
+    bottom: -200px;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    bottom: 0;
+    opacity: 1;
+  }
+}
+
+.seller__metrics {
+  background-color: main.$color-light-100;
+  border-radius: 10px;
+  animation: showBottom .3s linear forwards;
+  width: 100%;
+  @include main.flexbox($direction: column, $justify: space-between);
+
+  .metrics__headline {
+    width: fit-content;
+    align-self: center;
+    font-size: main.$fs-xl;
+    font-weight: main.$fw-bolder;
+    letter-spacing: unset;
+    text-align: center;
+    background-image: main.$color-brand-gradient;
+    background-blend-mode: normal;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: pre-line;
+    border: none;
+    text-decoration: underline;
+    position: relative;
+    padding: 10px;
+    z-index: 10;
+    margin: auto;
+  }
+
+  .metrics__wrap {
+    @include main.flexbox($align: center, $justify: center);
+    height: 400px;
+    margin: 30px;
+    position: relative;
+
+    .left__line {
+      width: .5rem;
+      border-radius: 10px;
+      background-color: main.$color-dark-300;
+
+      height: 90%;
+      position: absolute;
+      left: 122px;
+      z-index: 1;
+    }
+
+    .metrics__list {
+      width: 480px;
+      @include main.flexbox($direction: column, $justify: space-around);
+      height: 100%;
+
+      .metrics__item {
+        @include main.flexbox($justify: flex-start, $align: center);
+        position: relative;
+        margin-inline: 25px;
+        box-shadow: 0 0 10px 10px main.$color-light-200;
+
+        border-radius: 20px;
+
+        .left__wrap {
+          background-color: main.$color-dark-300;
+          height: 100%;
+          border-top-left-radius: 20px;
+          border-bottom-left-radius: 20px;
+          @include main.flexbox($align: center, $justify: center);
+          z-index: 2;
+        }
+
+        .img__container {
+          border-radius: 50%;
+          background-color: rgba(114, 197, 208, .1);
+          padding: 8px;
+          position: relative;
+          margin: 10px;
+          z-index: 10;
+
+          .metric__image {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        .metrics__info {
+          @include main.flexbox($direction: column, $gap: 10px);
+          margin-block: 10px;
+        }
+
+        .metric__headline {
+          margin-left: 15px;
+          color: main.$color-dark-400;
+          font-size: main.$fs-lg;
+          font-weight: main.$fw-bolder;
+        }
+
+        .metric__division {
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          height: .2rem;
+          width: 100%;
+          background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-light-400 50%, main.$color-light-100 100%);
+          position: relative;
+
+        }
+
+        .metric__value {
+          margin-left: 15px;
+          color: main.$color-gray-400;
+          padding: 1px 5px;
+          width: 50px;
+          text-align: center;
+          border-radius: 5px;
+
+          box-shadow: 0 0 5px 5px main.$color-light-200;
+          font-weight: main.$fw-medium;
+          font-size: main.$fs-lg;
+        }
+      }
+    }
+  }
+
+}

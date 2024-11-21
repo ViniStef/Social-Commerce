@@ -6,7 +6,7 @@ import plus from "~/assets/icons/plus-circle.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import publication from "~/assets/icons/file-image.svg";
-
+import metrics from "~/assets/icons/metrics.svg";
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -18,6 +18,9 @@ import {commitSession, getSession, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import ignore from "ignore";
+import CreatePublicationDisplay from "~/components/CreatePublicationDisplay";
+import {LogoDisplay} from "~/components/LogoDisplay";
+import SellerMetrics from "~/components/SellerMetrics";
 
 type Buyer = {
     name: string;
@@ -46,7 +49,7 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export const meta = () => {
-    return [{ title: "Comprador - Social Commerce"}]
+    return [{ title: "Vendedor - Social Commerce"}]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -127,7 +130,7 @@ export default function FeedPage() {
                         <Form method={"post"}>
                             <input type="hidden" name={"_action"} value={"list_posts"}/>
                             <button className={style.bar__action}>
-                                <img className={style.bar__image} src={publication} alt="Publicacoes"/>
+                                <img className={style.bar__image} src={publication} alt="Publicações"/>
                             </button>
                         </Form>
 
@@ -137,12 +140,22 @@ export default function FeedPage() {
 
 
                     <li className={style.bar__item}>
-                    <button className={style.bar__action}>
+                        <button className={style.bar__action}>
                             <img className={style.bar__image} src={plus} alt="Criar"/>
                         </button>
 
                         <p className={style.bar__text}>
                             Criar Publicações
+                        </p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <button className={style.bar__action}>
+                            <img className={style.bar__image} src={metrics} alt="Métricas"/>
+                        </button>
+
+                        <p className={style.bar__text}>
+                            Minhas Métricas
                         </p>
                     </li>
 
@@ -166,13 +179,15 @@ export default function FeedPage() {
                             <div className={style.feed__indicator}></div>
                         </div>
                     </div>
-                    <br/>
 
+                    {/*<CreatePublicationDisplay />*/}
+
+                    <SellerMetrics />
 
                     {
-                        data?.publications&& (
+                        data?.publications && (
                             data.publications.map((publication: PublicationsResultType) => (
-                                <PublicationDisplay publication={publication} type={"seller"} />
+                                <PublicationDisplay publication={publication} type={"seller"}/>
                             ))
                         )
                     }
@@ -211,10 +226,16 @@ export default function FeedPage() {
 
                         {loaderData?.buyers ? loaderData.buyers.map((buyer: Buyer) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} name={buyer.name} type={"seller"}/>
+                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} name={buyer.name}
+                                                             type={"seller"}/>
                                 )
                             })
-                            : <p>Você ainda não está seguindo ninguém!</p>
+                            : <li className={style.nofollow__content}>
+                                <div className={style.nofollow__item}>
+                                    <p className={style.nofollow__text}>Você não possui nenhum seguidor no momento!</p>
+                                </div>
+                                <LogoDisplay/>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -297,7 +318,13 @@ export async function action({request}: ActionFunctionArgs) {
             } catch (error) {
                 return {erro: "Não existe publicacões ainda."};
             }
-
+            break;
+        }
+        case "start_creating_publication": {
+            return {ok: true};
+        }
+        case "create_publication": {
+            console.log("form data aq em create publi: ", formData);
         }
     }
     return {error: "Internal Server Error"}
