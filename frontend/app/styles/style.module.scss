@@ -13,7 +13,7 @@
   top: 15px;
   max-width: 120px;
   width: 10vw;
-  min-width: 80px;
+  min-width: 90px;
   background-color: main.$color-dark-100-opaque-300;
   border-radius: 10px;
   height: fit-content;
@@ -28,7 +28,9 @@
       padding-inline: 10px;
       text-align: center;
       cursor: pointer;
+
       .bar__action {
+        @include main.flexbox($direction: column, $align: center, $gap: 5px);
         background-color: transparent;
         border: none;
 
@@ -37,11 +39,14 @@
           height: 40px;
           cursor: pointer;
         }
+
+        .bar__text {
+          color: main.$color-light-200;
+          cursor: pointer;
+        }
       }
 
-      .bar__text {
-        color: main.$color-light-200;
-      }
+
 
     }
   }
@@ -605,6 +610,7 @@
           padding: 8px;
           border-radius: 50%;
           cursor: pointer;
+
           .unfollow__image {
             width: 1.5rem;
             height: 1.5rem;

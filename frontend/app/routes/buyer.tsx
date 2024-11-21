@@ -36,10 +36,11 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {commitSession, getSession, requireAuthCookie} from "~/auth";
+import {commitSession, getSession, redirectAndClearCookie, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import {LogoDisplay} from "~/components/LogoDisplay";
+import logout from "~/assets/icons/logout.svg";
 
 type Seller = {
     firstName: string;
@@ -205,6 +206,16 @@ export default function FeedPage() {
                         </button>
 
                         <p className={style.bar__text}>Lista de Desejos</p>
+                    </li>
+
+                    <li className={style.bar__item}>
+                        <Form method={"post"}>
+                            <input type="hidden" name={"_action"} value={"log_out"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={logout} alt="Métricas"/>
+                                <p className={style.bar__text}>Sair da Sessão</p>
+                            </button>
+                        </Form>
                     </li>
 
                 </ul>
@@ -696,6 +707,10 @@ export async function action({request}: ActionFunctionArgs) {
                         return {errors: "Erro inesperado no servidor"};
                     }
                 }
+        }
+        break;
+        case "log_out": {
+            return redirectAndClearCookie(request);
         }
     }
 }

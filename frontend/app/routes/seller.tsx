@@ -6,7 +6,8 @@ import plus from "~/assets/icons/plus-circle.svg";
 import houseFill from "~/assets/icons/house-fill.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import publication from "~/assets/icons/file-image.svg";
-
+import metrics from "~/assets/icons/metrics.svg";
+import logout from "~/assets/icons/logout.svg";
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -14,10 +15,13 @@ import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
 import * as fs from "node:fs";
-import {commitSession, getSession, requireAuthCookie} from "~/auth";
+import {commitSession, getSession, redirectAndClearCookie, requireAuthCookie} from "~/auth";
 import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import ignore from "ignore";
+import CreatePublicationDisplay from "~/components/CreatePublicationDisplay";
+import {LogoDisplay} from "~/components/LogoDisplay";
+import SellerMetrics from "~/components/SellerMetrics";
 
 type Buyer = {
     firstName: string;
@@ -48,7 +52,7 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export const meta = () => {
-    return [{ title: "Comprador - Social Commerce"}]
+    return [{ title: "Vendedor - Social Commerce"}]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -129,23 +133,40 @@ export default function FeedPage() {
                         <Form method={"post"}>
                             <input type="hidden" name={"_action"} value={"list_posts"}/>
                             <button className={style.bar__action}>
-                                <img className={style.bar__image} src={publication} alt="Publicacoes"/>
+                                <img className={style.bar__image} src={publication} alt="Publicações"/>
+                                <p className={style.bar__text}>Minhas Publicações</p>
                             </button>
                         </Form>
-
-
-                        <p className={style.bar__text}>Minhas Publicações</p>
                     </li>
 
+                    <li className={style.bar__item}>
+                        <Form className={style.nocontent__create} method={"post"}>
+                            <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={plus} alt="Criar"/>
+                                <p className={style.bar__text}>Criar Publicações</p>
+                            </button>
+                        </Form>
+                    </li>
 
                     <li className={style.bar__item}>
-                    <button className={style.bar__action}>
-                            <img className={style.bar__image} src={plus} alt="Criar"/>
-                        </button>
+                        <Form method={"post"}>
+                            <input type="hidden" name={"_action"} value={"view_metrics"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={metrics} alt="Métricas"/>
+                                <p className={style.bar__text}>Minhas Métricas</p>
+                            </button>
+                        </Form>
+                    </li>
 
-                        <p className={style.bar__text}>
-                            Criar Publicações
-                        </p>
+                    <li className={style.bar__item}>
+                        <Form method={"post"}>
+                            <input type="hidden" name={"_action"} value={"log_out"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={logout} alt="Métricas"/>
+                                <p className={style.bar__text}>Sair da Sessão</p>
+                            </button>
+                        </Form>
                     </li>
 
                 </ul>
@@ -168,13 +189,13 @@ export default function FeedPage() {
                             <div className={style.feed__indicator}></div>
                         </div>
                     </div>
-                    <br/>
 
+                    {data?.viewMetrics ? <SellerMetrics /> : <CreatePublicationDisplay />}
 
                     {
-                        data?.publications&& (
+                        data?.publications && (
                             data.publications.map((publication: PublicationsResultType) => (
-                                <PublicationDisplay publication={publication} type={"seller"} />
+                                <PublicationDisplay publication={publication} type={"seller"}/>
                             ))
                         )
                     }
@@ -211,12 +232,17 @@ export default function FeedPage() {
 
                     <ul className={style.follows__list}>
 
-                        {loaderData?.buyers ? loaderData.buyers.map((buyer: Buyer) => {
+                        {loaderData?.buyers && loaderData.buyers.length > 0 ? loaderData.buyers.map((buyer: Buyer) => {
                                 return (
                                     <ProfileFollowersDisplay profileImg={buyer.imagePath} firstName={buyer.firstName} lastName={buyer.lastName} type={"seller"}/>
                                 )
                             })
-                            : <p>Você ainda não está seguindo ninguém!</p>
+                            : <li className={style.nofollow__content}>
+                                <div className={style.nofollow__item}>
+                                    <p className={style.nofollow__text}>Você não possui nenhum seguidor no momento!</p>
+                                </div>
+                                <LogoDisplay/>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -299,7 +325,20 @@ export async function action({request}: ActionFunctionArgs) {
             } catch (error) {
                 return {erro: "Não existe publicacões ainda."};
             }
-
+            break;
+        }
+        case "start_creating_publication": {
+            return {ok: true};
+        }
+        case "create_publication": {
+            console.log("form data aq em create publi: ", formData);
+        }
+        break;
+        case "view_metrics": {
+            return {viewMetrics: true}
+        }
+        case "log_out": {
+            return redirectAndClearCookie(request);
         }
     }
     return {error: "Internal Server Error"}

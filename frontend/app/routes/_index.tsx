@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
+import {LoaderFunctionArgs, MetaFunction, redirect} from "@remix-run/node";
+import {getAuthFromRequest} from "~/auth";
 
 export const meta: MetaFunction = () => {
   return [
@@ -6,6 +7,18 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { userId, accountType } = await getAuthFromRequest(request);
+  if (userId) {
+    if (accountType === "buyer") {
+      throw redirect("/buyer");
+    } else {
+      throw redirect("/seller");
+    }
+  }
+  throw redirect("/login");
+}
 
 export default function Index() {
   return (
