@@ -15,7 +15,7 @@ export default function CreatePublicationDisplay() {
             ?
         <section className={style.create__publication}>
             <h1 className={style.publication__headline}>Publicação</h1>
-            <Form className={style.publication__form} method={"post"}>
+            <Form encType={"multipart/form-data"} className={style.publication__form} method={"post"}>
                 <input type="hidden" name={"_action"} value={"create_publication"}/>
 
                 <div className={style.initial__settings}>

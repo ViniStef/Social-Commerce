@@ -331,6 +331,20 @@ export async function action({request}: ActionFunctionArgs) {
         }
         case "create_publication": {
             const formObjects = Object.fromEntries(formData);
+            const image = formData.get("product_image") as File;
+
+            console.log("teste ", image);
+
+            const uploadDir = path.join(process.cwd(), "public/000001");
+            const filename = `${crypto.randomUUID()}-${Date.now()}-${image.name}`;
+            const filePath = path.join(uploadDir, filename);
+
+            fs.mkdirSync(uploadDir, {recursive: true});
+            const arrayBuffer = await image.arrayBuffer();
+            fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
+
+            const imagePath = `public/000001/${filename}`;
+
             console.log(formData);
             const { product_name, category, product_description, product_image, price_without_discount, discount_choice, discount_percentage} = formObjects;
             const result = await axios.post(baseUrl + `publications/${userId}/createPublication`, {
@@ -342,7 +356,7 @@ export async function action({request}: ActionFunctionArgs) {
                         "category": {
                             "categoryID": category,
                         },
-                        "imagePath": product_image,
+                        "imagePath": imagePath,
                         "description": product_description,
                         "discount_percentage": discount_percentage,
                         "has_promotion": discount_choice,
