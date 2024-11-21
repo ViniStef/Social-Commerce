@@ -36,6 +36,13 @@ type SellerProfileResultType = {
     buyers: Buyer[];
 }
 
+type SellerMetrics = {
+    numOfFollowers: number,
+    numOfPublications: number;
+    numOfLikes: number;
+}
+
+
 export type PublicationsResultType = {
     publicationId: number;
     publicationDate: string;
@@ -71,7 +78,7 @@ export async function loader({request}: LoaderFunctionArgs) {
     }
 
     if (accountType === "seller") {
-        let resultFinal: {imagePath?: string; firstName?: string; lastName?: string; buyers?: Buyer[]; errors?: string[] } = { errors: [] };
+        let resultFinal: {imagePath?: string; firstName?: string; lastName?: string; buyers?: Buyer[]; errors?: string[]; numOfFollowers?:number, numOfPublications?:number, numOfLikes?:number } = { errors: [] };
 
         try {
             const { data }: { data: SellerProfileResultType } = await axios.get(`http://localhost:8080/seller/profile/${userId}`);
@@ -81,6 +88,17 @@ export async function loader({request}: LoaderFunctionArgs) {
             resultFinal.buyers = data.buyers;
         } catch (error) {
             console.error("Error fetching seller profile", error);
+            resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
+        }
+
+        try {
+            const { data }: { data: SellerMetrics } = await axios.get(`http://localhost:8080/seller/metrics/${userId}`);
+            resultFinal.numOfFollowers = data.numOfFollowers;
+            resultFinal.numOfPublications = data.numOfPublications;
+            resultFinal.numOfLikes= data.numOfLikes;
+
+        } catch (error) {
+            console.error("Error fetching seller metrics", error);
             resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
         }
 
@@ -190,7 +208,7 @@ export default function FeedPage() {
                         </div>
                     </div>
 
-                    {data?.viewMetrics ? <SellerMetrics /> : <CreatePublicationDisplay />}
+                    {data?.viewMetrics ? <SellerMetrics numOfFollowers={loaderData?.numOfFollowers} numOfPublications={loaderData?.numOfPublications} numOfLikes={loaderData?.numOfLikes} /> : <CreatePublicationDisplay />}
 
                     {
                         data?.publications && (

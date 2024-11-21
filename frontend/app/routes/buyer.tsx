@@ -41,6 +41,7 @@ import ProfileFollowersDisplay from "~/components/ProfileFollowersDisplay";
 import {PublicationDisplay} from "~/components/PublicationDisplay";
 import {LogoDisplay} from "~/components/LogoDisplay";
 import logout from "~/assets/icons/logout.svg";
+import {useEffect, useState} from "react";
 
 type Seller = {
     firstName: string;
@@ -166,8 +167,43 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
-
     const publicationsFeed =   data?.publicationFiltered || loaderData.publicationsList || publications;
+    const [cartList, setCartList] = useState(() => {
+        if (typeof window !== "undefined" && window.localStorage) {
+            const localInfo = localStorage.getItem("@CartItems");
+            return localInfo ? JSON.parse(localInfo) : [];
+        }
+        return [];
+    });
+
+
+    const [count, setCount] = useState(2);
+
+    useEffect(() => {
+        localStorage.setItem("@CartItems", JSON.stringify(cartList))
+        addCount();
+
+    }, [cartList])
+
+    const addCount = () => {
+        if(cartList){
+            setCount(cartList.length)
+        }
+    }
+
+    const addProductCart = (cartPublication:PublicationsResultType) => {
+
+        const hasProduct = cartList.some((cartItem:PublicationsResultType) => cartItem.publicationId === cartPublication.publicationId);
+
+        if (!hasProduct) {
+            setCartList([...cartList, cartPublication])
+            addCount();
+        }
+        else {
+            return {error: "O produto já foi adicionado!"};
+        }
+    }
+
 
     return (
         <div className={style.page__container}>
@@ -201,7 +237,8 @@ export default function FeedPage() {
 
 
                     <li className={style.bar__item}>
-                    <button className={style.bar__action}>
+                        <button className={style.bar__action}>
+                            <span className={style.desire_span}>{count}</span>
                             <img className={style.bar__image} src={wishes} alt="Desejos"/>
                         </button>
 
@@ -418,7 +455,7 @@ export default function FeedPage() {
                     {
                         publicationsFeed && publicationsFeed.length > 0 ? (
                             publicationsFeed.map((publication: PublicationsResultType) => (
-                                <PublicationDisplay publication={publication} type={"buyer"}/>
+                                <PublicationDisplay publication={publication} type={"buyer"} addProductCart={addProductCart}/>
                             ))
                         ) : (
                             <PublicationDisplay publication={null} notFound={true} type={"buyer"}/>
@@ -458,6 +495,7 @@ export default function FeedPage() {
                         <li className={style.feature__group}>
                             <div className={style.feature__item}>
                                 <button className={style.feature__action}>
+
                                     <img className={style.action__image} src={wishes} alt="Lista de Desejos"/>
                                 </button>
                             </div>
@@ -709,8 +747,29 @@ export async function action({request}: ActionFunctionArgs) {
                 }
         }
         break;
+
         case "log_out": {
             return redirectAndClearCookie(request);
+        }
+
+        case "like_post": {
+            try {
+                const response = await axios.post(baseUrl + `buyer/publication/${userId}/like/${formData.get("publicationId")}`)
+                const status = response.status;
+
+                if (status == 200) {
+                    return {status: status};
+                }
+            } catch (error) {
+
+                if (error instanceof AxiosError) {
+                    return {errors: "Erro na conexão com o servidor, tente novamente mais tarde"};
+
+                } else {
+                    return {errors: "Erro inesperado no servidor"};
+                }
+            }
+            break;
         }
     }
 }
