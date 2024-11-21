@@ -188,6 +188,11 @@
         cursor: pointer;
       }
 
+      button{
+        background-color: transparent;
+        border: none;
+      }
+
       .likes__count {
         color: main.$color-dark-400;
         position: relative;

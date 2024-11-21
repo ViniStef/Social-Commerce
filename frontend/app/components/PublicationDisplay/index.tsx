@@ -10,7 +10,7 @@ import {PublicationsResultType} from "~/routes/seller";
 import unfollow from "~/assets/images/person-x-fill.svg";
 import {Form} from "@remix-run/react";
 
-export const PublicationDisplay = ({ type, publication, notFound = false }: { publication: PublicationsResultType | null; notFound?: boolean, type: string }) => {
+export const PublicationDisplay = ({ type, publication, notFound = false, addProductCart }: { publication: PublicationsResultType | null; notFound?: boolean, type: string, addProductCart?:any}) => {
     const dateConversion: {[key: string]: string} = {"1": "Janeiro", "2": "Fevereiro", "3": "Março", "4": "Abril", "5": "Maio", "6": "Junho",
             "7": "Julho", "8": "Agosto", "9": "Setembro", "10": "Outubro", "11": "Novembro", "12": "Dezembro"};
 
@@ -75,11 +75,19 @@ export const PublicationDisplay = ({ type, publication, notFound = false }: { pu
                     {type == "buyer" ?
                         <div className={style.post__reactions}>
                             <div className={style.reaction__container}>
-                                <img className={style.reaction__image} src={like} alt="gostar"/>
+                                <form method={"post"}>
+                                    <input type="hidden" name={"_action"} value={"like_post"}/>
+                                    <input type="hidden" name={"publicationId"} value={publication?.publicationId}/>
+                                    <button>
+                                        <img className={style.reaction__image} src={like} alt="gostar"/>
+                                    </button>
+                                </form>
                                 <p className={style.likes__count}>{publication?.likes ? publication.likes : 0}</p>
                             </div>
                             <div className={style.reaction__container}>
-                                <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
+                                <button onClick={() => addProductCart(publication)}>
+                                    <img className={style.reaction__image} src={bag} alt="lista de desejos"/>
+                                </button>
                             </div>
                         </div> :
                         <div className={style.post__reactions}>

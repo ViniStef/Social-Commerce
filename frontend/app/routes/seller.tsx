@@ -24,15 +24,24 @@ import {LogoDisplay} from "~/components/LogoDisplay";
 import SellerMetrics from "~/components/SellerMetrics";
 
 type Buyer = {
-    name: string;
+    firstName: string;
+    lastName: string;
     imagePath: string;
 }
 
 type SellerProfileResultType = {
     imagePath: string,
-    name: string;
+    firstName: string;
+    lastName: string;
     buyers: Buyer[];
 }
+
+type SellerMetrics = {
+    numOfFollowers: number,
+    numOfPublications: number;
+    numOfLikes: number;
+}
+
 
 export type PublicationsResultType = {
     publicationId: number;
@@ -69,15 +78,27 @@ export async function loader({request}: LoaderFunctionArgs) {
     }
 
     if (accountType === "seller") {
-        let resultFinal: {imagePath?: string; name?: string; buyers?: Buyer[]; errors?: string[] } = { errors: [] };
+        let resultFinal: {imagePath?: string; firstName?: string; lastName?: string; buyers?: Buyer[]; errors?: string[]; numOfFollowers?:number, numOfPublications?:number, numOfLikes?:number } = { errors: [] };
 
         try {
             const { data }: { data: SellerProfileResultType } = await axios.get(`http://localhost:8080/seller/profile/${userId}`);
             resultFinal.imagePath = data.imagePath;
-            resultFinal.name = data.name;
+            resultFinal.firstName = data.firstName;
+            resultFinal.lastName = data.lastName;
             resultFinal.buyers = data.buyers;
         } catch (error) {
             console.error("Error fetching seller profile", error);
+            resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
+        }
+
+        try {
+            const { data }: { data: SellerMetrics } = await axios.get(`http://localhost:8080/seller/metrics/${userId}`);
+            resultFinal.numOfFollowers = data.numOfFollowers;
+            resultFinal.numOfPublications = data.numOfPublications;
+            resultFinal.numOfLikes= data.numOfLikes;
+
+        } catch (error) {
+            console.error("Error fetching seller metrics", error);
             resultFinal.errors!.push("Erro ao buscar o perfil do comprador.");
         }
 
@@ -119,7 +140,6 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
-    console.log(loaderData);
 
     return (
         <div className={style.page__container}>
@@ -183,12 +203,12 @@ export default function FeedPage() {
                 <section>
                     <div className={style.feed__starter}>
                         <div className={style.feed__headline}>
-                            <p className={style.feed__text}>{loaderData?.name} Workbench</p>
+                            <p className={style.feed__text}>{loaderData?.firstName} Workbench</p>
                             <div className={style.feed__indicator}></div>
                         </div>
                     </div>
 
-                    {data?.viewMetrics ? <SellerMetrics /> : <CreatePublicationDisplay />}
+                    {data?.viewMetrics ? <SellerMetrics numOfFollowers={loaderData?.numOfFollowers} numOfPublications={loaderData?.numOfPublications} numOfLikes={loaderData?.numOfLikes} /> : <CreatePublicationDisplay />}
 
                     {
                         data?.publications && (
@@ -207,7 +227,7 @@ export default function FeedPage() {
                 <div className={style.user__info}>
                     <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                          alt="Imagem de Perfil"/>
-                    <p className={style.user__name}>{loaderData?.name}</p>
+                    <p className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
                     <Form onChange={(event) => {
                         submit(event.currentTarget)
                     }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
@@ -232,8 +252,7 @@ export default function FeedPage() {
 
                         {loaderData?.buyers && loaderData.buyers.length > 0 ? loaderData.buyers.map((buyer: Buyer) => {
                                 return (
-                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} name={buyer.name}
-                                                             type={"seller"}/>
+                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} firstName={buyer.firstName} lastName={buyer.lastName} type={"seller"}/>
                                 )
                             })
                             : <li className={style.nofollow__content}>

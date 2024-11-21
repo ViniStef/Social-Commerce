@@ -4,18 +4,19 @@ import {Form} from "@remix-run/react";
 
 type ProfileFollowersDisplayProps = {
     profileImg: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     type: string
     sellerId?: number,
 }
 
-export default function ProfileFollowersDisplay( {profileImg, name, type, sellerId}: ProfileFollowersDisplayProps) {
+export default function ProfileFollowersDisplay( {profileImg, firstName, lastName, type, sellerId}: ProfileFollowersDisplayProps) {
     return (
         <li className={style.follows__item}>
             <div className={style.follows__user}>
                 <img className={style.follows__image} src={profileImg} alt=""/>
                 <div className={style.user__details}>
-                    <p className={style.follows__name} style={{textTransform: "capitalize"}}>{name}</p>
+                    <p className={style.follows__name} style={{textTransform: "capitalize"}}>{firstName} {lastName}</p>
                 </div>
 
             </div>

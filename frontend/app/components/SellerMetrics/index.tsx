@@ -4,7 +4,8 @@ import follows from "~/assets/icons/people-fill.svg";
 import likes from "~/assets/icons/heart-fill.svg";
 import publications from "~/assets/icons/publications.svg";
 
-export default function SellerMetrics() {
+
+export default function SellerMetrics({numOfFollowers, numOfPublications, numOfLikes}: {numOfFollowers?: number, numOfPublications?: number, numOfLikes?:number }) {
     return (
         <section className={style.seller__metrics}>
             <h1 className={style.metrics__headline}>Métricas</h1>
@@ -21,7 +22,7 @@ export default function SellerMetrics() {
                             <h1 className={style.metric__headline}>Quantidade de Seguidores</h1>
 
                             <div className={style.metric__division}></div>
-                            <span className={style.metric__value}>10</span>
+                            <span className={style.metric__value}>{numOfFollowers}</span>
                         </div>
                     </li>
                     <li className={style.metrics__item}>
@@ -34,7 +35,7 @@ export default function SellerMetrics() {
                             <h1 className={style.metric__headline}>Quantidade de Publicações</h1>
 
                             <div className={style.metric__division}></div>
-                            <span className={style.metric__value}>34</span>
+                            <span className={style.metric__value}>{numOfPublications}</span>
                         </div>
                     </li>
                     <li className={style.metrics__item}>
@@ -47,7 +48,7 @@ export default function SellerMetrics() {
                             <h1 className={style.metric__headline}>Quantidade de Curtidas</h1>
 
                             <div className={style.metric__division}></div>
-                            <span className={style.metric__value}>128</span>
+                            <span className={style.metric__value}>{numOfLikes}</span>
                         </div>
                     </li>
 

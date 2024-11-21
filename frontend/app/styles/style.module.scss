@@ -33,6 +33,18 @@
         @include main.flexbox($direction: column, $align: center, $gap: 5px);
         background-color: transparent;
         border: none;
+        position: relative;
+
+        .desire_span {
+          z-index: 10;
+          position: absolute;
+          right: -8px;
+          background-color: main.$color-brand-200;
+          border-radius: 50%;
+          color: white;
+          width: 20px;
+          height: 20px;
+        }
 
         .bar__image {
           width: 40px;
@@ -143,7 +155,7 @@
       z-index: 15;
 
       .search__results {
-        width: 100%;
+        width: 80%;
         border-radius: 10px;
         position: absolute;
         min-height: 190px;
@@ -163,7 +175,7 @@
           .close__button {
             border: none;
             padding: 10px 25px;
-            font-size: main.$fs-xl;
+            font-size: main.$fs-sm;
             line-height: 32px;
             font-weight: main.$fw-bold;
             border-radius: 10px;
@@ -181,7 +193,7 @@
         }
 
         .background__style {
-          width: 100%;
+          width: 50%;
           position: absolute;
           height: 100%;
           @include main.flexbox($direction: column, $align: center, $justify: space-evenly);
@@ -201,6 +213,31 @@
         .results__list {
           margin-inline: 15px;
           position: relative;
+          width: 90%;
+
+          .seller_result {
+            @include main.flexbox($align: center, $justify: space-between);
+            height: 60px;
+            border-block: 1px dotted #fff;
+            .result_person {
+              @include main.flexbox($align: center, $gap: 20px);
+
+            }
+
+            img {
+              border-radius: 50%;
+              width: 35px;
+              padding: 3px;
+            }
+
+            button {
+              width: 30px;
+              border-radius: 50%;
+              background-color: transparent;
+              border: 1px solid #fff;
+              cursor: pointer;
+            }
+          }
 
           .result__item {
             position: relative;
@@ -367,6 +404,8 @@
         .feature__action {
           border: none;
           background-color: transparent;
+
+
 
           .action__image {
             cursor: pointer;

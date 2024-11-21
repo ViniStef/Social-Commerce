@@ -62,6 +62,7 @@ public class BuyerService implements IBuyerService {
         return new BuyerProfileDto(
                 buyer.getImagePath(),
                 buyer.getFirstName(),
+                buyer.getLastName(),
                 fromSellerToSellerForBuyer(buyer.getSellers())
                 );
     }
@@ -75,7 +76,7 @@ public class BuyerService implements IBuyerService {
         List<SellerForBuyerProfileDto> sellerForBuyerList = new ArrayList<>();
 
         for (Seller seller : sellerList) {
-            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getSellerId(),seller.getImagePath(),seller.getFirstName());
+            SellerForBuyerProfileDto dto = new SellerForBuyerProfileDto(seller.getSellerId(),seller.getImagePath(),seller.getFirstName(), seller.getLastName());
             sellerForBuyerList.add(dto);
         }
 

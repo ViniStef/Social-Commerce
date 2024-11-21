@@ -39,10 +39,7 @@ public class Product {
     @JsonIgnoreProperties("product")
     private Publication publication;
 
-    public Product(String product_name, String product_description, String product_brand, String product_color) {
+    public Product(String product_name) {
         this.product_name = product_name;
-        this.product_description = product_description;
-        this.product_brand = product_brand;
-        this.product_color = product_color;
     }
 }

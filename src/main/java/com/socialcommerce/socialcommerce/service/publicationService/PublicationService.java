@@ -148,12 +148,22 @@ public class PublicationService implements IPublicationService{
 
     }
 
+    @Override
+    public List<ShowPublicationDto> getAllPostsWithMorePromotion(Long sellerId) {
+        Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller id not found"));
+
+        List<Publication> publications = seller.getPublications();
+        List<Publication> sortedPublications = publications.stream()
+                .filter(Publication::getHas_promotion)
+                .sorted(Comparator.comparing(Publication::getDiscount_percentage).reversed())
+                .toList();
+
+        return fromPublicationToShowPublication(sortedPublications);
+    }
+
     private Product fromProductDtoToProduct(CreateProductDto productDto) {
         return new Product(
-                productDto.product_name(),
-                productDto.product_description(),
-                productDto.product_brand(),
-                productDto.product_color()
+                productDto.product_name()
         );
     }
 

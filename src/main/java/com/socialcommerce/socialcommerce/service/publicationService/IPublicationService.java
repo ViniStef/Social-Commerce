@@ -19,5 +19,6 @@ public interface IPublicationService {
     void deleteAPublicationBySellerId(Long sellerId, Long publicationId);
     List<ShowPublicationDto> getAllByCategoryType(Integer categoryId, Long buyerId);
     List<ShowPublicationDto> getAllBySeller(Long sellerId);
+    List<ShowPublicationDto> getAllPostsWithMorePromotion(Long sellerId);
 
  }
