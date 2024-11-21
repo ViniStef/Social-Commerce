@@ -1,6 +1,5 @@
-package com.socialcommerce.socialcommerce.service;
+package com.socialcommerce.socialcommerce.service.loginService;
 
-import com.socialcommerce.socialcommerce.exception.AlreadyExistsException;
 import com.socialcommerce.socialcommerce.model.Buyer;
 import com.socialcommerce.socialcommerce.model.Seller;
 import com.socialcommerce.socialcommerce.repository.IBuyerRepo;
@@ -9,10 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-public class LoginService {
+public class LoginService implements ILoginService {
 
     private IBuyerRepo buyerRepo;
 
@@ -23,6 +21,7 @@ public class LoginService {
         this.sellerRepo = sellerRepo;
     }
 
+    @Override
     public Object login(String email, String password) {
         Seller seller = sellerRepo.findByEmail(email);
         Buyer buyer = buyerRepo.findByEmail(email);

@@ -1,7 +1,6 @@
 package com.socialcommerce.socialcommerce.controller;
 
-import com.socialcommerce.socialcommerce.service.LoginService;
-import com.socialcommerce.socialcommerce.service.RegisterService;
+import com.socialcommerce.socialcommerce.service.registerService.RegisterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
