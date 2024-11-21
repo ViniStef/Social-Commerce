@@ -323,6 +323,8 @@ export async function action({request}: ActionFunctionArgs) {
 
                 const response: PublicationsResultType[] = result.data;
 
+                console.log("respota do server: ", response);
+
                 return {publications: response};
 
             } catch (error) {
@@ -364,23 +366,21 @@ export async function action({request}: ActionFunctionArgs) {
 
             const imagePath = `public/000001/${filename}`;
 
-            console.log(formData);
+            console.log(imagePath);
+
             const { product_name, category, product_description, product_image, price_without_discount, discount_choice, discount_percentage} = formObjects;
             const result = await axios.post(baseUrl + `publications/${userId}/createPublication`, {
-                body:
-                    {
-                        "product": {
-                            "product_name": product_name,
-                        },
-                        "category": {
-                            "categoryID": category,
-                        },
-                        "imagePath": imagePath,
-                        "description": product_description,
-                        "discount_percentage": discount_percentage,
-                        "has_promotion": discount_choice,
-                        "price": price_without_discount,
-                    }
+                product: {
+                    product_name: product_name,
+                },
+                category: {
+                    categoryID: category,
+                },
+                imagePath: imagePath,
+                description: product_description,
+                discount_percentage: discount_percentage,
+                has_promotion: discount_choice,
+                price: price_without_discount,
             })
 
             if (result.status === 204) {
