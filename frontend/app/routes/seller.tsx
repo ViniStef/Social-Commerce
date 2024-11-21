@@ -131,32 +131,34 @@ export default function FeedPage() {
                             <input type="hidden" name={"_action"} value={"list_posts"}/>
                             <button className={style.bar__action}>
                                 <img className={style.bar__image} src={publication} alt="Publicações"/>
+                                <p className={style.bar__text}>Minhas Publicações</p>
                             </button>
                         </Form>
 
 
-                        <p className={style.bar__text}>Minhas Publicações</p>
                     </li>
 
 
                     <li className={style.bar__item}>
-                        <button className={style.bar__action}>
-                            <img className={style.bar__image} src={plus} alt="Criar"/>
-                        </button>
+                        <Form className={style.nocontent__create} method={"post"}>
+                            <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={plus} alt="Criar"/>
+                                <p className={style.bar__text}>Criar Publicações</p>
+                            </button>
+                        </Form>
 
-                        <p className={style.bar__text}>
-                            Criar Publicações
-                        </p>
                     </li>
 
                     <li className={style.bar__item}>
-                        <button className={style.bar__action}>
-                            <img className={style.bar__image} src={metrics} alt="Métricas"/>
-                        </button>
+                        <Form method={"post"}>
+                            <input type="hidden" name={"_action"} value={"view_metrics"}/>
+                            <button className={style.bar__action}>
+                                <img className={style.bar__image} src={metrics} alt="Métricas"/>
+                                <p className={style.bar__text}>Minhas Métricas</p>
+                            </button>
+                        </Form>
 
-                        <p className={style.bar__text}>
-                            Minhas Métricas
-                        </p>
                     </li>
 
                 </ul>
@@ -180,9 +182,7 @@ export default function FeedPage() {
                         </div>
                     </div>
 
-                    {/*<CreatePublicationDisplay />*/}
-
-                    <SellerMetrics />
+                    {data?.viewMetrics ? <SellerMetrics /> : <CreatePublicationDisplay />}
 
                     {
                         data?.publications && (
@@ -224,7 +224,7 @@ export default function FeedPage() {
 
                     <ul className={style.follows__list}>
 
-                        {loaderData?.buyers ? loaderData.buyers.map((buyer: Buyer) => {
+                        {loaderData?.buyers && loaderData.buyers.length > 0 ? loaderData.buyers.map((buyer: Buyer) => {
                                 return (
                                     <ProfileFollowersDisplay profileImg={buyer.imagePath} name={buyer.name}
                                                              type={"seller"}/>
@@ -325,6 +325,10 @@ export async function action({request}: ActionFunctionArgs) {
         }
         case "create_publication": {
             console.log("form data aq em create publi: ", formData);
+        }
+        break
+        case "view_metrics": {
+            return {viewMetrics: true}
         }
     }
     return {error: "Internal Server Error"}

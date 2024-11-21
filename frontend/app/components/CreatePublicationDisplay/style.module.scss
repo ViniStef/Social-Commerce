@@ -270,7 +270,21 @@
   }
 }
 
+@keyframes showBottomNoContent {
+  from {
+    position: relative;
+    bottom: -200px;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    bottom: 0;
+    opacity: 1;
+  }
+}
+
 .nocontent__container {
+  animation: showBottomNoContent .3s linear;
   position: absolute;
   width: 100%;
   height: 450px;
