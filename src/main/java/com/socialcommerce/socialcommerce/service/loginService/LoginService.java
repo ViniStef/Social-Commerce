@@ -1,5 +1,6 @@
 package com.socialcommerce.socialcommerce.service.loginService;
 
+import com.socialcommerce.socialcommerce.exception.NotFoundException;
 import com.socialcommerce.socialcommerce.model.Buyer;
 import com.socialcommerce.socialcommerce.model.Seller;
 import com.socialcommerce.socialcommerce.repository.IBuyerRepo;
@@ -42,6 +43,7 @@ public class LoginService implements ILoginService {
             }
             return false;
         }
-        return false;
+
+        throw new NotFoundException("User not found");
     }
 }
