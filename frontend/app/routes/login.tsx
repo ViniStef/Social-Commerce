@@ -95,6 +95,7 @@ async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginRespons
         return json({ userId, userAccountType: accountType });
 
     } catch (error) {
+
         return json(
             { message: `Erro interno no servidor: ${error}` },
             { status: 500 }

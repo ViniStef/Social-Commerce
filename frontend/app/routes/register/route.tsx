@@ -61,6 +61,8 @@ export async function action({request}: ActionFunctionArgs) {
 
             const emailAvailabilityResponse = await emailAvailability(formData as InitialRegister);
 
+            console.log(emailAvailabilityResponse);
+
             return {emailResponse: emailAvailabilityResponse};
 
         }
