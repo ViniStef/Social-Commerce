@@ -6,9 +6,24 @@ import {action} from "~/routes/seller";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import background from "~/assets/images/card-image.svg";
 import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
+import {useEffect, useState} from "react";
 
 export default function CreatePublicationDisplay() {
     const data = useActionData<typeof action>();
+    const [isDiscountSelected, setIsDiscountSelected] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string>();
+
+    useEffect(() => {
+        setImageSrc("");
+    }, []);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        if (file) {
+            const fileURL = URL.createObjectURL(file);
+            setImageSrc(fileURL);
+        }
+    };
 
     return (
         data?.ok
@@ -48,12 +63,12 @@ export default function CreatePublicationDisplay() {
                 <div className={style.product__info}>
                     <div className={style.info__left}>
                         <div className={style.image__content}>
-                            <img className={style.placeholder__image} src={background} alt="Imagem"/>
+                            <img className={`${imageSrc ? style.uploaded__image : style.placeholder__image}`} src={imageSrc ? imageSrc : background} alt="Imagem"/>
                             <div className={style.upload__submit}>
                                 <label className={style.upload__input} aria-label={"Enviar foto do produto"}
                                        htmlFor="upload__input"><img className={style.eraser__img} src={eraser}
                                                                     alt={"Enviar imagem"}/></label>
-                                <input name={"product_image"} id={"upload__input"} type={"file"} accept={"image/png"}/>
+                                <input onChange={(e) => handleFileChange(e)} name={"product_image"} id={"upload__input"} type={"file"} accept={"image/png"}/>
                             </div>
                             <p className={style.image__text}>Coloque uma imagem para seu produto</p>
                         </div>
@@ -72,27 +87,34 @@ export default function CreatePublicationDisplay() {
                             <h1 className={style.base__headline}>O produto tem desconto?</h1>
                             <div className={style.hasdiscount__container}>
                                 <div className={style.hasdiscount__wrap}>
-                                    <label className={`${style.label__choice} ${style.choice__yes}`} htmlFor="discount_true">Sim</label>
-                                    <input id={"discount_true"} name={"discount_choice"} type={"radio"} value={"true"}
+                                    <label className={`${style.label__choice} ${style.left__choice} ${ isDiscountSelected ? style.choice__yes : style.choice__no}`} htmlFor="discount_true">Sim</label>
+                                    <input onClick={(e) => setIsDiscountSelected((prevState => {
+                                        return !prevState;
+                                    }))} id={"discount_true"} name={"discount_choice"} type={"radio"} value={"true"}
                                            className={style.choice__input}/>
                                 </div>
 
                                 <div className={style.hasdiscount__wrap}>
-                                    <label className={`${style.label__choice} ${style.choice__no}`} htmlFor="discount_false">Não</label>
-                                    <input id={"discount_false"} name={"discount_choice"} type={"radio"} value={"false"}
+                                    <label className={`${style.label__choice} ${style.right__choice} ${ isDiscountSelected ? style.choice__no : style.choice__yes}`} htmlFor="discount_false">Não</label>
+                                    <input onClick={(e) => setIsDiscountSelected((prevState => {
+                                        return !prevState;
+                                    }))} id={"discount_false"} name={"discount_choice"} type={"radio"} value={"false"}
                                            className={style.choice__input}/>
                                 </div>
 
                             </div>
                         </div>
 
-                        <div>
+                        {isDiscountSelected && <div>
                             <h1 className={style.base__headline}>Quantidade de Desconto</h1>
                             <div className={style.discount__container}>
-                                <label htmlFor="discount_percentage" className={style.sr__only}>Quantidade de Desconto</label>
-                                <input name={"discount_percentage"} id={"discount_percentage"} min={0} max={100} type="number" placeholder={"0%"} className={style.discount__input}/>
+                                <label htmlFor="discount_percentage" className={style.sr__only}>Quantidade de
+                                    Desconto</label>
+                                <input name={"discount_percentage"} id={"discount_percentage"} min={0} max={100}
+                                       type="number" placeholder={"0%"} className={style.discount__input}/>
                             </div>
-                        </div>
+                        </div>}
+
                     </div>
                 </div>
 
@@ -103,14 +125,14 @@ export default function CreatePublicationDisplay() {
                 </div>
             </Form>
         </section>
-        :
-        <section className={style.nocontent__container}>
-            <div className={style.nocontent__text}>
-                <p className={style.nocontent__headline}>
-                    Crie uma publicação
-                </p>
-            </div>
-            <img className={style.nocontent__image} src={plus} alt="Logo"/>
+            :
+            <section className={style.nocontent__container}>
+                <div className={style.nocontent__text}>
+                    <p className={style.nocontent__headline}>
+                        Crie uma publicação
+                    </p>
+                </div>
+                <img className={style.nocontent__image} src={plus} alt="Logo"/>
             <Form className={style.nocontent__create} method={"post"}>
                 <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
                 <button className={style.create__btn}><img className={style.create__img} src={plus} alt=""/></button>

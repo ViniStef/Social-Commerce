@@ -66,7 +66,10 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
 
                     <div className={style.post__product}>
                         <img className={style.product__image} src={publication?.imagePath} alt="Imagem do Produto"/>
-                        <span className={style.product__discount}>-{publication?.discount}%</span>
+
+                        {publication?.discount &&
+                            <span className={style.product__discount}>-{publication?.discount}%</span>
+                        }
                     </div>
 
                     <div className={style.price__description}>

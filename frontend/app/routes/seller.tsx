@@ -22,6 +22,7 @@ import ignore from "ignore";
 import CreatePublicationDisplay from "~/components/CreatePublicationDisplay";
 import {LogoDisplay} from "~/components/LogoDisplay";
 import SellerMetrics from "~/components/SellerMetrics";
+import {z} from "zod";
 
 type Buyer = {
     firstName: string;
@@ -268,6 +269,26 @@ export default function FeedPage() {
         </div>
     );
 }
+
+
+const createPublicationSchema = z.object({
+    _action: z.string().optional(),
+    product_name: z.string().min(1, {
+        message: "Campo Obrigatório"
+    }).max(200, {
+        message: "Máximo de 200 caracteres"
+    }),
+    category: z.enum(["1", "2", "3", "4", "5", "6", "7"]),
+    product_description: z.string().min(1, {
+        message: "Campo Obrigatório"
+    }).max(200, {
+        message: "Máximo de 200 caracteres"
+    }),
+    product_image: z.any(),
+    price_without_discount: z.number(),
+    discount_choice: z.enum(["true", "false"]).optional(),
+    discount_percentage: z.number().optional()
+})
 
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
