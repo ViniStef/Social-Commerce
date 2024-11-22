@@ -10,7 +10,6 @@ import java.util.List;
 public interface IBuyerService {
     void createBuyer(CreateBuyerDto buyer);
     void followerASeller(Long sellerId, Long buyerId);
-    List<Buyer> findAllBuyers();
     BuyerProfileDto buyerProfile (Long buyerId);
     void likeAPublication(Long sellerId, Long publicationId);
     void deleteFollower(Long sellerId, Long buyerId);

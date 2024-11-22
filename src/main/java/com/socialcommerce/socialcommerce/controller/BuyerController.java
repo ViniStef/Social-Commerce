@@ -25,10 +25,6 @@ public class BuyerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllBuyers() {
-        return ResponseEntity.ok(buyerService.findAllBuyers());
-    }
 
     @PostMapping("/follower/{buyerId}/followed/{sellerId}")
     public ResponseEntity<?> followASeller(@PathVariable Long buyerId, @PathVariable Long sellerId) {

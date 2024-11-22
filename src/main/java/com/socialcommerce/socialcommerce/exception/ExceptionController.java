@@ -26,6 +26,6 @@ public class ExceptionController {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<?> handleAlreadyExistException(AlreadyExistsException ex) {
         ExceptionDto exception = new ExceptionDto(ex.getMessage());
-        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 }

@@ -60,4 +60,5 @@ public class Buyer {
         this.cpf = cpf;
         this.email = email;
     }
+
 }

@@ -67,10 +67,6 @@ public class BuyerService implements IBuyerService {
                 );
     }
 
-    @Override
-    public List<Buyer> findAllBuyers() {
-        return buyerRepo.findAll();
-    }
 
     private List<SellerForBuyerProfileDto> fromSellerToSellerForBuyer(List<Seller> sellerList) {
         List<SellerForBuyerProfileDto> sellerForBuyerList = new ArrayList<>();
