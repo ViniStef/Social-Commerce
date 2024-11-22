@@ -41,17 +41,6 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public void deleteAll(){
-        sellerRepo.deleteAll();
-    }
-
-
-    @Override
-    public List<Seller> getAllSellers() {
-        return sellerRepo.findAll();
-    }
-
-    @Override
     public SellerProfileDto sellerProfile(Long sellerId) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
 
@@ -76,17 +65,6 @@ public class SellerService implements ISellerService {
         }
     }
 
-    private List<BuyerForSellerProfileDto> fromBuyerToBuyerForSeller(List<Buyer> sellerList) {
-        List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
-
-        for (Buyer buyer : sellerList) {
-            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getImagePath(),buyer.getFirstName(), buyer.getLastName());
-            buyerList.add(dto);
-        }
-
-        return buyerList;
-    }
-
     @Override
     public void uploadImage(Long sellerId, ImagePathDto image) {
         Seller seller = sellerRepo.findById(sellerId).orElseThrow(() -> new NotFoundException("Seller not found"));
@@ -109,6 +87,16 @@ public class SellerService implements ISellerService {
                 Integer.parseInt(String.valueOf(followes)),
                 Integer.parseInt(String.valueOf(totalLikes))
         );
+    }
 
+    private List<BuyerForSellerProfileDto> fromBuyerToBuyerForSeller(List<Buyer> sellerList) {
+        List<BuyerForSellerProfileDto> buyerList = new ArrayList<>();
+
+        for (Buyer buyer : sellerList) {
+            BuyerForSellerProfileDto dto = new BuyerForSellerProfileDto(buyer.getImagePath(),buyer.getFirstName(), buyer.getLastName());
+            buyerList.add(dto);
+        }
+
+        return buyerList;
     }
 }
