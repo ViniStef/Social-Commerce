@@ -86,6 +86,8 @@ async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginRespons
             password,
         });
 
+        console.log("Response teste aq: ", response);
+
         if (response.status === 404) {
             return json({ message: "Usuário não encontrado" }, { status: 404 });
         }
@@ -95,7 +97,7 @@ async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginRespons
         return json({ userId, userAccountType: accountType });
 
     } catch (error) {
-
+        console.log("Teste error: ", error);
         return json(
             { message: `Erro interno no servidor: ${error}` },
             { status: 500 }
