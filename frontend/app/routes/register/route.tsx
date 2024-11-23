@@ -63,7 +63,7 @@ export async function action({request}: ActionFunctionArgs) {
 
             console.log(emailAvailabilityResponse);
 
-            return {emailResponse: emailAvailabilityResponse};
+            return {emailResponse: emailAvailabilityResponse, email: formData.email, account: formData.account};
 
         }
         case "register": {

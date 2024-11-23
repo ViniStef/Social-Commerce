@@ -8,6 +8,7 @@ import eraser from "~/assets/icons/eraser-fill.svg";
 import publication from "~/assets/icons/file-image.svg";
 import metrics from "~/assets/icons/metrics.svg";
 import logout from "~/assets/icons/logout.svg";
+import close from "~/assets/icons/x-circle.svg";
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
 import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
@@ -23,6 +24,11 @@ import CreatePublicationDisplay from "~/components/CreatePublicationDisplay";
 import {LogoDisplay} from "~/components/LogoDisplay";
 import SellerMetrics from "~/components/SellerMetrics";
 import {z} from "zod";
+import house from "~/assets/images/house.svg";
+import pedro from "~/assets/images/pedro.webp";
+import wishes from "~/assets/icons/bag-fill.svg";
+import offers from "~/assets/icons/currency-dollar.svg";
+import {useState} from "react";
 
 type Buyer = {
     firstName: string;
@@ -60,7 +66,7 @@ export type PublicationsResultType = {
 let session: SessionData;
 
 export const meta = () => {
-    return [{ title: "Vendedor - Social Commerce"}]
+    return [{title: "Vendedor - Social Commerce"}]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -72,17 +78,28 @@ export async function loader({request}: LoaderFunctionArgs) {
     // let userId = sessionLoader.get("userId");
     // let accountType = sessionLoader.get("accountType");
 
-    const {userId, accountType } = await requireAuthCookie(request);
+    const {userId, accountType} = await requireAuthCookie(request);
 
     if (accountType === "buyer") {
         return redirect("/buyer");
     }
 
     if (accountType === "seller") {
-        let resultFinal: {imagePath?: string; firstName?: string; lastName?: string; buyers?: Buyer[]; errors?: string[]; numOfFollowers?:number, numOfPublications?:number, numOfLikes?:number } = { errors: [] };
+        let resultFinal: {
+            imagePath?: string;
+            firstName?: string;
+            lastName?: string;
+            buyers?: Buyer[];
+            errors?: string[];
+            numOfFollowers?: number,
+            numOfPublications?: number,
+            numOfLikes?: number
+        } = {errors: []};
 
         try {
-            const { data }: { data: SellerProfileResultType } = await axios.get(`http://localhost:8080/seller/profile/${userId}`);
+            const {data}: {
+                data: SellerProfileResultType
+            } = await axios.get(`http://localhost:8080/seller/profile/${userId}`);
             resultFinal.imagePath = data.imagePath;
             resultFinal.firstName = data.firstName;
             resultFinal.lastName = data.lastName;
@@ -93,10 +110,10 @@ export async function loader({request}: LoaderFunctionArgs) {
         }
 
         try {
-            const { data }: { data: SellerMetrics } = await axios.get(`http://localhost:8080/seller/metrics/${userId}`);
+            const {data}: { data: SellerMetrics } = await axios.get(`http://localhost:8080/seller/metrics/${userId}`);
             resultFinal.numOfFollowers = data.numOfFollowers;
             resultFinal.numOfPublications = data.numOfPublications;
-            resultFinal.numOfLikes= data.numOfLikes;
+            resultFinal.numOfLikes = data.numOfLikes;
 
         } catch (error) {
             console.error("Error fetching seller metrics", error);
@@ -141,12 +158,12 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
+    const [shouldShowProfile, setshouldShowProfile] = useState(false);
 
     return (
-        <div className={style.page__container}>
+        <div className={`${style.page__container} ${data?.showProfileMobile ? style.change__background : ""}`}>
             <section className={style.lateral__bar}>
                 <ul className={style.bar__list}>
-
 
                     <li className={style.bar__item}>
                         <Form method={"post"}>
@@ -209,64 +226,150 @@ export default function FeedPage() {
                         </div>
                     </div>
 
-                    {data?.viewMetrics ? <SellerMetrics numOfFollowers={loaderData?.numOfFollowers} numOfPublications={loaderData?.numOfPublications} numOfLikes={loaderData?.numOfLikes} /> : <CreatePublicationDisplay />}
+                    {!data?.showProfileMobile &&
 
-                    {
+                    data?.viewMetrics && <SellerMetrics numOfFollowers={loaderData?.numOfFollowers}
+                                                       numOfPublications={loaderData?.numOfPublications}
+                                                       numOfLikes={loaderData?.numOfLikes}/> }
+
+                    {data?.publications && data.publications.length > 0 ?
                         data?.publications && (
                             data.publications.map((publication: PublicationsResultType) => (
                                 <PublicationDisplay publication={publication} type={"seller"}/>
                             ))
                         )
+                        : !data?.viewMetrics && <CreatePublicationDisplay />
                     }
 
                 </section>
 
+
             </main>
 
 
-            <section className={style.user__container}>
-                <div className={style.user__info}>
-                    <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
-                         alt="Imagem de Perfil"/>
-                    <p className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
-                    <Form onChange={(event) => {
-                        submit(event.currentTarget)
-                    }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
-                        <div className={style.upload__submit}>
-                            <input type={"hidden"} name={"_action"} value={"upload_image"}/>
-                            <label className={style.upload__input} aria-label={"Enviar foto de perfil"}
-                                   htmlFor="upload__input"><img src={eraser} alt={"Enviar imagem"}/></label>
-                            <input name={"image"} id={"upload__input"} type={"file"} accept={"image/png"}/>
-                        </div>
-                    </Form>
-                    <div className={`${style.separation__follows} ${style.separation__div}`}></div>
-                </div>
-
-                <div className={style.user__follows}>
-                    <div className={style.follows__headline}>
-                        <h1 className={style.follow__headline}>
-                            Seguidores
-                        </h1>
+            <section className={`${data?.showProfileMobile ? style.mobile__profile : style.user__section}`}>
+                <div className={`${style.user__container} ${data?.showProfileMobile ? style.mobile__content : ""} `}>
+                    <div className={style.user__info}>
+                        <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
+                             alt="Imagem de Perfil"/>
+                        <p className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
+                        <Form onChange={(event) => {
+                            submit(event.currentTarget)
+                        }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
+                            <div className={style.upload__submit}>
+                                <input type={"hidden"} name={"_action"} value={"upload_image"}/>
+                                <label className={style.upload__input} aria-label={"Enviar foto de perfil"}
+                                       htmlFor="upload__input"><img src={eraser} alt={"Enviar imagem"}/></label>
+                                <input name={"image"} id={"upload__input"} type={"file"} accept={"image/png"}/>
+                            </div>
+                        </Form>
+                        <div className={`${style.separation__follows} ${style.separation__div}`}></div>
                     </div>
 
-                    <ul className={style.follows__list}>
+                    <div className={style.user__follows}>
+                        <div className={style.follows__headline}>
+                            <h1 className={style.follow__headline}>
+                                Seguidores
+                            </h1>
+                        </div>
 
-                        {loaderData?.buyers && loaderData.buyers.length > 0 ? loaderData.buyers.map((buyer: Buyer) => {
-                                return (
-                                    <ProfileFollowersDisplay profileImg={buyer.imagePath} firstName={buyer.firstName} lastName={buyer.lastName} type={"seller"}/>
-                                )
-                            })
-                            : <li className={style.nofollow__content}>
-                                <div className={style.nofollow__item}>
-                                    <p className={style.nofollow__text}>Você não possui nenhum seguidor no momento!</p>
-                                </div>
-                                <LogoDisplay/>
-                            </li>
-                        }
-                    </ul>
+                        <ul className={style.follows__list}>
+
+                            {loaderData?.buyers && loaderData.buyers.length > 0 ? loaderData.buyers.map((buyer: Buyer) => {
+                                    return (
+                                        <ProfileFollowersDisplay profileImg={buyer.imagePath} firstName={buyer.firstName}
+                                                                 lastName={buyer.lastName} type={"seller"}/>
+                                    )
+                                })
+                                : <li className={style.nofollow__content}>
+                                    <div className={style.nofollow__item}>
+                                        <p className={style.nofollow__text}>Você não possui nenhum seguidor no
+                                            momento!</p>
+                                    </div>
+                                    <LogoDisplay/>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </section>
+
+
+            <section className={style.bottom__features}>
+                <div className={style.user__features}>
+                    <ul className={style.feature__list}>
+
+                        <li className={style.feature__group}>
+                            <Form className={style.feature__form} method={"post"}>
+                                <input type="hidden" name={"_action"} value={"list_posts"}/>
+                                <div className={style.feature__item}>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={publication}
+                                             alt="Minhas Publicações"/>
+                                    </button>
+                                </div>
+                            </Form>
+
+                            <Form className={style.feature__form} method={"post"}>
+                                <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
+                                <div className={style.feature__item}>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={plus} alt="Criar Publicação"/>
+                                    </button>
+                                </div>
+                            </Form>
+
+                        </li>
+
+                        <li className={`${style.profile__item} ${style.feature__item}`}>
+                            {data?.showProfileMobile ?
+                                <Form className={style.close__form} method={"post"}>
+                                    <input type="hidden" name={"_action"} value={"close_profile_mobile"}/>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={close} alt="Fechar Menu"/>
+                                        <p className={style.action__name}>Fechar Perfil</p>
+                                    </button>
+                                </Form>
+                                :
+                                <Form className={style.close__form} method={"post"}>
+                                    <input type="hidden" name={"_action"} value={"show_profile_mobile"}/>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image}
+                                             src={loaderData?.imagePath ? loaderData.imagePath : logo} alt="Perfil"/>
+                                        <p className={style.action__name}>Meu Perfil</p>
+                                    </button>
+                                </Form>
+                            }
+
+                        </li>
+
+                        <li className={style.feature__group}>
+                            <Form className={style.feature__form} method={"post"}>
+                                <input type="hidden" name={"_action"} value={"view_metrics"}/>
+                                <div className={style.feature__item}>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={metrics} alt="Minhas Métricas"/>
+                                    </button>
+                                </div>
+                            </Form>
+
+                            <Form className={style.feature__form} method={"post"}>
+                                <input type="hidden" name={"_action"} value={"log_out"}/>
+                                <div className={style.feature__item}>
+                                    <button className={style.feature__action}>
+                                        <img className={style.action__image} src={logout} alt="Sair da Sessão"/>
+                                    </button>
+                                </div>
+                            </Form>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </section>
+
         </div>
+
     );
 }
 
@@ -359,7 +462,7 @@ export async function action({request}: ActionFunctionArgs) {
 
                 const response = result.status;
 
-                if (response== 204){
+                if (response == 204) {
                     return {status: response};
                 }
 
@@ -389,7 +492,15 @@ export async function action({request}: ActionFunctionArgs) {
 
             console.log(imagePath);
 
-            const { product_name, category, product_description, product_image, price_without_discount, discount_choice, discount_percentage} = formObjects;
+            const {
+                product_name,
+                category,
+                product_description,
+                product_image,
+                price_without_discount,
+                discount_choice,
+                discount_percentage
+            } = formObjects;
             const result = await axios.post(baseUrl + `publications/${userId}/createPublication`, {
                 product: {
                     product_name: product_name,
@@ -417,6 +528,14 @@ export async function action({request}: ActionFunctionArgs) {
 
         case "log_out": {
             return redirectAndClearCookie(request);
+        }
+
+        case "show_profile_mobile": {
+            return {showProfileMobile: true}
+        }
+
+        case "close_profile_mobile": {
+            return {closeProfileMobile: true}
         }
     }
     return {error: "Internal Server Error"}

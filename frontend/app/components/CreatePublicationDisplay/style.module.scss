@@ -17,6 +17,7 @@
   background-color: main.$color-light-100;
   border-radius: 10px;
   animation: showBottom .3s linear forwards;
+  margin-bottom: 3rem;
 
   .publication__headline {
     width: fit-content;
@@ -347,7 +348,7 @@
 
 .nocontent__container {
   animation: showBottomNoContent .3s linear;
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 450px;
   background-color: main.$color-dark-opaque-300;
