@@ -194,26 +194,26 @@ export default function FeedPage() {
                         <p className={style.bar__text}>Início</p>
                     </li>
 
-                    <Form method={"post"}>
-                        <input type="hidden" name={"_action"} value={"promo_posts"}/>
-                        <li className={style.bar__item}>
+                    <li className={style.bar__item}>
+                        <Form className={style.item__form} method={"post"}>
+                            <input type="hidden" name={"_action"} value={"promo_posts"}/>
                             <button className={style.bar__action}>
                                 <img className={style.bar__image} src={offers} alt="Ofertas"/>
                             </button>
                             <p className={style.bar__text}>Ofertas</p>
-                        </li>
-                    </Form>
-
-
-                    <li className={style.bar__item}>
-                        <Form method={"post"}>
-                            <input type="hidden" name={"_action"} value={"wishlist_display"}/>
-                            <button className={style.bar__action}>
-                                <span className={style.desire_span}>{count}</span>
-                                <img className={style.bar__image} src={wishes} alt="Desejos"/>
-                            </button>
                         </Form>
-                        <p className={style.bar__text}>Lista de Desejos</p>
+                    </li>
+
+
+                <li className={style.bar__item}>
+                    <Form method={"post"}>
+                        <input type="hidden" name={"_action"} value={"wishlist_display"}/>
+                        <button className={style.bar__action}>
+                            <span className={style.desire_span}>{count}</span>
+                            <img className={style.bar__image} src={wishes} alt="Desejos"/>
+                        </button>
+                    </Form>
+                    <p className={style.bar__text}>Lista de Desejos</p>
                     </li>
 
                     <li className={style.bar__item}>

@@ -28,6 +28,22 @@
       padding-inline: 10px;
       text-align: center;
       cursor: pointer;
+      width: 100%;
+
+      &:hover {
+        width: 100%;
+        background-color: main.$color-dark-opaque-200;
+
+        .bar__text {
+          color: main.$color-gray-100;
+          cursor: pointer;
+
+        }
+      }
+
+      .item__form {
+        @include main.flexbox($justify: center, $align: center, $direction: column);
+      }
 
       .bar__action {
         @include main.flexbox($direction: column, $align: center, $gap: 5px);
@@ -55,7 +71,13 @@
         .bar__text {
           color: main.$color-light-200;
           cursor: pointer;
+
+          &:hover {
+            color: main.$color-dark-200;
+          }
         }
+
+
       }
 
 
@@ -285,6 +307,7 @@
         @include main.flexbox($direction: column, $justify: space-between, $align:center, $gap: 10px);
         height: fit-content;
         width: 5rem;
+        cursor: pointer;
 
         .category__img_container {
           border-radius: 50%;
@@ -298,6 +321,7 @@
             background-color: rgba(30,30,30,.76);
 
             .category__image {
+              cursor: pointer;
               width: 3rem;
               height: 3rem;
               padding: 5px;
@@ -309,6 +333,10 @@
           .category__blue {
             background-color: rgba(131, 227, 240,.3);
 
+            &:hover {
+              background-color: rgba(131, 227, 240,.6);
+
+            }
           }
         }
 
