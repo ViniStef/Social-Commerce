@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.processing.Generated;
+
 @RestController
 @RequestMapping("/login")
 public class LoginController {
@@ -16,6 +18,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    @Generated("ExcludedFromCoverage")
     @PostMapping()
     public ResponseEntity<Object> login (@RequestBody LoginDto loginDto) {
 
