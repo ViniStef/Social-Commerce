@@ -80,11 +80,11 @@ public class SellerService implements ISellerService {
                 .stream()
                 .mapToInt(Publication::getLikes)
                 .sum();
-        long followes = seller.getPublications().stream().count();
+        long followers = seller.getBuyers().stream().count();
 
         return new SellerMetrics(
                 Integer.parseInt(String.valueOf(publications)),
-                Integer.parseInt(String.valueOf(followes)),
+                Integer.parseInt(String.valueOf(followers)),
                 Integer.parseInt(String.valueOf(totalLikes))
         );
     }

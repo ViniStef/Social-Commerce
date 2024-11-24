@@ -18,21 +18,11 @@ public class RegisterService implements IRegisterService {
     }
     @Override
     public Boolean isEmailUsed(String type, String email) {
-        if (type.equals("seller")) {
-            Seller byEmail = sellerRepo.findByEmail(email);
-            if (byEmail != null) {
-                throw new AlreadyExistsException("This email already exists");
-            }
-            return false;
-
-        } else if (type.equals("buyer")) {
-            Buyer byEmail = buyerRepo.findByEmail(email);
-            if (byEmail != null) {
-                throw new AlreadyExistsException("This email already exists");
-            }
-            return false;
+        Seller sellerEmail = sellerRepo.findByEmail(email);
+        Buyer buyerEmail = buyerRepo.findByEmail(email);
+        if (sellerEmail != null || buyerEmail != null) {
+            throw new AlreadyExistsException("This email already exists");
         }
-        return true;
+        return false;
     }
-
 }

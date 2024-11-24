@@ -16,12 +16,14 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
 
     let convertedDate;
     if (publication?.publicationDate) {
-        const [day, month] = publication.publicationDate.split("-");
+        const [year, month, day] = publication.publicationDate.split("-");
         const convertedMonth = dateConversion[parseInt(month, 10)];
-        convertedDate = `${day} de ${convertedMonth}`;
+        convertedDate = `${day} de ${convertedMonth}, ${year}`;
     } else {
         console.log("Data inválida ou ausente");
     }
+
+    console.log("image path: ", publication);
 
     return (
 
@@ -63,8 +65,11 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
 
 
                     <div className={style.post__product}>
-                        <img className={style.product__image} src={product} alt=""/>
-                        <span className={style.product__discount}>-{publication?.discount}%</span>
+                        <img className={style.product__image} src={publication?.imagePath} alt="Imagem do Produto"/>
+
+                        {publication?.discount &&
+                            <span className={style.product__discount}>-{publication?.discount}%</span>
+                        }
                     </div>
 
                     <div className={style.price__description}>

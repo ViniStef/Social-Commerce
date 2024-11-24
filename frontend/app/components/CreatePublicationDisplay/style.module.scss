@@ -17,6 +17,7 @@
   background-color: main.$color-light-100;
   border-radius: 10px;
   animation: showBottom .3s linear forwards;
+  margin-bottom: 3rem;
 
   .publication__headline {
     width: fit-content;
@@ -36,6 +37,10 @@
     padding: 10px;
     z-index: 10;
     margin: auto;
+
+    &::selection {
+      background: main.$color-dark-opaque-100;
+    }
   }
 
   .publication__form {
@@ -133,6 +138,9 @@
       border: none;
       box-shadow: 0 0 10px 10px main.$color-light-200;
 
+      &:focus {
+        outline: 2px solid main.$color-accent-100;
+      }
     }
   }
 
@@ -153,6 +161,11 @@
           height: 50px;
           color: main.$color-light-100;
           text-align: center;
+
+          &::selection {
+            background: main.$color-light-100;
+            color: main.$color-dark-200;
+          }
         }
       }
     }
@@ -166,26 +179,54 @@
       box-shadow: 0 0 10px 10px main.$color-light-200;
       border-radius: 10px;
 
-      .choice__button {
+      .hasdiscount__wrap {
+        width: 100%;
         height: 3rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .label__choice {
+        @include main.flexbox($align: center, $justify: center);
+        left: 0;
+        position: absolute;
+        height: 100%;
+        align-self: center;
+        justify-self: center;
         border: none;
-        background-color: transparent;
         width: 100%;
         font-weight: main.$fw-bold;
         font-size: main.$fs-md;
+        cursor: pointer;
+      }
+
+      .left__choice {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+
+      .right__choice {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+
+      .choice__input {
+        display: none;
       }
 
       .choice__yes {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-        color: main.$color-dark-300;
+        background-color: main.$color-dark-300;
+        color: main.$color-light-200;
+
+        &::selection {
+          background: main.$color-light-100;
+          color: main.$color-dark-200;
+        }
       }
 
       .choice__no {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-        background-color: main.$color-dark-300;
-        color: main.$color-light-200;
+        text-align: center;
+        color: main.$color-dark-300;
       }
     }
 
@@ -193,6 +234,7 @@
       @include main.flexbox($align: center, $justify: center);
 
       .discount__input {
+        animation: showDiscount .3s;
         text-align: center;
         border: none;
         width: 150px;
@@ -204,6 +246,14 @@
     }
   }
 
+  @keyframes showDiscount {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
 
   .image__content {
@@ -222,6 +272,19 @@
       height: 240px;
       margin: auto;
       opacity: .5;
+    }
+
+    .uploaded__image {
+      position: absolute;
+      width: 100%;
+      min-width: 120px;
+      max-width: 240px;
+      min-height: 120px;
+      max-height: 240px;
+      height: 100%;
+      padding: 10px;
+      opacity: .3;
+      border-radius: 10px;
     }
 
     .upload__submit {
@@ -285,7 +348,7 @@
 
 .nocontent__container {
   animation: showBottomNoContent .3s linear;
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 450px;
   background-color: main.$color-dark-opaque-300;
@@ -342,5 +405,61 @@
         height: 4rem;
       }
     }
+  }
+}
+
+input:focus {
+  outline: 2px solid main.$color-accent-100;
+}
+
+
+::selection {
+  background: main.$color-dark-200;
+  color: main.$color-light-100;
+}
+
+@media (min-width: 900px) and (max-width: 1050px), (max-width: 640px) {
+  .name__input {
+    min-width: 100px;
+    max-width: 180px;
+    width: 100%;
+  }
+
+  .product__input {
+    max-width: 440px !important;
+    min-width: 440px !important;
+  }
+
+  .product__info {
+    flex-direction: column !important;
+
+    .price__details {
+      @include main.flexbox($align: center, $justify: center, $gap: 30px);
+      margin-top: 10px;
+    }
+  }
+}
+
+@media (max-width: 525px) {
+  .product__input {
+    max-width: 380px !important;
+    min-width: 380px !important;
+  }
+
+  .price__details {
+    @include main.flexbox($direction: column, $align: center, $justify: center, $gap: 10px);
+    flex-direction: column !important;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 470px) {
+  .initial__settings {
+    flex-direction: column !important;
+  }
+
+  .product__input {
+    max-width: 320px !important;
+    min-width: 320px !important;
   }
 }

@@ -15,6 +15,15 @@ type DataResponses<T extends string | number | symbol = string> = {
     errors: { errors: Record<T, string> };
 };
 
+export class InitialRegisterError extends Error{
+    statusCode:number;
+
+    constructor(statusCode: number, message: string){
+        super(message);
+        this.statusCode = statusCode;
+    }
+}
+
 export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     const data = useActionData<typeof action>();
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
@@ -107,27 +116,39 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         const formData = new FormData(e.currentTarget);
         console.log(Object.fromEntries(formData));
 
-
-        const initialRegisterData = new FormData(initialRegister);
-        console.log(Object.fromEntries(initialRegisterData));
-        if (initialRegister) {
-            const initialRegisterObject = Object.fromEntries(initialRegisterData);
-            const keys = Object.keys(initialRegisterObject);
-            console.log("Chaves:", keys);
-            // console.log();
-            for (const pair of Object.entries(initialRegisterObject)) {
-                console.log(pair);
-                if (!(pair[0] == "_action")) {
-                    formData.append(pair[0], pair[1]);
-                }
-            }
+        if (!data?.email) {
+            throw new InitialRegisterError(400, "Email não foi enviado");
         }
-        if (initialRegister) {
+        if (!data?.account) {
+            throw new InitialRegisterError(400, "Tipo de conta não foi enviado");
+
         }
 
-        console.log(Object.fromEntries(formData));
+        formData.append("email", data.email);
+        formData.append("account", data.account);
 
-        setIsRegisterClicked(true);
+        // const initialRegisterData = new FormData(initialRegister);
+        // console.log(Object.fromEntries(initialRegisterData));
+        // if (initialRegister) {
+        //     const initialRegisterObject = Object.fromEntries(initialRegisterData);
+        //     const keys = Object.keys(initialRegisterObject);
+        //     console.log("Chaves:", keys);
+        //     // console.log();
+        //     for (const pair of Object.entries(initialRegisterObject)) {
+        //         console.log(pair);
+        //         if (!(pair[0] == "_action")) {
+        //             formData.append(pair[0], pair[1]);
+        //         }
+        //     }
+        // }
+        // if (initialRegister) {
+        // }
+        //
+        // console.log(Object.fromEntries(formData));
+        //
+        // setIsRegisterClicked(true);
+
+        console.log("teste form aq:", Object.fromEntries(formData));
         submit(formData, { method: "post" });
     };
 

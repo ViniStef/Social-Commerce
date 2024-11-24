@@ -28,6 +28,22 @@
       padding-inline: 10px;
       text-align: center;
       cursor: pointer;
+      width: 100%;
+
+      &:hover {
+        width: 100%;
+        background-color: main.$color-dark-opaque-200;
+
+        .bar__text {
+          color: main.$color-gray-100;
+          cursor: pointer;
+
+        }
+      }
+
+      .item__form {
+        @include main.flexbox($justify: center, $align: center, $direction: column);
+      }
 
       .bar__action {
         @include main.flexbox($direction: column, $align: center, $gap: 5px);
@@ -55,7 +71,13 @@
         .bar__text {
           color: main.$color-light-200;
           cursor: pointer;
+
+          &:hover {
+            color: main.$color-dark-200;
+          }
         }
+
+
       }
 
 
@@ -77,7 +99,6 @@
     position: relative;
     background-color: main.$color-dark-100;
     border-radius: 10px;
-
 
     .feed__content {
       @include main.flexbox($direction: column, $align: center, $justify: center);
@@ -141,7 +162,6 @@
           background-color: transparent;
           right: 8px;
           cursor: pointer;
-          z-index: 100;
         }
       }
 
@@ -278,16 +298,16 @@
 
 
     .category__list {
-      @include main.flexbox($align: center, $justify: center, $gap: 10px);
+      @include main.flexbox($align: flex-start, $justify: center, $gap: 10px);
       padding-block: 5px 10px;
       position: relative;
       overflow: hidden;
 
-
       .item__category {
         @include main.flexbox($direction: column, $justify: space-between, $align:center, $gap: 10px);
-        min-width: 5rem;
         height: fit-content;
+        width: 5rem;
+        cursor: pointer;
 
         .category__img_container {
           border-radius: 50%;
@@ -297,11 +317,11 @@
           .category__button {
             border: none;
             padding: 8px;
-            //box-shadow: 0 0 10px 5px rgba(255, 85, 85, .2);
             border-radius: 50%;
             background-color: rgba(30,30,30,.76);
 
             .category__image {
+              cursor: pointer;
               width: 3rem;
               height: 3rem;
               padding: 5px;
@@ -311,17 +331,12 @@
           }
 
           .category__blue {
-            //box-shadow: 0 0 10px 5px rgba(131, 227, 240, .2);
             background-color: rgba(131, 227, 240,.3);
 
-          }
+            &:hover {
+              background-color: rgba(131, 227, 240,.6);
 
-          .category__green {
-            box-shadow: 0 0 10px 5px rgba(88, 255, 85, .2);
-          }
-
-          .category__yellow {
-            box-shadow: 0 0 10px 5px rgba(255, 193, 85, .2);
+            }
           }
         }
 
@@ -343,17 +358,18 @@
     width: 100%;
     margin-top: 10px;
     text-align: center;
-    height: 3.5rem;
+    min-height: 3.5rem;
     color: main.$color-light-100;
     font-size: main.$fs-md;
     background-color: main.$color-dark-200;
     border-radius: 10px;
     font-weight: main.$fw-bold;
     padding-bottom: 5px;
+    max-height: 5rem;
 
     .feed__headline {
       @include main.flexbox($direction: column, $align: center, $justify: center);
-      width: 50%;
+      width: 100%;
 
       .feed__text {
         font-size: main.$fs-xl;
@@ -364,116 +380,28 @@
         height: .35rem;
         border-radius: 20px;
         position: relative;
-        width: 90%;
+        width: 50%;
+        min-width: 70px;
 
         top: 6px;
       }
     }
-
-
   }
+}
 
-
-
-  .user__features {
-    position: fixed;
-    height: 3rem;
-    background-color: main.$color-dark-opaque-500;
-    bottom: 0;
-    display: none;
-    margin: 0;
-    padding: 0;
-    max-width: 732px;
-    width: 100%;
-
-    .feature__list {
-      @include main.flexbox($align: center, $justify: space-evenly);
-      width: 100%;
-      position: relative;
-
-      .feature__group {
-        @include main.flexbox($align: center, $justify: center);
-        width: 100%;
-      }
-
-      .feature__item {
-        @include main.flexbox($align: center, $justify: center);
-        //padding: 5px;
-        width: 100%;
-
-        .feature__action {
-          border: none;
-          background-color: transparent;
-
-
-
-          .action__image {
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-          }
-        }
-      }
-
-      .profile__item {
-        position: relative;
-        margin-inline: 15px;
-
-        .feature__action {
-          height: fit-content;
-          position: absolute;
-          bottom: -1.3rem;
-          cursor: pointer;
-          padding: 5px;
-          border-radius: 50%;
-
-          .action__image {
-            background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-200 100%);
-            border-radius: 50%;
-            padding: 3px;
-            width: 50px;
-            height: 50px;
-            margin: auto;
-          }
-
-          .action__name {
-            color: main.$color-light-200;
-          }
-        }
-      }
-    }
-
-  }
-
+.user__section {
+  margin-right: 5px;
 }
 
 .user__container {
-  width: 360px;
+  max-width: 360px;
   position: sticky;
   top: 15px;
   height: fit-content;
-  //background-color: main.$color-dark-200;
-  margin-right: 5px;
-
-  .user__info:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: main.$color-brand-gradient;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    width: 100%;
-    height: 45%;
-    box-shadow: inset 0 5px 20px 5px main.$color-dark-opaque-200;
-
-    //box-shadow: inset 0 5px 30px 2px main.$color-dark-400;
-  }
+  min-width: 280px;
+  width: 100%;
 
   .user__info {
-
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     position: relative;
@@ -481,33 +409,53 @@
     @include main.flexbox($direction: column, $align: center, $justify: center, $gap: 3px);
     background: linear-gradient(180deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-200 100%);
 
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: main.$color-brand-gradient;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      width: 100%;
+      height: 80px;
+      box-shadow: inset 0 5px 20px 5px main.$color-dark-opaque-200;
+    }
+
     .user__image {
       margin-top: 40px;
       width: 75px;
       height: 75px;
       padding: 5px;
       background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-400 100%);
-
       border-radius: 50%;
       z-index: 10;
     }
 
     .user__name {
+      text-align: center;
       font-size: main.$fs-xl;
       font-weight: main.$fw-bold;
       color: main.$color-light-100;
+      padding-inline: 8px;
     }
 
     .upload__image {
+      @include main.flexbox($align: center, $justify: center);
       position: absolute;
+      top: 82px;
+      bottom: 0;
       z-index: 10;
+      width: fit-content;
+      height: fit-content;
+      margin-left: 60px;
 
       .upload__submit {
         border: none;
         background-color: transparent;
         position: relative;
-        top: 15px;
-        left: 30px;
 
         input[type="file"] {
           display: none;
@@ -647,6 +595,147 @@
 
 }
 
+.user__features {
+  position: fixed;
+  height: 3rem;
+  bottom: 0;
+  display: none;
+  margin: 0;
+  padding: 0;
+  max-width: 732px;
+  width: 100%;
+
+  .feature__list {
+    @include main.flexbox($align: center, $justify: space-evenly);
+    width: 100%;
+    position: relative;
+
+    .feature__group {
+      @include main.flexbox($align: center, $justify: center);
+      width: 100%;
+    }
+
+    .bar__action {
+      position: relative;
+      background-color: green;
+
+      .desire_span {
+        z-index: 10;
+        position: absolute;
+        right: -8px;
+        background-color: main.$color-brand-200;
+        border-radius: 50%;
+        color: white;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .feature__item {
+      @include main.flexbox($align: center, $justify: center);
+      //padding: 5px;
+      width: 100%;
+
+      .feature__action {
+        border: none;
+        background-color: transparent;
+
+
+
+        .action__image {
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+
+}
+
+.bottom__features {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 3rem;
+  background-color: main.$color-dark-opaque-500;
+  display: none;
+}
+
+.user__features {
+  bottom: 0;
+  display: none;
+  margin: 0;
+  padding: 0;
+  min-width: 390px;
+  width: 100%;
+  max-width: 750px;
+
+  .feature__list {
+    @include main.flexbox($align: center, $justify: space-evenly);
+    width: 100%;
+    position: relative;
+
+    .feature__group {
+      @include main.flexbox($align: center, $justify: center);
+      width: 100%;
+    }
+
+    .feature__form {
+      @include main.flexbox($align: center, $justify: center);
+      //padding: 5px;
+      width: 100%;
+    }
+
+    .feature__item {
+      @include main.flexbox($align: center, $justify: center);
+
+      .feature__action {
+        border: none;
+        background-color: transparent;
+
+        .action__image {
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+
+    .profile__item {
+      @include main.flexbox($align: center, $justify: center);
+      position: relative;
+
+      .close__form {
+        @include main.flexbox($align: center, $justify: center);
+      }
+
+      .feature__action {
+        height: fit-content;
+        position: absolute;
+        bottom: -1.53rem;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+
+        .action__image {
+          background: linear-gradient(133.43deg, main.$color-dark-400 4.41%, main.$color-dark-300 80%, main.$color-dark-200 100%);
+          border-radius: 50%;
+          padding: 3px;
+          width: 50px;
+          height: 50px;
+          margin: auto;
+        }
+
+        .action__name {
+          color: main.$color-light-200;
+        }
+      }
+    }
+  }
+
+}
+
 .separation__div {
   height: .2rem;
   margin-block: 10px;
@@ -657,8 +746,52 @@
 }
 
 @media (max-width: 900px) {
+  .page__container {
+    gap: 0 !important;
+  }
+
   .user__container {
     display: none;
+    z-index: 10;
+    background-color: main.$color-dark-300;
+    border-radius: 10px;
+  }
+
+  .user__section {
+    margin-right: 0;
+  }
+
+  .mobile__profile {
+    position: absolute;
+    display: block;
+    margin-block: auto;
+    width: 100%;
+    height: 100%;
+    @include main.flexbox($justify: center);
+
+    .mobile__content {
+      display: block;
+      position: relative;
+      width: 100%;
+      max-width: 480px !important;
+      min-width: 370px !important;
+      margin-inline: 10px;
+    }
+  }
+
+  .change__background {
+    background: main.$color-brand-gradient;
+  }
+
+  .mobile__profile:after {
+    content: "";
+    position: absolute;
+    background: main.$color-brand-gradient;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    top: -15px;
   }
 
   .lateral__bar {
@@ -667,12 +800,18 @@
 
   .feed__container {
     padding-inline: 5px;
+    margin-bottom: 3rem;
+  }
 
-    .user__features {
-      @include main.flexbox($align: center, $justify: center);
+  .bottom__features {
+    @include main.flexbox($align: center, $justify: center);
+  }
 
-    }
+  .user__features {
+    @include main.flexbox($align: center, $justify: center);
+
   }
 
 
 }
+

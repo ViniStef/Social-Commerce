@@ -19,6 +19,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        console.log(e.currentTarget);
         setInitialRegister(e.currentTarget);
 
         submit(formData, {"method": "post"})
@@ -49,7 +50,7 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                     <input
                         autoComplete={"email"} name={"email"}
                            className={
-                               (data?.formValidationError?.email || data?.emailResponse?.errors) ?
+                               (data?.formValidationError?.email || data?.emailResponse?.errors || data?.emailResponse?.emailUsedMessage) ?
                             `${style.email__input} ${style.standard__input} ${style.invalid__email}`
                             : `${style.email__input} ${style.standard__input}`
                     }
@@ -57,9 +58,9 @@ export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}
                            id={"email__input"} placeholder={"Insira seu email"} type="text"/>
                     <button type={"submit"} className={style.email__validate}></button>
 
-                    {data?.emailResponse?.isEmailUsed && <p className={style.invalid__message}>Email já está em uso!</p>}
+                    {data?.emailResponse?.emailUsedMessage && <p className={style.invalid__message}>{data.emailResponse.emailUsedMessage}</p>}
                     {data?.formValidationError?.email && <p className={style.invalid__message}>{data.formValidationError.email}</p>}
-                    {data?.emailResponse?.errors && <p className={style.invalid__message}>{data?.emailResponse?.errors}</p>}
+                    {data?.emailResponse?.errors && <p className={style.invalid__message}>{data.emailResponse.errors}</p>}
 
                 </div>
 

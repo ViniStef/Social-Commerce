@@ -61,7 +61,9 @@ export async function action({request}: ActionFunctionArgs) {
 
             const emailAvailabilityResponse = await emailAvailability(formData as InitialRegister);
 
-            return {emailResponse: emailAvailabilityResponse};
+            console.log(emailAvailabilityResponse);
+
+            return {emailResponse: emailAvailabilityResponse, email: formData.email, account: formData.account};
 
         }
         case "register": {

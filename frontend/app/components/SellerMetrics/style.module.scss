@@ -43,29 +43,30 @@
   .metrics__wrap {
     @include main.flexbox($align: center, $justify: center);
     height: 400px;
-    margin: 30px;
+    margin-block: 30px;
     position: relative;
+    margin-right: 1rem;
 
     .left__line {
-      width: .5rem;
+      width: 1rem;
       border-radius: 10px;
       background-color: main.$color-dark-300;
 
       height: 90%;
       position: relative;
-      left: 68px;
+      left: 67px;
       z-index: 1;
     }
 
     .metrics__list {
-      width: 480px;
+      width: 520px;
       @include main.flexbox($direction: column, $justify: space-around);
       height: 100%;
 
       .metrics__item {
         @include main.flexbox($justify: flex-start, $align: center);
         position: relative;
-        margin-inline: 25px;
+        margin-inline: 20px;
         box-shadow: 0 0 10px 10px main.$color-light-200;
 
         border-radius: 20px;
@@ -99,6 +100,7 @@
         }
 
         .metric__headline {
+          width: 320px;
           margin-left: 15px;
           color: main.$color-dark-400;
           font-size: main.$fs-lg;
@@ -131,4 +133,30 @@
     }
   }
 
+}
+
+@media (max-width: 500px) {
+  .metrics__item {
+    margin-inline: 0 !important;
+    text-wrap: wrap;
+  }
+
+  .img__container {
+    margin: 5px !important;
+  }
+
+  .left__line {
+    left: 40px !important;
+  }
+
+  .metric__headline {
+    margin-left: 5px !important;
+    width: unset !important;
+    font-size: main.$fs-md-2 !important;
+  }
+
+  .metric__value {
+    font-size: main.$fs-md !important;
+    margin-left: 5px !important;
+  }
 }
