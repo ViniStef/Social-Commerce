@@ -140,7 +140,6 @@
           background-color: transparent;
           right: 8px;
           cursor: pointer;
-          z-index: 100;
         }
       }
 
@@ -277,16 +276,15 @@
 
 
     .category__list {
-      @include main.flexbox($align: center, $justify: center, $gap: 10px);
+      @include main.flexbox($align: flex-start, $justify: center, $gap: 10px);
       padding-block: 5px 10px;
       position: relative;
       overflow: hidden;
 
-
       .item__category {
         @include main.flexbox($direction: column, $justify: space-between, $align:center, $gap: 10px);
-        min-width: 5rem;
         height: fit-content;
+        width: 5rem;
 
         .category__img_container {
           border-radius: 50%;
@@ -296,7 +294,6 @@
           .category__button {
             border: none;
             padding: 8px;
-            //box-shadow: 0 0 10px 5px rgba(255, 85, 85, .2);
             border-radius: 50%;
             background-color: rgba(30,30,30,.76);
 
@@ -590,6 +587,22 @@
       width: 100%;
     }
 
+    .bar__action {
+      position: relative;
+      background-color: green;
+
+      .desire_span {
+        z-index: 10;
+        position: absolute;
+        right: -8px;
+        background-color: main.$color-brand-200;
+        border-radius: 50%;
+        color: white;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
     .feature__item {
       @include main.flexbox($align: center, $justify: center);
       //padding: 5px;
@@ -598,6 +611,7 @@
       .feature__action {
         border: none;
         background-color: transparent;
+
 
 
         .action__image {

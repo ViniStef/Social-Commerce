@@ -158,7 +158,6 @@ export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
-    const [shouldShowProfile, setshouldShowProfile] = useState(false);
 
     return (
         <div className={`${style.page__container} ${data?.showProfileMobile ? style.change__background : ""}`}>
@@ -199,7 +198,7 @@ export default function FeedPage() {
                         <Form method={"post"}>
                             <input type="hidden" name={"_action"} value={"log_out"}/>
                             <button className={style.bar__action}>
-                                <img className={style.bar__image} src={logout} alt="Métricas"/>
+                                <img className={style.bar__image} src={logout} alt="Sair da Sessão"/>
                                 <p className={style.bar__text}>Sair da Sessão</p>
                             </button>
                         </Form>
@@ -252,7 +251,7 @@ export default function FeedPage() {
                     <div className={style.user__info}>
                         <img className={style.user__image} src={loaderData?.imagePath ? loaderData.imagePath : logo}
                              alt="Imagem de Perfil"/>
-                        <p className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
+                        <p style={{textTransform: "capitalize"}} className={style.user__name}>{loaderData?.firstName} {loaderData?.lastName}</p>
                         <Form onChange={(event) => {
                             submit(event.currentTarget)
                         }} encType={"multipart/form-data"} className={style.upload__image} method={"post"}>
@@ -523,7 +522,7 @@ export async function action({request}: ActionFunctionArgs) {
         }
 
         case "view_metrics": {
-            return {viewMetrics: true}
+            return {viewMetrics: true};
         }
 
         case "log_out": {
@@ -531,11 +530,11 @@ export async function action({request}: ActionFunctionArgs) {
         }
 
         case "show_profile_mobile": {
-            return {showProfileMobile: true}
+            return {showProfileMobile: true};
         }
 
         case "close_profile_mobile": {
-            return {closeProfileMobile: true}
+            return {closeProfileMobile: true};
         }
     }
     return {error: "Internal Server Error"}
