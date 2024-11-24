@@ -26,17 +26,6 @@ public class SellerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/findall")
-    public ResponseEntity<?> findAllSellers() {
-        return ResponseEntity.ok(sellerService.getAllSellers());
-    }
-
-    @DeleteMapping()
-    public ResponseEntity<?> deleteAll() {
-        sellerService.deleteAll();
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/profile/{sellerId}")
     public ResponseEntity<SellerProfileDto> sellerProfile (@PathVariable Long sellerId){
         return ResponseEntity.ok(sellerService.sellerProfile(sellerId));
