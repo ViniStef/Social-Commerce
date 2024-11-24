@@ -49,12 +49,6 @@ public class PublicationService implements IPublicationService{
     }
 
     @Override
-    public List<Publication> getAllPublications() {
-        return publicationRepo.findAll();
-    }
-
-
-    @Override
     public List<ShowPublicationDto> getAllPublicationByBuyer (Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not found"));
 
@@ -66,27 +60,27 @@ public class PublicationService implements IPublicationService{
 
     }
 
-    @Override
-    public List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type) {
-
-        List<ShowPublicationDto> allPublicationByBuyer = getAllPublicationByBuyer(buyerId);
-
-        if (type.equalsIgnoreCase("mostRecently")) {
-
-            return allPublicationByBuyer.stream()
-                    .sorted((p1, p2) -> p2.publicationDate().compareTo(p1.publicationDate()))
-                    .collect(Collectors.toList());
-
-        } else if (type.equalsIgnoreCase("oldest")) {
-
-            return allPublicationByBuyer.stream()
-                    .sorted(Comparator.comparing(ShowPublicationDto::publicationDate))
-                    .collect(Collectors.toList());
-
-        } else {
-            throw new NotFoundException("Publications not found");
-        }
-    }
+//    @Override
+//    public List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type) {
+//
+//        List<ShowPublicationDto> allPublicationByBuyer = getAllPublicationByBuyer(buyerId);
+//
+//        if (type.equalsIgnoreCase("mostRecently")) {
+//
+//            return allPublicationByBuyer.stream()
+//                    .sorted((p1, p2) -> p2.publicationDate().compareTo(p1.publicationDate()))
+//                    .collect(Collectors.toList());
+//
+//        } else if (type.equalsIgnoreCase("oldest")) {
+//
+//            return allPublicationByBuyer.stream()
+//                    .sorted(Comparator.comparing(ShowPublicationDto::publicationDate))
+//                    .collect(Collectors.toList());
+//
+//        } else {
+//            throw new NotFoundException("Publications not found");
+//        }
+//    }
 
     @Override
     public List<ShowPublicationDto> getAllByPromo(Long buyerId) {
@@ -124,18 +118,6 @@ public class PublicationService implements IPublicationService{
         return fromPublicationToShowPublication(publications);
     }
 
-    private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
-
-        return new Publication(LocalDate.now(),
-                fromProductDtoToProduct(publicationDto.product()),
-                publicationDto.imagePath(),
-                publicationDto.description(),
-                fromCategoryDtoToCategory(publicationDto.category()),
-                publicationDto.discount_percentage(),
-                publicationDto.has_promotion(),
-                publicationDto.price());
-    }
-
     @Override
     public List<ShowPublicationDto> getAllByCategoryType(Integer categoryId, Long buyerId) {
         Buyer buyer = buyerRepo.findById(buyerId).orElseThrow(() -> new NotFoundException("Buyer Not Found"));
@@ -145,7 +127,6 @@ public class PublicationService implements IPublicationService{
                 .toList();
 
         return fromPublicationToShowPublication(publicationList);
-
     }
 
     @Override
@@ -159,6 +140,18 @@ public class PublicationService implements IPublicationService{
                 .toList();
 
         return fromPublicationToShowPublication(sortedPublications);
+    }
+
+    private Publication fromPublicationDtoToPublication(CreatePublicationDto publicationDto) {
+
+        return new Publication(LocalDate.now(),
+                fromProductDtoToProduct(publicationDto.product()),
+                publicationDto.imagePath(),
+                publicationDto.description(),
+                fromCategoryDtoToCategory(publicationDto.category()),
+                publicationDto.discount_percentage(),
+                publicationDto.has_promotion(),
+                publicationDto.price());
     }
 
     private Product fromProductDtoToProduct(CreateProductDto productDto) {

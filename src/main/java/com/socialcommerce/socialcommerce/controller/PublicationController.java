@@ -27,15 +27,10 @@ public class PublicationController {
         return new ResponseEntity<>(publicationService.createANewPost(createPublicationDto, sellerId), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllPublications() {
-        return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{buyerId}/order")
-    public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type, @PathVariable Long buyerId) {
-        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(buyerId, type));
-    }
+//    @GetMapping("/{buyerId}/order")
+//    public ResponseEntity<List<ShowPublicationDto>> getAllPublicationInOrder(@RequestParam String type, @PathVariable Long buyerId) {
+//        return ResponseEntity.ok(publicationService.getAllByLocalDateOrder(buyerId, type));
+//    }
 
     @GetMapping("/promo/{buyerId}")
     public ResponseEntity<List<ShowPublicationDto>> getAllPromoPublication(@PathVariable Long buyerId) {

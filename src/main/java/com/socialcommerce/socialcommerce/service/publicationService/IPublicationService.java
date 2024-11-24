@@ -12,9 +12,8 @@ import java.util.UUID;
 public interface IPublicationService {
 
     CreatePublicationDto createANewPost(CreatePublicationDto publicationDto, Long sellerId);
-    List<Publication> getAllPublications();
     List<ShowPublicationDto> getAllPublicationByBuyer(Long buyerId);
-    List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type);
+//    List<ShowPublicationDto> getAllByLocalDateOrder(Long buyerId, String type);
     List<ShowPublicationDto> getAllByPromo(Long buyerId);
     void deleteAPublicationBySellerId(Long sellerId, Long publicationId);
     List<ShowPublicationDto> getAllByCategoryType(Integer categoryId, Long buyerId);

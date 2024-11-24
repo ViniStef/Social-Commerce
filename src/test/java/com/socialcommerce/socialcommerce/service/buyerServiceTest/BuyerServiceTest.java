@@ -1,4 +1,4 @@
-package com.socialcommerce.socialcommerce.service;
+package com.socialcommerce.socialcommerce.service.buyerServiceTest;
 
 
 import com.socialcommerce.socialcommerce.dto.BuyerProfileDto;
