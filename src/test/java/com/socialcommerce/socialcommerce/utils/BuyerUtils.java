@@ -11,7 +11,7 @@ public class BuyerUtils {
                 "Goulart",
                 "123456",
                 12312312323L,
-                "mail@mail.com"
+                "buyer@mail.com"
         );
     }
 

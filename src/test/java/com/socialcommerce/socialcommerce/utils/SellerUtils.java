@@ -11,7 +11,7 @@ public class SellerUtils {
                 "Vinicius",
                 12312312323L,
                 "123456",
-                "mail@mail.com"
+                "seller@mail.com"
         );
     }
 
