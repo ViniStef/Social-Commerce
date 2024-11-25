@@ -25,9 +25,11 @@ export default function CreatePublicationDisplay() {
         }
     };
 
+    let errors = data?.schemaErrors || null;
+
     return (
-        data?.ok
-            ?
+        // data?.ok
+        //     ?
         <section className={style.create__publication}>
             <h1 className={style.publication__headline}>Publicação</h1>
             <Form encType={"multipart/form-data"} className={style.publication__form} method={"post"}>
@@ -37,6 +39,7 @@ export default function CreatePublicationDisplay() {
                     <div className={style.product__name}>
                         <label className={style.base__headline} htmlFor="product_name">Nome do Produto</label>
                         <input id={"product_name"} name={"product_name"} className={style.name__input} type="text"/>
+                        {data?.schemaErrors?.product_name && <p className={style.error__message}>{data?.schemaErrors.product_name}</p>}
                     </div>
 
                     <div className={style.category__choices}>
@@ -57,6 +60,7 @@ export default function CreatePublicationDisplay() {
                 <div className={style.description__content}>
                     <label className={style.base__headline} htmlFor="product_description">Descrição do Produto</label>
                     <textarea id={"product_description"} name={"product_description"} className={style.product__input}/>
+                    {data?.schemaErrors?.product_description && <p className={style.error__message}>{data.schemaErrors.product_description}</p>}
                 </div>
 
 
@@ -73,12 +77,13 @@ export default function CreatePublicationDisplay() {
                             <p className={style.image__text}>Coloque uma imagem para seu produto</p>
                         </div>
 
-                        <div>
+                        <div className={style.price__amount}>
                             <h1 className={style.base__headline}>Preço do Produto sem Desconto</h1>
                             <div className={style.product__price}>
                                 <label className={style.sr__only} htmlFor="price_input">Preço do Produto sem Desconto</label>
                                 <input name={"price_without_discount"} id={"price_input"} type="text" placeholder={"R$ 0,00"} className={style.price__input}/>
                             </div>
+                            {data?.schemaErrors?.price_without_discount && <p className={style.error__message}>{data.schemaErrors.price_without_discount}</p>}
                         </div>
                     </div>
 
@@ -110,8 +115,9 @@ export default function CreatePublicationDisplay() {
                             <div className={style.discount__container}>
                                 <label htmlFor="discount_percentage" className={style.sr__only}>Quantidade de
                                     Desconto</label>
-                                <input name={"discount_percentage"} id={"discount_percentage"} min={0} max={100}
+                                <input name={"discount_percentage"} id={"discount_percentage"}
                                        type="number" placeholder={"0%"} className={style.discount__input}/>
+                                {data?.schemaErrors?.discount_percentage && <p className={style.error__message}>{data?.schemaErrors.discount_percentage}</p>}
                             </div>
                         </div>}
 
@@ -125,19 +131,19 @@ export default function CreatePublicationDisplay() {
                 </div>
             </Form>
         </section>
-            :
-            <section className={style.nocontent__container}>
-                <div className={style.nocontent__text}>
-                    <p className={style.nocontent__headline}>
-                        Crie uma publicação
-                    </p>
-                </div>
-                <img className={style.nocontent__image} src={plus} alt="Logo"/>
-            <Form className={style.nocontent__create} method={"post"}>
-                <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
-                <button className={style.create__btn}><img className={style.create__img} src={plus} alt=""/></button>
-            </Form>
-        </section>
+        //     :
+        //     <section className={style.nocontent__container}>
+        //         <div className={style.nocontent__text}>
+        //             <p className={style.nocontent__headline}>
+        //                 Crie uma publicação
+        //             </p>
+        //         </div>
+        //         <img className={style.nocontent__image} src={plus} alt="Logo"/>
+        //     <Form className={style.nocontent__create} method={"post"}>
+        //         <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
+        //         <button className={style.create__btn}><img className={style.create__img} src={plus} alt=""/></button>
+        //     </Form>
+        // </section>
     );
 
 }

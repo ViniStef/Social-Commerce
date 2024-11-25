@@ -39,11 +39,17 @@ export async function action({request}: ActionFunctionArgs) {
     )
 
     if (_action == "login") {
+        console.log("oii2: ", errors);
         if (errors) {
             return {"errors": errors};
         }
         const response = await tryLoginUser(formData);
         const data = await response.json();
+
+        if (data.invalid === true) {
+            return {"invalid": true};
+        }
+
         if (data?.userId && data?.userAccountType) {
             session.set( "userId", data.userId);
             session.set( "accountType", data.userAccountType);
@@ -71,25 +77,29 @@ export async function action({request}: ActionFunctionArgs) {
     return {"error": "Algo inesperado aconteceu"};
 }
 
-type LoginResponse = {
+export type LoginResponse = {
     userId?: string;
     userAccountType?: string;
     message?: string;
+    invalid?: boolean;
 };
 
 async function tryLoginUser(formData: Login): Promise<TypedResponse<LoginResponse>> {
     const { email, password } = formData;
 
     try {
+
         const response = await axios.post("http://localhost:8080/login", {
             email,
             password,
         });
 
-        console.log("Response teste aq: ", response);
-
         if (response.status === 404) {
             return json({ message: "Usuário não encontrado" }, { status: 404 });
+        }
+
+        if (response.data === false) {
+            return json({invalid: true});
         }
 
         const { userId, accountType } = response.data;

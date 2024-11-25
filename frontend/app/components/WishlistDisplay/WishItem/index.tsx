@@ -14,11 +14,13 @@ export default function WishItem({ publicationId, productImg, productName, produ
     const { cartList, setCartList } = useContext(RemoveWishlistContext);
 
     function removeProductCart(publicationId: number) {
+        console.log("publication id: ", publicationId);
+        console.log("cart list: ", cartList);
         const productExists: boolean = cartList.some((cartItem:PublicationsResultType) => cartItem.publicationId === publicationId);
 
-        if (!productExists) {
+        if (productExists) {
             setCartList((prevValue: PublicationsResultType[]) => {
-                return prevValue.filter(publication => publication);
+                return prevValue.filter(publication => publication.publicationId != publicationId);
             })
         }
     }
@@ -31,13 +33,11 @@ export default function WishItem({ publicationId, productImg, productName, produ
                 <p className={style.info__price}>R$ <span className={style.price__value}>{productPrice}</span></p>
             </div>
 
-            <Form method={"post"}>
                 <input type="hidden" name={"_action"} value={"remove_publication_wishlist"}/>
                 <input type="hidden" name={"publicationId"} value={publicationId}/>
                 <button onClick={(e) => removeProductCart(publicationId)} className={style.wish__remove}>
                     Remover
                 </button>
-            </Form>
         </li>
     );
 }

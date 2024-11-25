@@ -146,7 +146,7 @@
 
   .product__info {
     margin-inline: 10px;
-    @include main.flexbox($justify: space-around);
+    @include main.flexbox($justify: space-around, $gap: 10px);
 
     .info__left {
       @include main.flexbox($direction: column, $gap: 15px, $align: center, $justify: center);
@@ -231,7 +231,9 @@
     }
 
     .discount__container {
-      @include main.flexbox($align: center, $justify: center);
+      @include main.flexbox($direction: column, $align: center, $justify: center);
+      position: relative;
+      text-align: center;
 
       .discount__input {
         animation: showDiscount .3s;
@@ -326,6 +328,10 @@
     }
   }
 
+  .price__amount {
+    @include main.flexbox($direction: column, $align: center, $justify: center);
+  }
+
   .product__input {
     height: 3rem;
     background-color: main.$color-light-100;
@@ -416,6 +422,10 @@ input:focus {
 ::selection {
   background: main.$color-dark-200;
   color: main.$color-light-100;
+}
+
+.error__message {
+  color: main.$color-brand-200;
 }
 
 @media (min-width: 900px) and (max-width: 1050px), (max-width: 640px) {

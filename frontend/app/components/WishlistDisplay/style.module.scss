@@ -14,14 +14,13 @@
 }
 
 .wishlist__display {
-  box-sizing: border-box;
   position: absolute;
   width: 100%;
   height: 100%;
-  @include main.flexbox($align: center, $justify: center);
+  @include main.flexbox( $justify: center);
   z-index: 1;
   top: -15px;
-  background: main.$color-dark-opaque-300;
+  background: main.$color-dark-opaque-400;
 
   .wishlist__container {
     animation: showBottom .3s linear;
@@ -33,6 +32,7 @@
     max-height: 780px;
     width: 100%;
     border-radius: 20px;
+    top: 50px;
 
     .wishlist__headers {
 
@@ -164,6 +164,9 @@
       @include main.flexbox($align: center, $justify: center);
       background-color: main.$color-dark-200;
       height: 5rem;
+      margin-top: auto;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
 
       .total__headline {
         width: fit-content;
@@ -197,6 +200,20 @@
       }
     }
 
+  }
+
+  .empty__wishlist {
+    @include main.flexbox($align: center, $justify: center);
+    height: 100%;
+    width: 100%;
+    margin-top: auto;
+
+    .empty__message {
+      height: 100%;
+      font-size: main.$fs-xl;
+      color: main.$color-dark-200;
+      font-weight: main.$fw-boldest;
+    }
   }
 
 }

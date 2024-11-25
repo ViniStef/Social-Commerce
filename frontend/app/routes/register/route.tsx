@@ -8,7 +8,7 @@ import {FinalRegister, finalRegisterSchema} from "~/routes/register/schemas/fina
 import {emailAvailability} from "~/routes/register/requests/emailAvailability";
 import {ZodSchema} from "zod";
 import {registerUser} from "~/routes/register/requests/users/registerUser";
-import {isResponse} from "@remix-run/react/dist/data";
+import DeveloperSocials from "~/components/DeveloperSocials";
 
 interface InitialRegisterContextType {
     initialRegister: HTMLFormElement | undefined;
@@ -32,6 +32,7 @@ export default function RegisterPage() {
         <>
             <InitialRegisterContext.Provider value={{initialRegister, setInitialRegister}} >
                 <RegisterArea/>
+                <DeveloperSocials />
             </InitialRegisterContext.Provider>
         </>
 

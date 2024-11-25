@@ -30,7 +30,6 @@ input:hover {
   background-color: colors.$color-dark-300;
 }
 
-// "Fix" for the autocomplete style changes!
 input:-webkit-autofill,
 input:-webkit-autofill:focus, {
   transition-delay: 3600s;

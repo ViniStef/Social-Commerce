@@ -11,6 +11,8 @@ type WishlistItemsProps = {
 }
 
 export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
+    let wishlistTotalPrice = 0;
+
     return (
         <section className={style.wishlist__display}>
             <div className={style.wishlist__container}>
@@ -24,114 +26,28 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
                     </Form>
                 </div>
 
-                <ul className={style.wishes__list}>
-                    {wishlistItems.map(wishlistItem => {
-                        return (
-                            <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
-                                      productName={wishlistItem.productName}
-                                      productPrice={wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price}/>
-                        )
-                    })}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={netshoes} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing*/}
-                    {/*            elit.</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                    {/*<li className={style.wish__item}>*/}
-                    {/*    <img className={style.wish__image} src={background} alt="Imagem do Produto"/>*/}
-                    {/*    <div className={style.wish__info}>*/}
-                    {/*        <p className={style.info__name}>Lorem ipsum dolor sit amet, consectetur adipisicing elit.*/}
-                    {/*            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, nostrum?</p>*/}
-                    {/*        <p className={style.info__price}>R$ <span className={style.price__value}>000,00</span></p>*/}
-                    {/*    </div>*/}
-
-                    {/*    <button className={style.wish__remove}>*/}
-                    {/*        Remover*/}
-                    {/*    </button>*/}
-                    {/*</li>*/}
-                </ul>
+                {wishlistItems.length > 0
+                    ?
+                    <ul className={style.wishes__list}>
+                        {wishlistItems.map(wishlistItem => {
+                            wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price;
+                            return (
+                                <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
+                                          productName={wishlistItem.productName}
+                                          productPrice={wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price}/>
+                            )
+                        })}
+                    </ul>
+                    :
+                    <div className={style.empty__wishlist}>
+                        <h1 className={style.empty__message}>Sua lista de desejos está vazia!</h1>
+                    </div>
+                }
 
                 <div className={style.price__total}>
                     <h1 className={style.total__headline}>Preço Total:</h1>
-                    <p className={style.total__amount}>R$ <span className={style.amount__price}>000,00</span></p>
+                    <p className={style.total__amount}>R$ <span
+                        className={style.amount__price}>{wishlistTotalPrice}</span></p>
                 </div>
             </div>
 

@@ -29,6 +29,9 @@ import pedro from "~/assets/images/pedro.webp";
 import wishes from "~/assets/icons/bag-fill.svg";
 import offers from "~/assets/icons/currency-dollar.svg";
 import {useState} from "react";
+import {validateAction} from "~/utils/utils";
+import {InitialRegister} from "~/routes/register/schemas/initialRegisterSchema";
+import CreatePublicationPlaceholder from "~/components/CreatePublicationDisplay/CreatePublicationPlaceholder";
 
 type Buyer = {
     firstName: string;
@@ -128,32 +131,6 @@ export async function loader({request}: LoaderFunctionArgs) {
 
 }
 
-// if (accountType === "buyer") {
-//     try {
-//         const result = await axios.get(`http://localhost:8080/buyer/profile/${userId}`)
-//         const {name, sellers}: BuyerProfileResultType = result.data;
-//         console.log(name);
-//         console.log(sellers);
-//         return {name: name, sellersFollowed: sellers};
-//
-//     } catch (error) {
-//         console.log("catch")
-//         return {"errors": "Algo deu errado no servidor"}
-//     }
-// }
-
-
-// try {
-//     const result = await axios.get(`http://localhost:8080/publications/${userId}/order`);
-//     const publicationsList:PublicationsResultType[] = result.data;
-//
-//     results = {...results, "publicationsList": publicationsList};
-//     return results;
-//
-// } catch (error) {
-//     return console.log(error);
-// }
-
 export default function FeedPage() {
     const submit = useSubmit();
     const data = useActionData<typeof action>();
@@ -237,8 +214,10 @@ export default function FeedPage() {
                                 <PublicationDisplay publication={publication} type={"seller"}/>
                             ))
                         )
-                        : !data?.viewMetrics && <CreatePublicationDisplay />
-                    }
+                        : (!data?.viewMetrics && !data?.startCreatingPublication && !data?.schemaErrors) && <CreatePublicationPlaceholder />}
+
+                    {(data?.startCreatingPublication || data?.schemaErrors) && <CreatePublicationDisplay />}
+
 
                 </section>
 
@@ -377,8 +356,8 @@ const createPublicationSchema = z.object({
     _action: z.string().optional(),
     product_name: z.string().min(1, {
         message: "Campo Obrigatório"
-    }).max(200, {
-        message: "Máximo de 200 caracteres"
+    }).max(50, {
+        message: "Máximo de 50 caracteres"
     }),
     category: z.enum(["1", "2", "3", "4", "5", "6", "7"]),
     product_description: z.string().min(1, {
@@ -387,10 +366,12 @@ const createPublicationSchema = z.object({
         message: "Máximo de 200 caracteres"
     }),
     product_image: z.any(),
-    price_without_discount: z.number(),
+    price_without_discount: z.coerce.number({message: "Apenas números são permitidos"}).min(1, {message: "Não pode ser 0 ou vazio"}).max(1000000, {message: "O valor não pode exceder 1 milhão"}),
     discount_choice: z.enum(["true", "false"]).optional(),
-    discount_percentage: z.number().optional()
+    discount_percentage: z.coerce.number().max(100, {message: "O desconto não pode exceder 100%"}).min(1, "O desconto não pode ser menor que 1%").optional()
 })
+
+type CreatePublication = z.infer<typeof createPublicationSchema>;
 
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -404,7 +385,6 @@ export async function action({request}: ActionFunctionArgs) {
     const baseUrl = "http://localhost:8080/";
 
     switch (_action) {
-
         case "upload_image": {
             const image = formData.get("image") as File;
 
@@ -446,12 +426,10 @@ export async function action({request}: ActionFunctionArgs) {
 
                 const response: PublicationsResultType[] = result.data;
 
-                console.log("respota do server: ", response);
-
                 return {publications: response};
 
             } catch (error) {
-                return {erro: "Não existe publicacões ainda."};
+                return {erro: "Não existe nenhuma publicação ainda"};
             }
         }
 
@@ -471,10 +449,16 @@ export async function action({request}: ActionFunctionArgs) {
             break;
         }
         case "start_creating_publication": {
-            return {ok: true};
+            return {startCreatingPublication: true};
         }
         case "create_publication": {
             const formObjects = Object.fromEntries(formData);
+            const {formData:formParsedData, errors} = validateAction<CreatePublication>(formObjects, createPublicationSchema);
+
+            if (errors) {
+                return {schemaErrors: errors};
+            }
+
             const image = formData.get("product_image") as File;
 
             console.log("teste ", image);
@@ -488,8 +472,6 @@ export async function action({request}: ActionFunctionArgs) {
             fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
 
             const imagePath = `public/000001/${filename}`;
-
-            console.log(imagePath);
 
             const {
                 product_name,
