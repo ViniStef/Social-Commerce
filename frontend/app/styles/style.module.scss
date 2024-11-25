@@ -572,10 +572,12 @@
           padding: 8px;
           border-radius: 50%;
           cursor: pointer;
+          min-width: 1.5rem;
+          min-height: 1.5rem;
 
           .unfollow__image {
-            width: 1.5rem;
-            height: 1.5rem;
+            min-width: 1.5rem;
+            min-height: 1.5rem;
           }
         }
 
