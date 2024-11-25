@@ -8,7 +8,6 @@ import {FinalRegister, finalRegisterSchema} from "~/routes/register/schemas/fina
 import {emailAvailability} from "~/routes/register/requests/emailAvailability";
 import {ZodSchema} from "zod";
 import {registerUser} from "~/routes/register/requests/users/registerUser";
-import {isResponse} from "@remix-run/react/dist/data";
 
 interface InitialRegisterContextType {
     initialRegister: HTMLFormElement | undefined;

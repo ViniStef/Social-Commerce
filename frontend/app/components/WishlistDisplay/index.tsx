@@ -26,20 +26,28 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
                     </Form>
                 </div>
 
-                <ul className={style.wishes__list}>
-                    {wishlistItems.map(wishlistItem => {
-                        wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price;
-                        return (
-                            <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
-                                      productName={wishlistItem.productName}
-                                      productPrice={wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price}/>
-                        )
-                    })}
-                </ul>
+                {wishlistItems.length > 0
+                    ?
+                    <ul className={style.wishes__list}>
+                        {wishlistItems.map(wishlistItem => {
+                            wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price;
+                            return (
+                                <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
+                                          productName={wishlistItem.productName}
+                                          productPrice={wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price}/>
+                            )
+                        })}
+                    </ul>
+                    :
+                    <div className={style.empty__wishlist}>
+                        <h1 className={style.empty__message}>Sua lista de desejos está vazia!</h1>
+                    </div>
+                }
 
                 <div className={style.price__total}>
                     <h1 className={style.total__headline}>Preço Total:</h1>
-                    <p className={style.total__amount}>R$ <span className={style.amount__price}>{wishlistTotalPrice}</span></p>
+                    <p className={style.total__amount}>R$ <span
+                        className={style.amount__price}>{wishlistTotalPrice}</span></p>
                 </div>
             </div>
 

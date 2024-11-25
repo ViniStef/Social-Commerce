@@ -35,9 +35,8 @@
         background-color: main.$color-dark-opaque-200;
 
         .bar__text {
-          color: main.$color-gray-100;
+          color: main.$color-accent-200;
           cursor: pointer;
-
         }
       }
 
@@ -73,7 +72,7 @@
           cursor: pointer;
 
           &:hover {
-            color: main.$color-dark-200;
+            color: main.$color-accent-200;
           }
         }
 
@@ -619,7 +618,6 @@
 
     .bar__action {
       position: relative;
-      background-color: green;
 
       .desire_span {
         z-index: 10;

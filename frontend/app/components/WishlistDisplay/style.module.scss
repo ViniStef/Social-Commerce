@@ -202,4 +202,18 @@
 
   }
 
+  .empty__wishlist {
+    @include main.flexbox($align: center, $justify: center);
+    height: 100%;
+    width: 100%;
+    margin-top: auto;
+
+    .empty__message {
+      height: 100%;
+      font-size: main.$fs-xl;
+      color: main.$color-dark-200;
+      font-weight: main.$fw-boldest;
+    }
+  }
+
 }
