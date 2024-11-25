@@ -1,0 +1,76 @@
+@use "../../../../styles/main";
+
+.role__container {
+  @include main.flexbox($align: center);
+  width: 100%;
+  border-radius: 10px;
+  background-color: main.$color-dark-300;
+
+  .indication__label {
+    display: inline-block;
+  }
+
+  .role__choice {
+    @include main.flexbox($justify: center, $align: center);
+    position: relative;
+    height: 2rem;
+    width: 2rem;
+    margin: 0.5rem;
+    border-radius: 50%;
+
+    .choice__input {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0;
+
+      &:hover + .choice__indication {
+          box-shadow: 0 0 15px 5px main.$color-dark-400;
+      }
+
+      &:checked + .choice__indication:before {
+        @include main.flexbox($align: center);
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: 50%;
+        background-color: main.$color-light-300;
+      }
+
+    }
+
+    .choice__indication {
+      @include main.flexbox($align: center, $justify: center);
+      height: 100%;
+      width: 100%;
+      border: 3px solid main.$color-gray-200;
+      border-radius: 50%;
+      transition: all 150ms ease;
+
+      .indication__label {
+        color: main.$color-light-100;
+        font-size: main.$fs-md;
+      }
+    }
+
+  }
+
+  .role__description {
+    font-size: main.$fs-md;
+    color: main.$color-light-100;
+  }
+
+}
+
+.container__error {
+  outline: 1px solid main.$color-brand-100;
+}

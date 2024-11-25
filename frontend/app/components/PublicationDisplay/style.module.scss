@@ -1,0 +1,204 @@
+@use "../../styles/main";
+
+.post__container {
+  background-color: main.$color-light-100;
+  padding-top: 5px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 10px;
+
+  .noposts__container {
+    position: absolute;
+    width: 100%;
+    height: 450px;
+    background-color: main.$color-dark-opaque-300;
+    @include main.flexbox($direction: column, $align: center, $justify: center);
+    border-radius: 10px;
+
+    .noposts__headline {
+      position: absolute;
+      font-size: main.$fs-xl;
+      max-width: 80%;
+      text-align: center;
+      font-weight: main.$fw-bolder;
+      background-color: main.$color-dark-100;
+      padding: 10px;
+      border-radius: 10px;
+      color: main.$color-light-200;
+    }
+
+    .noposts__image {
+      width: 350px;
+      height: 350px;
+      opacity: .1;
+      filter: blur(5px);
+    }
+
+
+  }
+
+  .post__field {
+    position: relative;
+    border: 2px solid main.$color-gray-300;
+    border-inline: none;
+    border-bottom: none;
+
+
+    .field__brand {
+      @include main.flexbox($align: center, $justify: center, $gap: 15px);
+      padding-inline: .5rem 1rem;
+      margin-left: 1rem;
+      //background-color: main.$color-dark-opaque-200;
+      border-radius: 40px;
+
+      .brand__image {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+      }
+
+      .product__name {
+        font-size: main.$fs-lg;
+        color: main.$color-dark-100;
+        font-weight: main.$fw-boldest;
+      }
+    }
+  }
+
+
+  .post__details {
+    position: absolute;
+    @include main.flexbox($align: center, $justify: center, $gap: 5px);
+    right: 0;
+    top: -28px;
+
+
+    .post__date {
+      position: relative;
+      right: 10px;
+      top: 10px;
+
+      .date__text {
+        color: main.$color-dark-400;
+      }
+    }
+
+  }
+
+  .separation__onpost {
+    height: .1rem;
+    margin-block: 10px;
+    width: 80%;
+    background: main.$color-gray-400;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .post__description {
+    padding-inline: 20px;
+    padding-block: 5px 20px;
+
+    .description__text {
+      line-height: 1.5;
+      color: main.$color-gray-400;
+    }
+  }
+
+  .username__headline {
+    padding-inline: 30px 20px;
+    padding-block: 5px 5px;
+
+    .headline__text {
+      color: main.$color-dark-400;
+      font-size: main.$fs-lg;
+      font-weight: main.$fw-bolder;
+      text-transform: capitalize;
+    }
+
+  }
+
+  .post__product {
+    @include main.flexbox($align: center, $justify: center);
+    width: fit-content;
+    margin: auto;
+    padding-block: 10px;
+    position: relative;
+    padding-inline: 5px;
+
+    .product__image {
+      max-width: 450px;
+      max-height: 450px;
+      height: 100%;
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid main.$color-light-400;
+
+    }
+
+    .product__discount {
+      position: absolute;
+      background: main.$color-brand-200;
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 0 20px 0 20px;
+      color: main.$color-light-150;
+      font-weight: main.$fw-bolder;
+
+      top: 0;
+      right: 5px;
+    }
+  }
+
+  .price__description {
+    @include main.flexbox($justify: center, $align: center);
+    width: 100%;
+    background-color: main.$color-dark-300;
+
+    .price__before {
+      position: relative;
+      right: 10px;
+      bottom: 10px;
+      color: main.$color-light-300;
+      text-decoration: line-through;
+    }
+
+    .price__text {
+      font-size: main.$fs-lg;
+      color: main.$color-light-100;
+      padding: 10px;
+      border: 1px solid main.$color-gray-100;
+      border-radius: 10px;
+      font-weight: main.$fw-boldest;
+      margin-block: 10px;
+
+    }
+  }
+
+  .post__reactions {
+    @include main.flexbox($align: center, $justify: center);
+    padding-block: .5rem;
+
+    .reaction__container {
+      @include main.flexbox($align: center, $justify: center);
+      width: 100%;
+
+      .reaction__image {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+      }
+
+      button{
+        background-color: transparent;
+        border: none;
+      }
+
+      .likes__count {
+        color: main.$color-dark-400;
+        position: relative;
+        left: 10px;
+      }
+    }
+  }
+
+}

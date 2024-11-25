@@ -1,0 +1,219 @@
+@use "../../styles/main";
+
+@keyframes showBottom {
+  from {
+    position: relative;
+    bottom: -200px;
+    opacity: 0;
+  }
+  to {
+    position: relative;
+    bottom: 0;
+    opacity: 1;
+  }
+}
+
+.wishlist__display {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  @include main.flexbox( $justify: center);
+  z-index: 1;
+  top: -15px;
+  background: main.$color-dark-opaque-400;
+
+  .wishlist__container {
+    animation: showBottom .3s linear;
+    @include main.flexbox($direction: column);
+    position: sticky;
+    background-color: main.$color-light-100;
+    min-height: 580px;
+    height: fit-content;
+    max-height: 780px;
+    width: 100%;
+    border-radius: 20px;
+    top: 50px;
+
+    .wishlist__headers {
+
+      .wishlist__headline {
+        width: fit-content;
+        align-self: center;
+        font-size: main.$fs-xl;
+        font-weight: main.$fw-bolder;
+        letter-spacing: unset;
+        text-align: center;
+        background-image: main.$color-brand-gradient;
+        background-blend-mode: normal;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        white-space: pre-line;
+        border: none;
+        text-decoration: underline;
+        position: relative;
+        padding: 10px;
+        z-index: 10;
+        margin: auto;
+
+        &::selection {
+          background: main.$color-dark-opaque-100;
+        }
+      }
+
+      .wishlist__close {
+        @include main.flexbox($align: center, $justify: center);
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: main.$color-brand-gradient;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+
+        .close__image {
+          background: main.$color-brand-gradient;
+          padding: 3px;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .wishes__list {
+      @include main.flexbox($direction: column, $gap: 10px);
+      overflow-y: scroll;
+      overflow-x: hidden;
+      margin-top: 15px;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: main.$color-brand-gradient;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: main.$color-dark-350;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: main.$color-dark-400;
+      }
+
+      .wish__item {
+        @include main.flexbox($align: center);
+        padding: 10px 5px;
+        position: relative;
+        box-shadow: 0 0 5px 5px main.$color-light-200;
+
+        .wish__image {
+          height: 75px;
+          width: 75px;
+          background-color: white;
+          border-radius: 5px;
+          box-shadow: 0 0 5px 2px main.$color-light-200;
+        }
+
+        .wish__info {
+          @include main.flexbox($direction: column, $align: flex-start, $gap: 15px);
+          height: 100%;
+          width: 70%;
+          margin-inline: 10px;
+
+          .info__name {
+            //align-self: center;
+            line-height: 1.1;
+            font-size: main.$fs-lg;
+            color: main.$color-dark-100;
+            font-weight: main.$fw-boldest;
+            display: -webkit-box;
+            width: 100%;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .info__price {
+            color: main.$color-gray-400;
+            font-weight: main.$fw-bold;
+            background-color: main.$color-dark-opaque-100;
+            padding: 5px;
+            border-radius: 10px;
+            width: fit-content;
+          }
+        }
+
+        .wish__remove {
+          cursor: pointer;
+          position: relative;
+          background-color: main.$color-dark-200;
+          border-radius: 10px;
+          padding: 10px;
+          font-weight: main.$fw-medium;
+          font-size: main.$fs-md;
+          border: none;
+        }
+
+      }
+    }
+
+    .price__total {
+      @include main.flexbox($align: center, $justify: center);
+      background-color: main.$color-dark-200;
+      height: 5rem;
+      margin-top: auto;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+
+      .total__headline {
+        width: fit-content;
+        align-self: center;
+        font-size: main.$fs-xl;
+        font-weight: main.$fw-bolder;
+        letter-spacing: unset;
+        text-align: center;
+        background-image: main.$color-brand-gradient;
+        background-blend-mode: normal;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        white-space: pre-line;
+        border: none;
+        text-decoration: underline;
+        position: relative;
+        padding: 10px;
+        z-index: 10;
+
+        &::selection {
+          background: main.$color-dark-opaque-100;
+        }
+      }
+
+      .total__amount {
+        border: 1px solid main.$color-gray-200;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: main.$fs-md;
+        color: main.$color-light-300;
+      }
+    }
+
+  }
+
+  .empty__wishlist {
+    @include main.flexbox($align: center, $justify: center);
+    height: 100%;
+    width: 100%;
+    margin-top: auto;
+
+    .empty__message {
+      height: 100%;
+      font-size: main.$fs-xl;
+      color: main.$color-dark-200;
+      font-weight: main.$fw-boldest;
+    }
+  }
+
+}

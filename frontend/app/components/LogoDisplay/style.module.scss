@@ -1,0 +1,28 @@
+@use "../../styles/main";
+
+.company__container {
+  @include main.flexbox($align: center, $justify: center, $direction: column);
+
+  .company__logo {
+    width: 75px;
+    margin: 15px;
+  }
+
+  .company__headline {
+    color: main.$color-light-100;
+    font-family: main.$ff-primary;
+    font-size: main.$fs-xl;
+    line-height: 32px;
+    font-weight: main.$fw-bolder;
+    letter-spacing: unset;
+    text-align: center;
+    background-image: main.$color-brand-gradient;
+    background-blend-mode: normal;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: pre-line;
+    align-self: center;
+    margin-bottom: 40px;
+  }
+}
+
