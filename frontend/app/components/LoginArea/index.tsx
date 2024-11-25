@@ -4,6 +4,7 @@ import {Form, Link, useActionData} from "@remix-run/react";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
 import {useEffect, useState} from "react";
 import {action} from "~/routes/login";
+import DeveloperSocials from "~/components/DeveloperSocials";
 
 export const LoginArea = () => {
     const [isAnyLoginFieldInvalid, setIsAnyLoginFieldInvalid] = useState<boolean>(false);
@@ -35,6 +36,7 @@ export const LoginArea = () => {
 
     return (
         <main className={style.main__page}>
+            <DeveloperSocials />
             <div className={style.register__container}>
                 <LogoDisplay />
                 <Form className={style.login__form} method={"post"}>
