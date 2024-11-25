@@ -11,6 +11,8 @@ type WishlistItemsProps = {
 }
 
 export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
+    let wishlistTotalPrice = 0;
+
     return (
         <section className={style.wishlist__display}>
             <div className={style.wishlist__container}>
@@ -26,6 +28,7 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
 
                 <ul className={style.wishes__list}>
                     {wishlistItems.map(wishlistItem => {
+                        wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price;
                         return (
                             <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
                                       productName={wishlistItem.productName}
@@ -36,7 +39,7 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
 
                 <div className={style.price__total}>
                     <h1 className={style.total__headline}>Preço Total:</h1>
-                    <p className={style.total__amount}>R$ <span className={style.amount__price}>000,00</span></p>
+                    <p className={style.total__amount}>R$ <span className={style.amount__price}>{wishlistTotalPrice}</span></p>
                 </div>
             </div>
 

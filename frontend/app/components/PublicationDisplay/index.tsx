@@ -73,7 +73,7 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
                     </div>
 
                     <div className={style.price__description}>
-                        <p className={style.price__before}>R$ {publication?.price}</p>
+                        {publication?.discount && <p className={style.price__before}>R$ {publication?.price}</p>}
                         <p className={style.price__text}>R$ {publication?.price ? publication.price - (publication.price * publication?.discount/100) : publication?.price}</p>
                     </div>
 
