@@ -24,6 +24,8 @@ export class InitialRegisterError extends Error{
     }
 }
 
+let initialRegisterFormData: {email: string | null, accountType: string | null};
+
 export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     const data = useActionData<typeof action>();
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
@@ -33,82 +35,6 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
-    const [invalidFirstNameMessage, setInvalidFirstNameMessage] = useState("");
-    const [invalidLastNameMessage, setInvalidLastNameMessage] = useState("");
-    const [invalidIdentifierMessage, setInvalidIdentifierMessage] = useState("");
-    const [invalidPasswordMessage, setInvalidPasswordMessage] = useState("");
-    const [invalidConfirmPasswordMessage, setInvalidConfirmPasswordMessage] = useState("");
-
-    // useEffect(() => {
-    //     if (data) {
-    //         const expectedFields = new Set(['first_name', 'last_name', 'identifier', 'password', 'confirm_password']);
-    //         if ("errors" in data) {
-    //             for (const key in data.errors.errors) {
-    //                 switch (key) {
-    //                     case 'first_name':
-    //                         setInvalidFirstNameMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("first_name");
-    //                         break;
-    //                     case 'last_name':
-    //                         setInvalidLastNameMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("last_name");
-    //                         break;
-    //                     case 'identifier':
-    //                         setInvalidIdentifierMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("identifier");
-    //                         break;
-    //                     case 'password':
-    //                         setInvalidPasswordMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("password");
-    //                         break;
-    //                     case 'confirm_password':
-    //                         setInvalidConfirmPasswordMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("confirm_password");
-    //                         break;
-    //                 }
-    //
-    //             }
-    //         }
-    //
-    //         if (expectedFields.size > 0) {
-    //             for (const missingField of expectedFields) {
-    //                 switch (missingField) {
-    //                     case 'first_name':
-    //                         setInvalidFirstNameMessage("");
-    //                         break;
-    //                     case 'last_name':
-    //                         setInvalidLastNameMessage("");
-    //                         break;
-    //                     case 'identifier':
-    //                         setInvalidIdentifierMessage("");
-    //                         break;
-    //                     case 'password':
-    //                         setInvalidPasswordMessage("");
-    //                         break;
-    //                     case 'confirm_password':
-    //                         setInvalidConfirmPasswordMessage("");
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     console.log(data);
-    //     // if (data === true) {
-    //     //
-    //     //     setIsValidEmail(false);
-    //     //     setInvalidMessage("E-mail já está em uso");
-    //     // } else if (data === false) {
-    //     //     setIsValidEmail(true);
-    //     //     setNeedsAnimation(true);
-    //     // }
-    //
-    // }, [data]);
-
-    useEffect(() => {
-        console.log(initialRegister);
-    }, [initialRegister]);
-
     const submit = useSubmit();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -116,39 +42,20 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         const formData = new FormData(e.currentTarget);
         console.log(Object.fromEntries(formData));
 
-        if (!data?.email) {
+        if (data?.email) {
+            initialRegisterFormData.email = data.email;
+        } else {
             throw new InitialRegisterError(400, "Email não foi enviado");
         }
-        if (!data?.account) {
+        if (data?.account) {
+            initialRegisterFormData.accountType = data.account;
+        } else {
             throw new InitialRegisterError(400, "Tipo de conta não foi enviado");
-
         }
 
-        formData.append("email", data.email);
-        formData.append("account", data.account);
+        formData.append("email", initialRegisterFormData.email);
+        formData.append("account", initialRegisterFormData.accountType);
 
-        // const initialRegisterData = new FormData(initialRegister);
-        // console.log(Object.fromEntries(initialRegisterData));
-        // if (initialRegister) {
-        //     const initialRegisterObject = Object.fromEntries(initialRegisterData);
-        //     const keys = Object.keys(initialRegisterObject);
-        //     console.log("Chaves:", keys);
-        //     // console.log();
-        //     for (const pair of Object.entries(initialRegisterObject)) {
-        //         console.log(pair);
-        //         if (!(pair[0] == "_action")) {
-        //             formData.append(pair[0], pair[1]);
-        //         }
-        //     }
-        // }
-        // if (initialRegister) {
-        // }
-        //
-        // console.log(Object.fromEntries(formData));
-        //
-        // setIsRegisterClicked(true);
-
-        console.log("teste form aq:", Object.fromEntries(formData));
         submit(formData, { method: "post" });
     };
 
