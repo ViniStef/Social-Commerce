@@ -177,6 +177,7 @@ public class PublicationService implements IPublicationService{
                     , publi.getSeller().getImagePath()
                     , publi.getSeller().getFirstName()
                     , publi.getImagePath()
+                    , publi.getSeller().getSellerId()
                     ,publi.getDescription()
                     , publi.getDiscount_percentage()
                     , publi.getPrice()

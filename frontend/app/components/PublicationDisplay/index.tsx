@@ -83,6 +83,7 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
                                 <form method={"post"}>
                                     <input type="hidden" name={"_action"} value={"like_post"}/>
                                     <input type="hidden" name={"publicationId"} value={publication?.publicationId}/>
+                                    <input type="hidden" name={"sellerId"} value={publication?.sellerId}/>
                                     <button>
                                         <img className={style.reaction__image} src={like} alt="gostar"/>
                                     </button>

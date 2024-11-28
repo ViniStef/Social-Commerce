@@ -53,6 +53,7 @@ export type PublicationsResultType = {
     productName: string;
     sellerImg: string;
     sellerName: string;
+    sellerId: number;
     description: string;
     imagePath: string;
     discount: number;
@@ -765,7 +766,7 @@ export async function action({
 
         case "like_post": {
             try {
-                const response = await axios.post(baseUrl + `buyer/publication/${userId}/like/${formData.get("publicationId")}`)
+                const response = await axios.post(baseUrl + `buyer/publication/${formData.get("sellerId")}/like/${formData.get("publicationId")}`)
                 const status = response.status;
 
                 if (status == 200) {
