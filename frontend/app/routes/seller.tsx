@@ -59,6 +59,7 @@ export type PublicationsResultType = {
     productName: string;
     sellerImg: string;
     sellerName: string;
+    sellerId: number;
     description: string;
     imagePath: string;
     discount: number;
