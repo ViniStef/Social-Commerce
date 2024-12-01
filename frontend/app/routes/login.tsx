@@ -1,13 +1,22 @@
 import {LoginArea} from "~/components/LoginArea";
 import {z} from "zod";
-import {ActionFunctionArgs, redirect, TypedResponse} from "@remix-run/node";
+import {ActionFunctionArgs, MetaFunction, redirect, TypedResponse} from "@remix-run/node";
 import {validateAction} from "~/utils/utils";
 import {json} from "@remix-run/react";
 import axios from "axios";
 import { commitSession, getSession} from "~/auth";
 
-export const meta = () => {
-    return [{ title: "Entrar - Social Commerce"}]
+export const meta: MetaFunction = () => {
+    return [{ title: "Entrar - Social Commerce"},
+        {
+            name: "description",
+            content: "Social Commerce - Uma plataforma para descomplicar o processo de compra e vendas de produtos"
+        },
+        {
+            name: "keywords",
+            content: "Ecommerce, Vendas, Compras, Produtos, Promoções, Social Commerce, Smartphones, Tecnologias, Roupas, Televisores, Ofertas"
+        }
+    ]
 }
 
 export default function LoginPage() {

@@ -13,7 +13,6 @@ interface needsAnimation {
 export default function RegisterInitialArea( {needsAnimation, setNeedsAnimation}: needsAnimation) {
     const data = useActionData<typeof action>();
     const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);
-    const [email, setEmail] = useState("");
     const submit = useSubmit();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

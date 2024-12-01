@@ -22,67 +22,8 @@
   .bar__list {
     @include main.flexbox($direction: column, $align: center, $gap: 40px);
     margin-block: 30px;
-
-    .bar__item {
-      @include main.flexbox($direction: column, $justify: center, $align: center, $gap: 5px);
-      padding-inline: 10px;
-      text-align: center;
-      cursor: pointer;
-      width: 100%;
-
-      &:hover {
-        width: 100%;
-        background-color: main.$color-dark-opaque-200;
-
-        .bar__text {
-          color: main.$color-accent-200;
-          cursor: pointer;
-        }
-      }
-
-      .item__form {
-        @include main.flexbox($justify: center, $align: center, $direction: column);
-      }
-
-      .bar__action {
-        @include main.flexbox($direction: column, $align: center, $gap: 5px);
-        background-color: transparent;
-        border: none;
-        position: relative;
-
-        .desire_span {
-          z-index: 10;
-          position: absolute;
-          right: -8px;
-          background-color: main.$color-brand-200;
-          border-radius: 50%;
-          color: white;
-          width: 20px;
-          height: 20px;
-        }
-
-        .bar__image {
-          width: 40px;
-          height: 40px;
-          cursor: pointer;
-        }
-
-        .bar__text {
-          color: main.$color-light-200;
-          cursor: pointer;
-
-          &:hover {
-            color: main.$color-accent-200;
-          }
-        }
-
-
-      }
-
-
-
-    }
   }
+
 }
 
 .feed__container {

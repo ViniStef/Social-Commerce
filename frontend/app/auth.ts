@@ -15,16 +15,6 @@ type SessionFlashData = {
     error: string
 }
 
-
-// export const authCookie = createCookie("auth", {
-//     httpOnly: true,
-//     path: "/feed",
-//     sameSite: "lax",
-//     secrets: [secret],
-//     secure: false,
-//     maxAge: 60 * 60 * 24 * 30,
-// });
-
 export const {getSession, commitSession, destroySession} = createCookieSessionStorage<SessionData, SessionFlashData>(
     {
         cookie: {

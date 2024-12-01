@@ -16,7 +16,14 @@ import follow from "~/assets/icons/person-plus.svg";
 
 
 import {Form, json, useActionData, useLoaderData, useRevalidator, useSubmit} from "@remix-run/react";
-import {ActionFunction, ActionFunctionArgs, LoaderFunctionArgs, redirect, SessionData} from "@remix-run/node";
+import {
+    ActionFunction,
+    ActionFunctionArgs,
+    LoaderFunctionArgs,
+    MetaFunction,
+    redirect,
+    SessionData
+} from "@remix-run/node";
 import axios, {AxiosError} from "axios";
 import * as path from "node:path";
 import * as process from "node:process";
@@ -66,8 +73,17 @@ let session: SessionData;
 let publications: PublicationsResultType[];
 
 
-export const meta = () => {
-    return [{title: "Comprador - Social Commerce"}]
+export const meta: MetaFunction = () => {
+    return [{title: "Comprador - Social Commerce"},
+        {
+        name: "description",
+        content: "Compre novos produtos e siga seus vendedores favoritos"
+        },
+        {
+            name: "keywords",
+            content: "Ecommerce, Vendas, Compras, Produtos, Promoções, Social Commerce, Smartphones, Tecnologias, Roupas, Televisores, Ofertas"
+        }
+    ]
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -177,9 +193,6 @@ export default function FeedPage() {
             return {error: "O produto já foi adicionado!"};
         }
     }
-
-
-
 
     return (
         <div className={style.page__container}>

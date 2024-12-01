@@ -1,16 +1,14 @@
 import RegisterArea from "~/components/RegisterArea";
 import {createContext, Dispatch, SetStateAction, useState} from "react";
-import {json} from "@remix-run/react";
 import {validateAction} from "~/utils/utils";
-import {ActionFunctionArgs, redirect} from "@remix-run/node";
-import {InitialRegister, initialRegisterSchema} from "~/routes/register/schemas/initialRegisterSchema";
-import {FinalRegister, finalRegisterSchema} from "~/routes/register/schemas/finalRegisterSchema";
-import {emailAvailability} from "~/routes/register/requests/emailAvailability";
+import {ActionFunctionArgs, MetaFunction, redirect} from "@remix-run/node";
+import {InitialRegister, initialRegisterSchema, FinalRegister, finalRegisterSchema} from "~/routes/register/schemas";
+import {emailAvailability} from "~/routes/register/requests";
 import {ZodSchema} from "zod";
-import {registerUser} from "~/routes/register/requests/users/registerUser";
+import {registerUser} from "~/routes/register/requests";
 import DeveloperSocials from "~/components/DeveloperSocials";
 
-interface InitialRegisterContextType {
+type InitialRegisterContextType = {
     initialRegister: HTMLFormElement | undefined;
     setInitialRegister: Dispatch<SetStateAction<HTMLFormElement | undefined>>;
 }
@@ -21,8 +19,17 @@ export const InitialRegisterContext = createContext<InitialRegisterContextType>(
     },
 });
 
-export const meta = () => {
-    return [{ title: "Cadastrar - Social Commerce"}]
+export const meta: MetaFunction = () => {
+    return [{ title: "Cadastrar - Social Commerce"},
+        {
+            name: "description",
+            content: "Social Commerce - Uma plataforma para descomplicar o processo de compra e vendas de produtos"
+        },
+        {
+            name: "keywords",
+            content: "Ecommerce, Vendas, Compras, Produtos, Promoções, Social Commerce, Smartphones, Tecnologias, Roupas, Televisores, Ofertas"
+        }
+    ]
 }
 
 export default function RegisterPage() {
@@ -61,8 +68,6 @@ export async function action({request}: ActionFunctionArgs) {
             }
 
             const emailAvailabilityResponse = await emailAvailability(formData as InitialRegister);
-
-            console.log(emailAvailabilityResponse);
 
             return {emailResponse: emailAvailabilityResponse, email: formData.email, account: formData.account};
 
