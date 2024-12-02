@@ -3,7 +3,7 @@ import {Dispatch, SetStateAction, useRef, useState} from "react";
 
 import exclamation from "../../../../assets/images/exclamation-circle.svg";
 import {useActionData} from "@remix-run/react";
-import {action} from "~/routes/login";
+import {action} from "~/routes/login/route";
 
 interface InputProps {
     setIsAnyInvalid?: Dispatch<SetStateAction<boolean>>;

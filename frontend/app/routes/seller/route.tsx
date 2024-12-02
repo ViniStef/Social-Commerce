@@ -1,4 +1,4 @@
-import style from "../styles/style.module.scss";
+import style from "~/styles/style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import plus from "~/assets/icons/plus-circle.svg";
 import eraser from "~/assets/icons/eraser-fill.svg";

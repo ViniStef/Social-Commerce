@@ -1,4 +1,4 @@
-import style from "../styles/style.module.scss";
+import style from "~/styles/style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import smartphone from "~/assets/icons/phone.svg";
 import piggy from "~/assets/icons/piggy-bank.svg";

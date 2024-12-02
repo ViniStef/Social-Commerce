@@ -2,7 +2,7 @@ import style from "./style.module.scss";
 import {LogoDisplay} from "~/components/LogoDisplay";
 import {Form, Link, useActionData} from "@remix-run/react";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
-import {action} from "~/routes/login";
+import {action} from "~/routes/login/route";
 import DeveloperSocials from "~/components/DeveloperSocials";
 
 export const LoginArea = () => {
