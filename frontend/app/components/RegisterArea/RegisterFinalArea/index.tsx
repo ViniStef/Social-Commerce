@@ -15,10 +15,17 @@ type DataResponses<T extends string | number | symbol = string> = {
     errors: { errors: Record<T, string> };
 };
 
-export class InitialRegisterError extends Error{
-    statusCode:number;
+type registerSchema = {
+    email: string;
+    accountType: string;
+};
 
-    constructor(statusCode: number, message: string){
+let registerData: registerSchema | null = null;
+
+export class InitialRegisterError extends Error {
+    statusCode: number;
+
+    constructor(statusCode: number, message: string) {
         super(message);
         this.statusCode = statusCode;
     }
@@ -28,86 +35,16 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
     const data = useActionData<typeof action>();
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
     const [isAnyInvalid, setIsAnyInvalid] = useState(false);
-    const { initialRegister, setInitialRegister } = useContext(InitialRegisterContext);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
-    const [invalidFirstNameMessage, setInvalidFirstNameMessage] = useState("");
-    const [invalidLastNameMessage, setInvalidLastNameMessage] = useState("");
-    const [invalidIdentifierMessage, setInvalidIdentifierMessage] = useState("");
-    const [invalidPasswordMessage, setInvalidPasswordMessage] = useState("");
-    const [invalidConfirmPasswordMessage, setInvalidConfirmPasswordMessage] = useState("");
-
-    // useEffect(() => {
-    //     if (data) {
-    //         const expectedFields = new Set(['first_name', 'last_name', 'identifier', 'password', 'confirm_password']);
-    //         if ("errors" in data) {
-    //             for (const key in data.errors.errors) {
-    //                 switch (key) {
-    //                     case 'first_name':
-    //                         setInvalidFirstNameMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("first_name");
-    //                         break;
-    //                     case 'last_name':
-    //                         setInvalidLastNameMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("last_name");
-    //                         break;
-    //                     case 'identifier':
-    //                         setInvalidIdentifierMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("identifier");
-    //                         break;
-    //                     case 'password':
-    //                         setInvalidPasswordMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("password");
-    //                         break;
-    //                     case 'confirm_password':
-    //                         setInvalidConfirmPasswordMessage(data.errors.errors[key]);
-    //                         expectedFields.delete("confirm_password");
-    //                         break;
-    //                 }
-    //
-    //             }
-    //         }
-    //
-    //         if (expectedFields.size > 0) {
-    //             for (const missingField of expectedFields) {
-    //                 switch (missingField) {
-    //                     case 'first_name':
-    //                         setInvalidFirstNameMessage("");
-    //                         break;
-    //                     case 'last_name':
-    //                         setInvalidLastNameMessage("");
-    //                         break;
-    //                     case 'identifier':
-    //                         setInvalidIdentifierMessage("");
-    //                         break;
-    //                     case 'password':
-    //                         setInvalidPasswordMessage("");
-    //                         break;
-    //                     case 'confirm_password':
-    //                         setInvalidConfirmPasswordMessage("");
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     console.log(data);
-    //     // if (data === true) {
-    //     //
-    //     //     setIsValidEmail(false);
-    //     //     setInvalidMessage("E-mail já está em uso");
-    //     // } else if (data === false) {
-    //     //     setIsValidEmail(true);
-    //     //     setNeedsAnimation(true);
-    //     // }
-    //
-    // }, [data]);
-
-    useEffect(() => {
-        console.log(initialRegister);
-    }, [initialRegister]);
+    if(data?.account && data?.email){
+        registerData = {
+            email: data.email,
+            accountType: data.account
+        };
+    }
 
     const submit = useSubmit();
 
@@ -116,16 +53,16 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         const formData = new FormData(e.currentTarget);
         console.log(Object.fromEntries(formData));
 
-        if (!data?.email) {
+        if (!registerData?.email) {
             throw new InitialRegisterError(400, "Email não foi enviado");
         }
-        if (!data?.account) {
+        if (!registerData?.accountType) {
             throw new InitialRegisterError(400, "Tipo de conta não foi enviado");
 
         }
 
-        formData.append("email", data.email);
-        formData.append("account", data.account);
+        formData.append("email",registerData?.email);
+        formData.append("account", registerData?.accountType);
 
         // const initialRegisterData = new FormData(initialRegister);
         // console.log(Object.fromEntries(initialRegisterData));
@@ -149,7 +86,7 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         // setIsRegisterClicked(true);
 
         console.log("teste form aq:", Object.fromEntries(formData));
-        submit(formData, { method: "post" });
+        submit(formData, {method: "post"});
     };
 
     const handlePrevAnimation = () => {
@@ -161,19 +98,30 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         <Form className={style.registration__form} onSubmit={(e) => handleSubmit(e)} method={"post"}>
             <div className={style.registration__fields}>
 
-                <InputField invalidMessage={data?.errors && data.errors.first_name} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Nome"} autocomplete={"given-name"} className={"name__input"} name={"first_name"} id={"first_name"}
+                <InputField invalidMessage={data?.errors && data.errors.first_name} setIsAnyInvalid={setIsAnyInvalid}
+                            isRegisterClicked={isRegisterClicked} labelText={"Nome"} autocomplete={"given-name"}
+                            className={"name__input"} name={"first_name"} id={"first_name"}
                             placeholder={"Seu nome"}/>
 
-                <InputField invalidMessage={data?.errors && data.errors.last_name} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Sobrenome"} autocomplete={"family-name"} className={"surname__input"}
+                <InputField invalidMessage={data?.errors && data.errors.last_name} setIsAnyInvalid={setIsAnyInvalid}
+                            isRegisterClicked={isRegisterClicked} labelText={"Sobrenome"} autocomplete={"family-name"}
+                            className={"surname__input"}
                             name={"last_name"} id={"last_name"} placeholder={"Seu Sobrenome"}/>
 
-                <InputField invalidMessage={data?.errors && data.errors.identifier} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"CPF/CNPJ"} autocomplete={"cpf"} className={"identifier__input"}
+                <InputField invalidMessage={data?.errors && data.errors.identifier} setIsAnyInvalid={setIsAnyInvalid}
+                            isRegisterClicked={isRegisterClicked} labelText={"CPF/CNPJ"} autocomplete={"cpf"}
+                            className={"identifier__input"}
                             name={"identifier"} id={"identifier"} placeholder={"Seu CPF/CNPJ"}/>
 
-                <InputField invalidMessage={data?.errors && data.errors.password} setPassword={setPassword} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Senha"} autocomplete={"new-password"} className={"password__input"}
+                <InputField invalidMessage={data?.errors && data.errors.password} setPassword={setPassword}
+                            setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Senha"}
+                            autocomplete={"new-password"} className={"password__input"}
                             name={"password"} id={"password"} placeholder={"Sua Senha"} type={"password"}/>
 
-                <InputField invalidMessage={data?.errors && data.errors.confirm_password} isConfirmPasswordValid={isConfirmPasswordValid} setConfirmPassword={setConfirmPassword} password={password} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked} labelText={"Confirme a Senha"} autocomplete={"new-password"}
+                <InputField invalidMessage={data?.errors && data.errors.confirm_password}
+                            isConfirmPasswordValid={isConfirmPasswordValid} setConfirmPassword={setConfirmPassword}
+                            password={password} setIsAnyInvalid={setIsAnyInvalid} isRegisterClicked={isRegisterClicked}
+                            labelText={"Confirme a Senha"} autocomplete={"new-password"}
                             className={"passwordConfirm__input"} name={"confirm_password"} id={"confirm_password"}
                             placeholder={"Confirme sua Senha"} type={"password"}/>
 
@@ -184,7 +132,8 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
             <Link to={"/login"} className={style.redirect__login}>Já tenho uma conta</Link>
 
             <div className={style.return__container}>
-                <button type={"button"} aria-label={"voltar"} className={style.return__button} onClick={(e) => handlePrevAnimation()}>Voltar<span
+                <button type={"button"} aria-label={"voltar"} className={style.return__button}
+                        onClick={(e) => handlePrevAnimation()}>Voltar<span
                     className={style.arrow__next}></span></button>
             </div>
         </Form>
