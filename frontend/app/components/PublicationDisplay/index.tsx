@@ -1,13 +1,9 @@
 import style from "./style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
-import details from "~/assets/images/three-dots-vertical.svg";
-import product from "~/assets/images/product_shirt.webp";
 import like from "~/assets/images/heart-svgrepo-com.svg";
 import bag from "~/assets/images/bag.svg";
-import bookmark from "~/assets/images/bookmark.svg";
-import trash from "~/assets/icons/trash-fill.svg"
-import {PublicationsResultType} from "~/routes/seller";
-import unfollow from "~/assets/images/person-x-fill.svg";
+import trash from "~/assets/icons/trash-fill.svg";
+import {PublicationsResultType} from "~/routes/seller/types";
 import {Form} from "@remix-run/react";
 
 export const PublicationDisplay = ({ type, publication, notFound = false, addProductCart }: { publication: PublicationsResultType | null; notFound?: boolean, type: string, addProductCart?:any}) => {
@@ -23,14 +19,9 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
         console.log("Data inválida ou ausente");
     }
 
-    console.log("image path: ", publication);
-
     return (
-
-
         <div className={style.post__container}>
             {notFound ?
-
                 <div className={style.noposts__container}>
                     <p className={style.noposts__headline}>
                         Comece a seguir um vendedor para ver suas
@@ -108,13 +99,8 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
                             </div>
                         </div>
                     }
-
-
                 </fieldset>
             }
-
         </div>
     );
-
-
 }

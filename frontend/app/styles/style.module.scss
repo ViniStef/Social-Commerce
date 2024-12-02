@@ -33,7 +33,6 @@
   position: relative;
   min-height: 100vh;
 
-
   .navbar__feed {
     @include main.flexbox($direction: column, $align: center, $justify: center);
     position: relative;
@@ -242,53 +241,6 @@
       padding-block: 5px 10px;
       position: relative;
       overflow: hidden;
-
-      .item__category {
-        @include main.flexbox($direction: column, $justify: space-between, $align:center, $gap: 10px);
-        height: fit-content;
-        width: 5rem;
-        cursor: pointer;
-
-        .category__img_container {
-          border-radius: 50%;
-          width: fit-content;
-          background-color: rgba(20,20,20, .9);
-
-          .category__button {
-            border: none;
-            padding: 8px;
-            border-radius: 50%;
-            background-color: rgba(30,30,30,.76);
-
-            .category__image {
-              cursor: pointer;
-              width: 3rem;
-              height: 3rem;
-              padding: 5px;
-
-              border-radius: 10px;
-            }
-          }
-
-          .category__blue {
-            background-color: rgba(131, 227, 240,.3);
-
-            &:hover {
-              background-color: rgba(131, 227, 240,.6);
-
-            }
-          }
-        }
-
-
-
-        .category__name {
-          font-size: main.$fs-xs;
-          font-weight: main.$fw-medium;
-          text-align: center;
-        }
-
-      }
     }
 
   }

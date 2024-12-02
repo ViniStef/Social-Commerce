@@ -7,14 +7,24 @@ type BarItemProps = {
     barImageUrl: string;
     barImageAlt: string;
     barText: string;
+    isScrollButton?: boolean;
+    count?: number;
+}
+
+function scrollToTop() {
+    document.body.scrollTo(0, 0); // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
 export default function BarItem(barItemContents: BarItemProps) {
     return (
         <li key={crypto.randomUUID()} className={style.bar__item}>
-            <Form method={"post"} className={barItemContents.formClass}>
-                <input type="hidden" name={"_action"} value={barItemContents.hiddenInputValue}/>
-                <button className={style.bar__action}>
+            <Form method={"post"} className={`${barItemContents.formClass && style[barItemContents.formClass]}`}>
+                {!barItemContents.isScrollButton &&
+                    <input type="hidden" name={"_action"} value={barItemContents.hiddenInputValue}/>}
+                <button className={style.bar__action} onClick={() => {
+                    barItemContents.isScrollButton && scrollToTop()}}>
+                    {barItemContents.count && <span className={style.desire_span}>{barItemContents.count}</span>}
                     <img className={style.bar__image} src={barItemContents.barImageUrl} alt={barItemContents.barImageAlt}/>
                     <p className={style.bar__text}>{barItemContents.barText}</p>
                 </button>

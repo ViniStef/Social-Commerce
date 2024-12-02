@@ -2,10 +2,9 @@ import style from "./style.module.scss";
 import logo from "~/assets/icons/social-commerce-logo.svg";
 import plus from "~/assets/icons/plus-circle.svg";
 import {Form, useActionData} from "@remix-run/react";
-import {action} from "~/routes/seller";
+import {action} from "~/routes/seller/route";
 import eraser from "~/assets/icons/eraser-fill.svg";
 import background from "~/assets/images/card-image.svg";
-import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
 import {useEffect, useState} from "react";
 
 export default function CreatePublicationDisplay() {
