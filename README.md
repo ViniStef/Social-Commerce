@@ -50,8 +50,7 @@ A segunda etapa envolve preencher informações gerais do cadastro: nome, sobren
 <hr>
 <h3>Responsividade</h3>
 <p>A aplicação foi desenvolvida para possibilitar qualquer usuário, independentemente de seu dispositivo, a ter uma experiência excelente durante sua navegação no Social Commerce. A página é responsiva em todas as rotas, funcionando corretamente até telas com 390px de largura, até telas com 2560px de largura.</p>
-
-
+<hr>
 
 <div align="center">
 <img width="100%" height="100%" src="frontend\public\social-commerce-banner.png" >
