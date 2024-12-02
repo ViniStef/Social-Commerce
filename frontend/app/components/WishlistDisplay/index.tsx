@@ -30,11 +30,11 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
                     ?
                     <ul className={style.wishes__list}>
                         {wishlistItems.map(wishlistItem => {
-                            wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price;
+                            wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price - (wishlistItem.price * wishlistItem.discount / 100) : wishlistItem.price;
                             return (
                                 <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
                                           productName={wishlistItem.productName}
-                                          productPrice={wishlistItem.discount > 0 ? wishlistItem.price * (wishlistItem.discount / 100) : wishlistItem.price}/>
+                                          productPrice={wishlistItem.discount > 0 ? wishlistItem.price - (wishlistItem.price * wishlistItem.discount / 100) : wishlistItem.price}/>
                             )
                         })}
                     </ul>

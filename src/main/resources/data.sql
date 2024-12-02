@@ -8,5 +8,6 @@ INSERT INTO category (category_id, category_name) VALUES
                                                       (5, 'Eletrônicos'),
                                                       (6, 'Decorações'),
                                                       (7, 'Roupas')
-    ON DUPLICATE KEY UPDATE category_name = VALUES(category_name);
+
+ON DUPLICATE KEY UPDATE category_name = VALUES(category_name);
 
