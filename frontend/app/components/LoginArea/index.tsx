@@ -2,37 +2,13 @@ import style from "./style.module.scss";
 import {LogoDisplay} from "~/components/LogoDisplay";
 import {Form, Link, useActionData} from "@remix-run/react";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
-import {useEffect, useState} from "react";
 import {action} from "~/routes/login";
 import DeveloperSocials from "~/components/DeveloperSocials";
 
 export const LoginArea = () => {
-    const [isAnyLoginFieldInvalid, setIsAnyLoginFieldInvalid] = useState<boolean>(false);
-    const [invalidMessage, setInvalidMessage] = useState("");
     const data = useActionData<typeof action>();
 
-    const anyFieldInvalid = !!data?.errors || !!data?.notFound || !!data?.invalid;
-
-    console.log("Valor de teste aq: ", anyFieldInvalid);
-
-    // useEffect(() => {
-    //     if (data) {
-    //         if ("errors" in data) {
-    //             const errorsMsg = data.errors.errors;
-    //             if (errorsMsg.email == "Email inválido" || errorsMsg.password == "Senha inválida") {
-    //                 setInvalidMessage("Credenciais inválidas");
-    //                 setIsAnyLoginFieldInvalid(true);
-    //             }
-    //         } else if ("message" in data) {
-    //             if (data.message == "Usuário não encontrado") {
-    //                 setInvalidMessage(data.message);
-    //                 setIsAnyLoginFieldInvalid(true);
-    //             }
-    //         }
-    //     }
-    //
-    //
-    // }, [data]);
+    const anyFieldInvalid: boolean = !!data?.errors || !!data?.notFound || !!data?.invalid;
 
     return (
         <main className={style.main__page}>

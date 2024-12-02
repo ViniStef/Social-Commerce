@@ -1,4 +1,3 @@
-
 import style from "./styles/style.module.scss";
 import {Form} from "@remix-run/react";
 

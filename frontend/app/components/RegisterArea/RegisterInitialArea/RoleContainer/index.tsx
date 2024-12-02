@@ -1,5 +1,4 @@
 import style from "./style.module.scss";
-import {Dispatch, JSX, SetStateAction, useContext, useEffect} from "react";
 import {action} from "~/routes/register/route";
 import {useActionData} from "@remix-run/react";
 
@@ -9,8 +8,6 @@ type RoleContainerProps = {
 
 export const RoleContainer = ({account}: RoleContainerProps) => {
     const data = useActionData<typeof action>();
-
-    console.log("data aki: ", data);
 
     return (
         <div className={data?.formValidationError?.account ? `${style.role__container} ${style.container__error}` : style.role__container}>

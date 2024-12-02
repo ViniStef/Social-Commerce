@@ -1,9 +1,14 @@
 import {
-    BuyerProfileResultType, FollowASellerResponse, GetPublicationsByCategoryResponse,
+    BuyerProfileResultType,
+    FollowASellerResponse,
+    GetBestPromotionPublicationsResponse,
+    GetPromotionPublicationsResponse,
+    GetPublicationsByCategoryResponse, LikeAPublicationResponse,
     PublicationsResultType,
     PutBuyerProfileImgResponse,
     searchSellerResponse,
-    Seller, UnfollowASellerResponse
+    Seller,
+    UnfollowASellerResponse
 } from "~/routes/buyer/types";
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {baseUrl} from "~/utils/urls";
@@ -87,10 +92,59 @@ export async function followASeller(sellerId: string, buyerId: string): Promise<
 
 export async function getPublicationsByCategory(categoryId: string, buyerId: string): Promise<GetPublicationsByCategoryResponse> {
     try {
-        const response = await axios.get(`${baseUrl}/publications/buyer/${buyerId}/category/${categoryId}`)
+        const response: AxiosResponse = await axios.get(`${baseUrl}/publications/buyer/${buyerId}/category/${categoryId}`)
         const publicationsCategory: PublicationsResultType[] = response.data;
 
         return {publicationsCategory: publicationsCategory};
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return {error: "Erro na conexão com o servidor, tente novamente mais tarde"};
+        } else {
+            return {error: "Erro inesperado no servidor"};
+        }
+    }
+}
+
+export async function getPromotionPublications(buyerId: string): Promise<GetPromotionPublicationsResponse> {
+    try {
+        const response: AxiosResponse = await axios.get(`${baseUrl}/publications/promo/${buyerId}`);
+        const publicationsPromo: PublicationsResultType[] = response.data
+
+        return {publicationFiltered: publicationsPromo};
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return {error: "Erro na conexão com o servidor, tente novamente mais tarde"};
+        } else {
+            return {error: "Erro inesperado no servidor"};
+        }
+    }
+}
+
+export async function getBestPromotionPublications(buyerId: string): Promise<GetBestPromotionPublicationsResponse> {
+    try {
+        const response: AxiosResponse = await axios.get(`${baseUrl}/publications/mostPromo/${buyerId}`);
+        const publicationsPromo: PublicationsResultType[] = response.data;
+
+        return {publicationFiltered: publicationsPromo};
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return {error: "Erro na conexão com o servidor, tente novamente mais tarde"};
+        } else {
+            return {error: "Erro inesperado no servidor"};
+        }
+    }
+}
+
+export async function likeAPublication(sellerId: string, publicationId: string): Promise<LikeAPublicationResponse>  {
+    try {
+        const response: AxiosResponse = await axios.post(`${baseUrl}/buyer/publication/${sellerId}/like/${publicationId}`);
+        const status: number = response.status;
+
+        if (status == 200) {
+            return {status: status};
+        }
+
+        return {error: "Erro inesperado no servidor"};
     } catch (error) {
         if (error instanceof AxiosError) {
             return {error: "Erro na conexão com o servidor, tente novamente mais tarde"};

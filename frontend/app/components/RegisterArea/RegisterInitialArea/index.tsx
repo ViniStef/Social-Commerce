@@ -1,7 +1,7 @@
 import {Form, Link, useActionData, useSubmit} from "@remix-run/react";
 import style from "./style.module.scss";
 import {RoleContainer} from "~/components/RegisterArea/RegisterInitialArea/RoleContainer";
-import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useContext} from "react";
 import {action, InitialRegisterContext} from "~/routes/register/route";
 import {FormData} from "@remix-run/web-fetch";
 

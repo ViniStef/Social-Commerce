@@ -1,9 +1,7 @@
 import style from "./style.module.scss";
 import xFill from "~/assets/icons/x-circle-fill.svg";
-import netshoes from "~/assets/images/netshoes-logo.png";
-import background from "~/assets/images/card-image.svg";
 import {Form} from "@remix-run/react";
-import {PublicationsResultType} from "~/routes/buyer";
+import {PublicationsResultType} from "~/routes/buyer/types";
 import WishItem from "~/components/WishlistDisplay/WishItem";
 
 type WishlistItemsProps = {

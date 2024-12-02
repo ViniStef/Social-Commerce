@@ -1,8 +1,7 @@
 import style from "~/components/WishlistDisplay/style.module.scss";
-import {Form} from "@remix-run/react";
 import {useContext} from "react";
-import {PublicationsResultType, RemoveWishlistContext} from "~/routes/buyer";
-
+import { RemoveWishlistContext } from "~/routes/buyer/route";
+import { PublicationsResultType } from "~/routes/buyer/types";
 type WishItemProps = {
     publicationId: number;
     productImg: string;
@@ -14,8 +13,6 @@ export default function WishItem({ publicationId, productImg, productName, produ
     const { cartList, setCartList } = useContext(RemoveWishlistContext);
 
     function removeProductCart(publicationId: number) {
-        console.log("publication id: ", publicationId);
-        console.log("cart list: ", cartList);
         const productExists: boolean = cartList.some((cartItem:PublicationsResultType) => cartItem.publicationId === publicationId);
 
         if (productExists) {

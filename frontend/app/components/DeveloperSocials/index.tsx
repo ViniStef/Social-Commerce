@@ -1,4 +1,3 @@
-import {Link} from "@remix-run/react";
 import style from "./style.module.scss";
 import github from "~/assets/icons/github.svg";
 import linkedin from "~/assets/icons/linkedin.svg";

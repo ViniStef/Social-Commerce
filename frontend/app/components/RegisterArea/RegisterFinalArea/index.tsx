@@ -1,8 +1,8 @@
 import style from "./style.module.scss";
 import {Form, Link, useActionData, useSubmit} from "@remix-run/react";
-import {Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useState} from "react";
 import {FormData} from "@remix-run/web-fetch";
-import {action, InitialRegisterContext} from "~/routes/register/route";
+import {action} from "~/routes/register/route";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
 import {TypedResponse} from "@remix-run/node";
 
@@ -64,28 +64,6 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
         formData.append("email",registerData?.email);
         formData.append("account", registerData?.accountType);
 
-        // const initialRegisterData = new FormData(initialRegister);
-        // console.log(Object.fromEntries(initialRegisterData));
-        // if (initialRegister) {
-        //     const initialRegisterObject = Object.fromEntries(initialRegisterData);
-        //     const keys = Object.keys(initialRegisterObject);
-        //     console.log("Chaves:", keys);
-        //     // console.log();
-        //     for (const pair of Object.entries(initialRegisterObject)) {
-        //         console.log(pair);
-        //         if (!(pair[0] == "_action")) {
-        //             formData.append(pair[0], pair[1]);
-        //         }
-        //     }
-        // }
-        // if (initialRegister) {
-        // }
-        //
-        // console.log(Object.fromEntries(formData));
-        //
-        // setIsRegisterClicked(true);
-
-        console.log("teste form aq:", Object.fromEntries(formData));
         submit(formData, {method: "post"});
     };
 

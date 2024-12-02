@@ -1,5 +1,5 @@
 import style from "./style.module.scss";
-import {Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from "react";
+import {Dispatch, SetStateAction, useRef, useState} from "react";
 
 import exclamation from "../../../../assets/images/exclamation-circle.svg";
 import {useActionData} from "@remix-run/react";

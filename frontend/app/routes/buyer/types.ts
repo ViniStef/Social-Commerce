@@ -51,3 +51,18 @@ export type GetPublicationsByCategoryResponse = {
     publicationsCategory?: PublicationsResultType[];
     error?: string;
 }
+
+export type GetPromotionPublicationsResponse = {
+    publicationFiltered?: PublicationsResultType[];
+    error?: string;
+}
+
+export type GetBestPromotionPublicationsResponse = {
+    publicationFiltered?: PublicationsResultType[];
+    error?: string;
+}
+
+export type LikeAPublicationResponse = {
+    status?: number;
+    error?: string;
+}

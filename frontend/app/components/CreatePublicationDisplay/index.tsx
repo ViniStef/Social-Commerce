@@ -1,6 +1,4 @@
 import style from "./style.module.scss";
-import logo from "~/assets/icons/social-commerce-logo.svg";
-import plus from "~/assets/icons/plus-circle.svg";
 import {Form, useActionData} from "@remix-run/react";
 import {action} from "~/routes/seller/route";
 import eraser from "~/assets/icons/eraser-fill.svg";
@@ -27,8 +25,7 @@ export default function CreatePublicationDisplay() {
     let errors = data?.schemaErrors || null;
 
     return (
-        // data?.ok
-        //     ?
+
         <section className={style.create__publication}>
             <h1 className={style.publication__headline}>Publicação</h1>
             <Form encType={"multipart/form-data"} className={style.publication__form} method={"post"}>
@@ -130,19 +127,6 @@ export default function CreatePublicationDisplay() {
                 </div>
             </Form>
         </section>
-        //     :
-        //     <section className={style.nocontent__container}>
-        //         <div className={style.nocontent__text}>
-        //             <p className={style.nocontent__headline}>
-        //                 Crie uma publicação
-        //             </p>
-        //         </div>
-        //         <img className={style.nocontent__image} src={plus} alt="Logo"/>
-        //     <Form className={style.nocontent__create} method={"post"}>
-        //         <input type="hidden" name={"_action"} value={"start_creating_publication"}/>
-        //         <button className={style.create__btn}><img className={style.create__img} src={plus} alt=""/></button>
-        //     </Form>
-        // </section>
     );
 
 }
