@@ -1,4 +1,4 @@
-
+<h1>Social Commerce</h1>
 <p>
 O Social Commerce tem como objetivo facilitar o processo de compra e venda de produtos de diversos tipos. Fornecendo uma aplicação leve e fácil de utilizar.
 </p>
@@ -54,5 +54,5 @@ A segunda etapa envolve preencher informações gerais do cadastro: nome, sobren
 
 
 <div align="center">
-<img width="50px" height="50px" src="frontend\public\social-commerce-banner.png" >
+<img width="100%" height="100%" src="frontend\public\social-commerce-banner.png" >
 </div>
