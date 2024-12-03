@@ -1,6 +1,5 @@
 import style from "~/components/WishlistDisplay/style.module.scss";
-import {Form} from "@remix-run/react";
-import {useContext} from "react";
+import {Dispatch, SetStateAction, useContext} from "react";
 import {PublicationsResultType, RemoveWishlistContext} from "~/routes/buyer";
 
 type WishItemProps = {
@@ -8,14 +7,13 @@ type WishItemProps = {
     productImg: string;
     productName: string;
     productPrice: number;
+    cartList: PublicationsResultType[] | [];
+    setCartList: Dispatch<SetStateAction<PublicationsResultType[]>>;
 }
 
-export default function WishItem({ publicationId, productImg, productName, productPrice } :WishItemProps) {
-    const { cartList, setCartList } = useContext(RemoveWishlistContext);
+export default function WishItem({ publicationId, productImg, productName, productPrice, cartList, setCartList } :WishItemProps) {
 
     function removeProductCart(publicationId: number) {
-        console.log("publication id: ", publicationId);
-        console.log("cart list: ", cartList);
         const productExists: boolean = cartList.some((cartItem:PublicationsResultType) => cartItem.publicationId === publicationId);
 
         if (productExists) {
@@ -26,7 +24,7 @@ export default function WishItem({ publicationId, productImg, productName, produ
     }
 
     return (
-        <li className={style.wish__item}>
+        <li key={crypto.randomUUID()} className={style.wish__item}>
             <img className={style.wish__image} src={productImg} alt="Imagem do Produto"/>
             <div className={style.wish__info}>
                 <p className={style.info__name}>{productName}</p>

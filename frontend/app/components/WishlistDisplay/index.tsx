@@ -1,16 +1,16 @@
 import style from "./style.module.scss";
 import xFill from "~/assets/icons/x-circle-fill.svg";
-import netshoes from "~/assets/images/netshoes-logo.png";
-import background from "~/assets/images/card-image.svg";
 import {Form} from "@remix-run/react";
 import {PublicationsResultType} from "~/routes/buyer";
 import WishItem from "~/components/WishlistDisplay/WishItem";
+import {Dispatch, SetStateAction} from "react";
 
 type WishlistItemsProps = {
     wishlistItems: PublicationsResultType[];
+    setWishlistItems: Dispatch<SetStateAction<PublicationsResultType[]>>;
 }
 
-export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
+export default function WishlistDisplay({wishlistItems, setWishlistItems}: WishlistItemsProps) {
     let wishlistTotalPrice = 0;
 
     return (
@@ -32,7 +32,7 @@ export default function WishlistDisplay({wishlistItems}: WishlistItemsProps) {
                         {wishlistItems.map(wishlistItem => {
                             wishlistTotalPrice += wishlistItem.discount > 0 ? wishlistItem.price - (wishlistItem.price * wishlistItem.discount / 100) : wishlistItem.price;
                             return (
-                                <WishItem publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
+                                <WishItem setCartList={setWishlistItems} cartList={wishlistItems} publicationId={wishlistItem.publicationId} productImg={wishlistItem.imagePath}
                                           productName={wishlistItem.productName}
                                           productPrice={wishlistItem.discount > 0 ? wishlistItem.price - (wishlistItem.price * wishlistItem.discount / 100) : wishlistItem.price}/>
                             )

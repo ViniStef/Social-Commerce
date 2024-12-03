@@ -138,6 +138,7 @@ export default function FeedPage() {
     const data = useActionData<typeof action>();
     const loaderData = useLoaderData<typeof loader>();
     const publicationsFeed =   data?.publicationFiltered || loaderData.publicationsList || publications;
+
     const [cartList, setCartList] = useState<PublicationsResultType[]>(() => {
         if (typeof window !== "undefined" && window.localStorage) {
             const localInfo = localStorage.getItem("@CartItems");
@@ -145,6 +146,8 @@ export default function FeedPage() {
         }
         return [];
     });
+
+    console.log(cartList);
 
     const [count, setCount] = useState(2);
 
@@ -234,7 +237,7 @@ export default function FeedPage() {
                 {data?.showWishlist && !data?.closeWishlist &&
 
                     <RemoveWishlistContext.Provider value={{cartList, setCartList}}>
-                        <WishlistDisplay wishlistItems={cartList} />
+                        <WishlistDisplay setWishlistItems={setCartList} wishlistItems={cartList} />
                     </RemoveWishlistContext.Provider>}
 
                 <nav className={style.navbar__feed}>

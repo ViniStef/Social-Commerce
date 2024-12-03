@@ -23,8 +23,6 @@ export const PublicationDisplay = ({ type, publication, notFound = false, addPro
         console.log("Data inválida ou ausente");
     }
 
-    console.log("image path: ", publication);
-
     return (
 
 
