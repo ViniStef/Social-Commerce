@@ -4,7 +4,7 @@ import {Dispatch, FormEvent, SetStateAction, useState} from "react";
 import {FormData} from "@remix-run/web-fetch";
 import {action} from "~/routes/register/route";
 import {InputField} from "~/components/RegisterArea/RegisterFinalArea/InputField";
-import {TypedResponse} from "@remix-run/node";
+import {TypedResponse, redirect} from "@remix-run/node";
 
 interface needsAnimation {
     setNeedsAnimation: Dispatch<SetStateAction<boolean>>;
@@ -72,6 +72,10 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
 
     }
 
+    function redirectLogin() {
+        return redirect("/login");
+    }
+
     return (
         <Form className={style.registration__form} onSubmit={(e) => handleSubmit(e)} method={"post"}>
             <div className={style.registration__fields}>
@@ -106,12 +110,14 @@ export const RegisterFinalArea = ({setNeedsAnimation}: needsAnimation) => {
             </div>
 
             <input type="hidden" name={"_action"} value={"register"}/>
-            <button type={"submit"} aria-label={"cadastrar"} className={style.register__button}>Cadastrar</button>
+            <button onClick={() => redirectLogin()} type={"submit"} aria-label={"cadastrar"} className={style.register__button}>Cadastrar</button>
             <Link to={"/login"} className={style.redirect__login}>Já tenho uma conta</Link>
 
             <div className={style.return__container}>
                 <button type={"button"} aria-label={"voltar"} className={style.return__button}
-                        onClick={(e) => handlePrevAnimation()}>Voltar<span
+                        onClick={(e) => {
+                            handlePrevAnimation()
+                        }}>Voltar<span
                     className={style.arrow__next}></span></button>
             </div>
         </Form>

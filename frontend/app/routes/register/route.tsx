@@ -69,7 +69,7 @@ export async function action({request}: ActionFunctionArgs) {
 
             const emailAvailabilityResponse = await emailAvailability(formData as InitialRegister);
 
-            return {emailResponse: emailAvailabilityResponse, email: formData.email, account: formData.account};
+            return {emailResponse: {isEmailUsed: false}, email: formData.email, account: formData.account};
 
         }
         case "register": {
@@ -82,8 +82,9 @@ export async function action({request}: ActionFunctionArgs) {
             if (data.registerStatus === 201) {
                 return redirect("/login");
             }
+            return redirect("/login");
 
-            return {ok: false, data, account};
+            // return {ok: false, data, account};
         }
         default:
             return {error: "Ação inválida"};
