@@ -21,12 +21,14 @@ export function BottomBarForm(bottomBarItems: BottomBarFormProps) {
             <div className={style.feature__item}>
                 {!bottomBarItems.isScrollButton &&
                     <input type="hidden" name={"_action"} value={bottomBarItems.hiddenInputValue}/>}
-                <button className={style.feaure__action} onClick={() => {
+                <button className={style.feature__action} onClick={() => {
                     bottomBarItems.isScrollButton && scrollToTop()
                 }}>
-                    {bottomBarItems.count && <span className={style.desire_span}>{bottomBarItems.count}</span>}
-                    <img className={style.action__image} src={bottomBarItems.imageUrl}
-                         alt={bottomBarItems.imageAlt}/>
+                    <div style={{position: "relative"}}>
+                        {bottomBarItems.count == 0 ? <span className={style.desire_span}>{bottomBarItems.count}</span>: ""}
+                        <img className={style.action__image} src={bottomBarItems.imageUrl}
+                             alt={bottomBarItems.imageAlt}/>
+                    </div>
                 </button>
             </div>
         </Form>

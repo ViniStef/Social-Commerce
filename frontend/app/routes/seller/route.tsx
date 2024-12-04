@@ -63,9 +63,9 @@ export async function loader({request}: LoaderFunctionArgs) {
 
     const {userId, accountType} = await requireAuthCookie(request);
 
-    if (accountType === "buyer") {
-        return redirect("/buyer");
-    }
+    // if (accountType === "buyer") {
+    //     return redirect("/buyer");
+    // }
 
     if (accountType === "seller") {
         let resultFinal: {

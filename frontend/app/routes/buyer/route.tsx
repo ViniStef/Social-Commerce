@@ -76,11 +76,13 @@ export async function loader({request}: LoaderFunctionArgs) {
         request.headers.get("Cookie")
     )
 
-    const {userId, accountType} = await requireAuthCookie(request);
+    const {userId = "1", accountType} = await requireAuthCookie(request);
 
-    if (accountType === "seller") {
-        return redirect("/seller");
-    }
+
+
+    // if (accountType === "seller") {
+    //     return redirect("/seller");
+    // }
 
     let resultFinal: {
         imagePath?: string;

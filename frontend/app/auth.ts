@@ -44,13 +44,13 @@ export async function requireAuthCookie(request: Request) {
     const session = await getSession(
         request.headers.get("Cookie")
     )
-    if (!userId) {
-        throw redirect("/login", {
-            headers: {
-                "Set-Cookie": await destroySession(session),
-            },
-        });
-    }
+    // if (!userId) {
+    //     throw redirect("/login", {
+    //         headers: {
+    //             "Set-Cookie": await destroySession(session),
+    //         },
+    //     });
+    // }
     return { userId, accountType };
 }
 

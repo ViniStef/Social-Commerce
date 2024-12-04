@@ -30,7 +30,7 @@
     .desire_span {
       z-index: 10;
       position: absolute;
-      right: -8px;
+      right: -5px;
       background-color: main.$color-brand-200;
       border-radius: 50%;
       color: white;
@@ -42,6 +42,7 @@
       width: 40px;
       height: 40px;
       cursor: pointer;
+      position: relative;
     }
 
     .bar__text {
@@ -55,7 +56,6 @@
 
 
   }
-
 
 
 }

@@ -24,8 +24,14 @@ export default function BarItem(barItemContents: BarItemProps) {
                     <input type="hidden" name={"_action"} value={barItemContents.hiddenInputValue}/>}
                 <button className={style.bar__action} onClick={() => {
                     barItemContents.isScrollButton && scrollToTop()}}>
-                    {barItemContents.count && <span className={style.desire_span}>{barItemContents.count}</span>}
-                    <img className={style.bar__image} src={barItemContents.barImageUrl} alt={barItemContents.barImageAlt}/>
+                    <div style={
+                        {
+                            position: "relative"
+                        }
+                    }>
+                        {barItemContents.count == 0 ? <span className={style.desire_span}>{barItemContents.count}</span> : ""}
+                        <img className={style.bar__image} src={barItemContents.barImageUrl} alt={barItemContents.barImageAlt}/>
+                    </div>
                     <p className={style.bar__text}>{barItemContents.barText}</p>
                 </button>
             </Form>
