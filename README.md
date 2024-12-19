@@ -5,7 +5,7 @@ O Social Commerce tem como objetivo facilitar o processo de compra e venda de pr
 
 ## Desenvolvido por:
 [Marcos Vinícius Alves Goulart](https://www.linkedin.com/in/marcos-vinícius-goulart/)<br>
-[Vinícius Steflitsch da Silva](https://www.linkedin.com/in/vinicius-steflitsch-b19a47259/)
+[Vinícius Steflitsch da Silva](https://www.linkedin.com/in/vinicius-steflitsch/)
 
 [Vídeo do Projeto](https://youtu.be/eaFYJ6GKV2w)<br>
 [Slides da Apresentação](https://www.canva.com/design/DAGXfgdr_MY/iIZ9wFHjJycsUyS5mvWPHA/edit?utm_content=DAGXfgdr_MY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
