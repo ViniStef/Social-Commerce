@@ -26,7 +26,7 @@ export default function DeveloperSocials() {
                                                                           alt="GitHub"/></a>
                         <a target={"_blank"
                         } className={style.link__social}
-                              href={"https://www.linkedin.com/in/vinicius-steflitsch-b19a47259"}><img
+                              href={"https://www.linkedin.com/in/vinicius-steflitsch"}><img
                             className={style.social__image} src={linkedin} alt="LinkedIn"/></a>
                     </div>
                 </div>
